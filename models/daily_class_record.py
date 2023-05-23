@@ -91,7 +91,7 @@ class DailyClassRecord(models.Model):
 
     total_duration_sum = fields.Float(string='Total duration', compute='_amount_all', store=True)
 
-    @api.depends('standard_hour', 'total_duration_sum', 'record_ids.net_hour')
+    @api.depends('standard_hour', 'total_duration_sum')
     def remaining_hour(self):
         total = 0
         net_hour = self.env['daily.class.record'].search([])
@@ -101,7 +101,7 @@ class DailyClassRecord(models.Model):
                 total += jj.total_duration_sum
             aa = self.standard_hour - total
             for i in jj.record_ids:
-                self.total_remaining_hour = aa - i.net_hour
+                self.total_remaining_hour = aa
         print(total, 'kklk')
                 # self.total_remaining_hour = self.total_duration_sum - total
 
@@ -258,7 +258,7 @@ class RecordData(models.Model):
     break_time = fields.Integer(string='Break time')
     topic = fields.Char(string='Topic')
     date = fields.Date(string='Date', default=fields.Date.today)
-    remaining_hours = fields.Float('Remaining hours', compute='_compute_total_remaining_hour', store=True)
+    remaining_hours = fields.Float('Remaining hours')
 
     @api.depends('start_date', 'end_date')
     def _compute_net_time(self):
@@ -287,19 +287,8 @@ class RecordData(models.Model):
 
     balance = fields.Float(string='Balance', compute='_compute_balance', store=True)
 
-    @api.depends('net_hour')
-    def _compute_total_remaining_hour(self):
-        total = 0
-        net_hour = self.env['daily.class.record'].search([])
-        for rec in self:
-            if rec.record_id.total_remaining_hour == 0:
-                if rec.record_id.standard_hour ==0:
-                    self.remaining_hours = 0
-                else:
-                    self.remaining_hours = self.record_id.standard_hour
-            else:
-                self.remaining_hours = self.record_id.total_remaining_hour
-            print(rec.record_id.total_remaining_hour)
-
-
-            rec.remaining_hours = rec.record_id.total_remaining_hour
+    # @api.depends('net_hour')
+    # def _compute_total_remaining_hour(self):
+    #     for rec in self:
+    #
+    #         rec.remaining_hours = rec.record_id.total_remaining_hour

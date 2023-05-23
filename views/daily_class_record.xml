@@ -24,7 +24,6 @@
                             groups="faculty.group_faculty_user"/>
                     <button name="rejected" class="oe_highlight" states="fac_approve" string="Reject" type="object"
                             groups="faculty.group_faculty_user"/>
-<!--                    <h1> hhhi </h1>-->
                     <!--                    <button name="rejected" class="oe_highlight" string="Reject" type="object"-->
                     <!--                            attrs="{'invisible':[('state', 'in', ['rejected','draft','approve'])]}"/>-->
                 </header>
@@ -69,7 +68,7 @@
                                     <field name="break_reason"/>
                                     <field name="break_time"/>
                                     <field name="net_hour"/>
-                                    <field name="remaining_hours"/>
+                                    <field name="remaining_hours" invisible="1"/>
                                     <field name="balance" invisible="1"/>
                                 </tree>
                             </field>
