@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="primary_basic_view" model="ir.ui.view">
+            <field name="name">Department</field>
+            <field name="model">faculty.department</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Department">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+<!--                        <button name="confirm_department" string="Confirm" type="object" class="oe_highlight"/>-->
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="deprt_prime"/>
+                                <field name="adm_fee"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="primary_tree_basic_view" model="ir.ui.view">
+            <field name="name">Primary Department</field>
+            <field name="model">faculty.department</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="deprt_prime"/>
+                    <field name="adm_fee"/>
+                </tree>
+
+            </field>
+        </record>
+        <record id="dept_basic_view" model="ir.ui.view">
+            <field name="name">Department</field>
+            <field name="model">primary.department</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Department">
+                    <sheet>
+                        <group>
+                            <group>
+                                <!--                                <field name="prime_department"/>-->
+                                <field name="dpt"/>
+                                <field name="fee"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="admission_department_basic_view" model="ir.ui.view">
+            <field name="name">Department</field>
+            <field name="model">admission.details</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Department">
+<!--                    <header>-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>-->
+<!--                        <button name="confirm_department" string="Confirm" type="object" class="oe_highlight"/>-->
+<!--                    </header>-->
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="course_ids" widget="many2many_tags"/>
+                                <field name="batches_ids" widget="many2many_tags"/>
+                                <field name="class_room_id"/>
+                                <field name="student_id"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="department_action_form">
+            <field name="name">Department Details</field>
+            <field name="res_model">faculty.department</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Department" id="department_menu"
+                  action="department_action_form"
+                  parent="menu_view_faculty"
+                  sequence="6"/>
+    </data>
+</odoo>

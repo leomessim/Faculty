@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="faculty_classroom_view" model="ir.ui.view">
+            <field name="name">courses</field>
+            <field name="model">courses.details</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Class">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
+<!--                        <button name="add_subject" class="oe_highlight" states="draft" string="Add Subject"-->
+<!--                                type="object"/>-->
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+<!--                                <field name="department"/>-->
+                                <field name="subject_ids" widget="many2many_tags" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="faculty_classroom_tree_view" model="ir.ui.view">
+            <field name="name">courses</field>
+            <field name="model">courses.details</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+<!--                    <field name="department"/>-->
+
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

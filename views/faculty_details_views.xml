@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="faculty_details_basic_view" model="ir.ui.view">
+            <field name="name">faculty</field>
+            <field name="model">faculty.details</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Penalty">
+                    <sheet>
+                        <div name="button_box" class="oe_button_box">
+                            <button
+                                    id="hr_presence_button"
+                                    class="oe_stat_button"
+                                    disabled="1">
+                                <div role="img" class="fa fa-fw fa-circle text-success o_button_icon"
+                                     attrs="{'invisible': [('current_status', '!=', 'active')]}" aria-label="Available"
+                                     title="Available"/>
+                                <div role="img" class="fa fa-fw fa-circle text-danger o_button_icon"
+                                     attrs="{'invisible': [('current_status', '!=', 'inactive')]}"
+                                     aria-label="Not available" title="Not available"/>
+                                <div class="o_stat_info" attrs="{'invisible': [('current_status', '=', 'active')]}">
+                                    <field string="Vehicle" name="inactive_date" widget="statinfo"/>
+                                    <span class="o_stat_text">
+                                        Inactive
+                                    </span>
+                                </div>
+                                <div class="o_stat_info" attrs="{'invisible': [('current_status', '=', 'inactive')]}">
+                                    <span class="o_stat_text">
+                                        Active
+                                    </span>
+                                </div>
+                                <!--                        <button class="oe_stat_button" type="object" name="get_active_status"-->
+                                <!--                                icon="fa-car">-->
+                                <!--                                <field string="Vehicle" name="vehicle_count" widget="statinfo"/>-->
+                            </button>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="qualification"/>
+                                <field name="exp"/>
+                                <field name="course" widget="many2many_tags"/>
+                            </group>
+                            <group>
+                                <field name="bank_acc"/>
+                                <field name="date_birth"/>
+                                <field name="date_month"/>
+                                <field name="current_status"/>
+                                <field name="inactive_date" attrs="{'invisible':[('current_status', '=', 'active')]}"/>
+
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Class room" name="fields">
+                                <group>
+                                    <group>
+
+<!--                                        <field name="gst_number"/>-->
+                                        <field name="test"/>
+                                        <field name="gst_status"/>
+                                    </group>
+                                    <!--                                    <group>-->
+                                    <!--                                        <field name="salary_hr"/>-->
+                                    <!--                                    </group>-->
+                                </group>
+                            </page>
+
+<!--                            <page string="Payout" name="payout">-->
+<!--                                <field name="payout_ids" domain="[('topic', '=', 'abc')]">-->
+<!--                                    <tree editable="bottom">-->
+<!--                                        <field name="subject_id"/>-->
+<!--                                        &lt;!&ndash;                                        <field name="classroom_id"/>&ndash;&gt;-->
+<!--                                        <field name="courses_id"/>-->
+<!--                                        <field name="topic"/>-->
+<!--                                        <field name="start_time"/>-->
+<!--                                        <field name="end_time"/>-->
+
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                                &lt;!&ndash;                                <field name="total_amount" widget="monetary"/>&ndash;&gt;-->
+
+<!--                            </page>-->
+
+                            <page string="Bank Details" name="fields">
+                                <group>
+                                    <group>
+                                        <field name="bank_name"/>
+                                        <field name="account_holder"/>
+                                        <field name="bank_account_no"/>
+                                        <field name="ifsc"/>
+                                        <field name="gst_number"/>
+                                        <field name="pan_number"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="faculty_data_tree" model="ir.ui.view">
+            <field name="name">Faculty_tree</field>
+            <field name="model">faculty.details</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="qualification"/>
+                    <field name="exp"/>
+                    <field name="course"/>
+                </tree>
+
+            </field>
+        </record>
+        <record id="subject_details_form" model="ir.ui.view">
+            <field name="name">Subject_details</field>
+            <field name="model">subject.details</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="course_sub_id"/>
+                                <field name="stnd_hr"/>
+                            </group>
+
+                        </group>
+
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+        <record id="faculty_subject_hr_tree_view" model="ir.ui.view">
+            <field name="name">Subject Hours</field>
+            <field name="model">subject.details</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="course_sub_id"/>
+                    <field name="stnd_hr"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_subject_standard_hr" model="ir.actions.act_window">
+            <field name="name">Standard Hours</field>
+            <field name="res_model">subject.details</field>
+            <field name="view_mode">tree</field>
+        </record>
+        <record id="action_subject" model="ir.actions.act_window">
+            <field name="name">Standard Hours</field>
+            <field name="res_model">subject.details</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <!--        <record id="faculty_details_tree_view" model="ir.ui.view">-->
+        <!--            <field name="name">faculty tree</field>-->
+        <!--            <field name="model">faculty.details</field>-->
+        <!--            <field name="type">tree</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <form string="Details">-->
+        <!--                    <tree>-->
+        <!--                        <field name="name"/>-->
+        <!--                        <field name="qualification"/>-->
+        <!--                        <field name="exp"/>-->
+        <!--                        <field name="course"/>-->
+        <!--                    </tree>-->
+        <!--                </form>-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <record model="ir.actions.act_window" id="faculty_action_form">
+            <field name="name">Faculty Details</field>
+            <field name="res_model">faculty.details</field>
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+        <record model="ir.actions.act_window" id="faculty_classroom_form">
+            <field name="name">Courses</field>
+            <field name="res_model">courses.details</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+        <record model="ir.actions.act_window" id="faculty_details_view_form">
+            <field name="name">Faculty Details</field>
+            <field name="res_model">faculty.details</field>
+            <field name="view_mode">kanban,tree,form</field>
+        </record>
+        <record model="ir.actions.act_window" id="head_approvals_view">
+            <field name="name">Approvals</field>
+            <field name="res_model">approvals</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem name="Faculty" id="menu_faculty" action="faculty_details_view_form"
+                  web_icon="faculty/static/description/icon.png"
+                  sequence="1"/>
+        <menuitem name="Course" id="menu_course" parent='menu_faculty'
+                  sequence="2"/>
+        <menuitem name="Faculty" id="menu_view_faculty"
+                  parent="menu_faculty"
+                  sequence="1"/>
+        <menuitem name="Payment" id="menu_payment" parent='menu_faculty'
+                  sequence="4"/>
+        <menuitem
+                id="menu_view_faculty_set"
+                name="Faculty"
+                parent="menu_view_faculty"
+                action="faculty_details_view_form"
+                sequence="1"/>
+        <menuitem
+                id="menu_faculty_subject"
+                name="Subject"
+                parent="menu_course"
+                action="action_subject"
+                sequence="2"/>
+
+
+        <menuitem
+                id="menu_classroom_faculty"
+                name="Course"
+                action="faculty_classroom_form"
+                parent="menu_course"
+                sequence="1"/>
+        <!--        <menuitem-->
+        <!--                id="head_menu_approval"-->
+        <!--                name="Approvals"-->
+        <!--                action="head_approvals_view"-->
+        <!--                parent="menu_view_faculty"-->
+        <!--                sequence="5"/>-->
+
+    </data>
+</odoo>

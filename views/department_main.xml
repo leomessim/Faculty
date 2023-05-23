@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="approvals_main_view" model="ir.ui.view">
+            <field name="name">Approvals</field>
+            <field name="model">approvals</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Class">
+                    <!--                            <header>-->
+                    <!--                                <field name="state" widget="statusbar" statusbar_visible="draft,done,approve"/>-->
+                    <!--                                <button name="add_entry" class="oe_highlight" states="draft" string="Add Entry"-->
+                    <!--                                        type="object"/>-->
+
+                    <!--                                <button name="approve_button" class="oe_highlight" states="done" string="Approve"-->
+                    <!--                                        type="object"-->
+                    <!--                                        groups="faculty.group_faculty_administrator"/>-->
+                    <!--                            </header>-->
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="faculty_appr_id"/>
+                                <field name="class_room_appr"/>
+                                <field name="topic_appr"/>
+                                <field name="strt_time_appr"/>
+                                <field name="end_time_appr"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="department_main_view" model="ir.ui.view">
+            <field name="name">courses</field>
+            <field name="model">daily.class</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Class">
+                    <header>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,to_approve,fac_approve,approve,paid"/>
+                        <button name="add_entry" class="oe_highlight" states="draft" string="Add Entry"
+                                type="object"/>
+                        <!--                        <button name="check_approval" class="oe_highlight" states="confirm" string="Check"-->
+                        <!--                                type="object"-->
+                        <!--                                groups="faculty.group_coordinator_head"/>-->
+                        <button name="approve_user_button" class="oe_highlight" states="fac_approve" string="Approve"
+                                type="object"
+                                groups="faculty.group_faculty_user"/>
+                        <button name="check_approval" class="oe_highlight" states="to_approve"
+                                string="To Approve"
+                                type="object"/>
+                        <!--                        <button name="paid_button" class="oe_highlight" states="approve" string="Paid"-->
+                        <!--                                type="object"-->
+                        <!--                                groups="faculty.group_accounting_manager"/>-->
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="faculty_id" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+                                <field name="class_room" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+
+                                <field name="course_id" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+                                <field name="subject_daily_id" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+                                <field name="topic" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+                            </group>
+                            <group>
+                                <field name="strt_time" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+                                <field name="end_time" attrs="{'readonly': [('state', '=', 'approve')]}"/>
+                                <field name="duration_time"/>
+                                <field name="extra_class_bool"
+                                       attrs="{'invisible':['|',('total_class_remaining', '&gt;', 0),('total_class_remaining', '=', 0)]}"/>
+                                <field name="extra_hour"
+                                       attrs="{'invisible':['|',('extra_class_bool', '=', False),('state', '=', 'draft')]}"/>
+                                <field name="extra_hour_reason"
+                                       attrs="{'invisible':['|',('extra_class_bool', '=', False),('state', 'in', ('draft','to_approve','approve','paid'))]}"
+                                       groups="faculty.group_faculty_user"/>
+                                <!--                                <field name="extra_amount"/>-->
+                                <!--                                <field name="extra_hour_total"/>-->
+                                <field name="total_class_remaining"/>
+                                <!--                                <field name="manager_approve"/>-->
+                                <!--                                <field name="tax_ids" widget="many2many_tags"/>-->
+                                <field name="total_rate"/>
+                                <field name="total_payable_amount"/>
+                                <field name="normal_class_time"/>
+                            </group>
+
+                            <!--                                <field name="break_class" attrs="{'readonly': [('state', '=', 'approve')]}"/>-->
+
+
+                            <!--                                <field name="test_bool"/>-->
+                            <!--                                <field name="name"/>-->
+
+                            <!--                                <field name="name"/>-->
+                            <!--                                <field name="srtdate"/>-->
+                            <!--                                <field name="enddate"/>-->
+                        </group>
+
+                        <notebook position="inside">
+                            <page string="Break" name="reason">
+                                <field name="reason_ids">
+                                    <tree editable="bottom">
+                                        <field name="reason"/>
+                                        <field name="from_date"/>
+                                        <field name="to_date"/>
+                                        <field name="duration"/>
+                                    </tree>
+                                </field>
+                                <!--                                <field name="total_amount" widget="monetary"/>-->
+
+                            </page>
+                        </notebook>
+                        <group name="note_group" col="6">
+                            <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
+                                <field name="total_amount" widget="monetary"/>
+                                <field name="total_class_remaining" widget="monetary"/>
+                                <field name="actual_amount" widget="monetary"/>
+
+                                <!--                                <field name="amount_tax" widget='monetary' options="{'currency_field': 'currency_id'}"/>-->
+                                <!--                                <field name="tds_amount" widget='monetary'/>-->
+
+                                <!--                                <div class="oe_subtotal_footer_separator oe_inline o_td_label">-->
+                                <!--                                    <label for="total_payable_amount"/>-->
+                                <!--                                </div>-->
+                                <!--                                <field name="total_payable_amount" nolabel="1" class="oe_subtotal_footer_separator"-->
+                                <!--                                       widget="monetary"/>-->
+                            </group>
+                            <!--                        <div class="oe_clear"/>-->
+                        </group>
+                        <h4 align="center" style="color:red"
+                            attrs="{'invisible':['|',('total_class_remaining', '&gt;', 0),('total_class_remaining', '=', 0)]}">
+                            This Faculty class is over...
+                        </h4>
+                        <!--                        <notebook>-->
+                        <!--                            <page string="Class room" name="fields">-->
+                        <!--                                <field name="reason_ids">-->
+                        <!--                                    <tree string="Reason">-->
+                        <!--                                        <field name="reason"/>-->
+                        <!--                                    </tree>-->
+                        <!--                                </field>-->
+                        <!--                            </page>-->
+                        <!--                        </notebook>-->
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <!--        <record id="department_approve_view" model="ir.ui.view">-->
+        <!--            <field name="name">Approve</field>-->
+        <!--            <field name="model">approvals</field>-->
+        <!--            <field name="type">form</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <form string="Class">-->
+        <!--                    <header>-->
+        <!--                        <button name="check_approvals" class="oe_highlight" string="Check Approval"-->
+        <!--                                type="object"/>-->
+        <!--                        &lt;!&ndash;                                groups="faculty.group_faculty_administrator"/>&ndash;&gt;-->
+        <!--                    </header>-->
+        <!--                </form>-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <record id="department_main_tree" model="ir.ui.view">
+            <field name="name">courses</field>
+            <field name="model">form.department</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="current_user"/>
+                </tree>
+            </field>
+        </record>
+        <record id="break_reason_model_view" model="ir.ui.view">
+            <field name="name">Reasons</field>
+            <field name="model">break.reason</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="reason"/>
+                </tree>
+            </field>
+        </record>
+        <record id="daily_class_main_view" model="ir.ui.view">
+            <field name="name">Daily class</field>
+            <field name="model">daily.class</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="faculty_id"/>
+                    <field name="class_room"/>
+                    <field name="subject_daily_id"/>
+
+                    <field name="actual_amount"/>
+                    <field name="state" decoration-success="state == 'sale' or state == 'done'"
+                           decoration-info="state == 'paid' or state == 'sent'" widget="badge" optional="show"/>
+                    <!--                    <field name="topic"/>-->
+                    <!--                    <field name="strt_time"/>-->
+                    <!--                    <field name="end_time"/>-->
+                    <field name="approve_status"/>
+                    <!--                    <field name="payment_status"/>-->
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="daily_class_record_action_view">
+            <field name="name">Daily Class Details</field>
+            <field name="res_model">daily.class</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+<!--        <menuitem-->
+<!--                id="menu_view_daily_class"-->
+<!--                name="Daily Class Record"-->
+<!--                  parent="menu_view_faculty"-->
+<!--                action="daily_class_record_action_view"-->
+<!--                sequence="2"/>-->
+
+
+        <!--        <menuitem-->
+        <!--        id="crm_lead_menu_my_activities"-->
+        <!--        name="My Activities"-->
+        <!--        parent="crm_menu_sales"-->
+        <!--        groups="sales_team.group_sale_manager"-->
+        <!--        sequence="2"/>-->
+    </data>
+</odoo>

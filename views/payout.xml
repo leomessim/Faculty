@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="faculty_subject_rate_view_form" model="ir.ui.view">
+            <field name="name">Faculty Rate</field>
+            <field name="model">faculty.subject.rate</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Rate">
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="course_id"/>
+                                <field name="subject_id"/>
+                                <field name="salary_per_hr"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+
+        </record>
+        <record id="faculty_subject_view" model="ir.ui.view">
+            <field name="name">Subject Rate</field>
+            <field name="model">faculty.subject.rate</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="daily_class_rate_record_action">
+            <field name="name">Faculty Subject Rate</field>
+            <field name="res_model">faculty.subject.rate</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="faculty_rate_view" model="ir.ui.view">
+            <field name="name">Accounts Payout</field>
+            <field name="model">accountant.payout</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,paid"/>
+                        <!--                        <button name="paid_button" class="oe_highlight" states="draft" string="Paid"-->
+                        <!--                                type="object"/>-->
+                    </header>
+
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="course"/>
+                                <field name="duration"/>
+                                <field name="per_hr_rate"/>
+                                <field name="tds"/>
+                                <field name="extra_charge"/>
+                                <field name="total"/>
+                                <!--                                <field name="create_date_custome"/>-->
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+        <!--        <record id="action_server_state" model="ir.actions.server">-->
+        <!--            <field name="name">Paid State</field>-->
+        <!--            <field name="type">ir.actions.server</field>-->
+        <!--            <field name="model_id" ref="model_accountant_payout"/>-->
+        <!--            <field name="binding_model_id" ref="model_accountant_payout"/>-->
+        <!--            <field name="state">code</field>-->
+        <!--            <field name="code">-->
+        <!--                for record in records:-->
+        <!--                record.paid_button()-->
+        <!--            </field>-->
+        <!--        </record>-->
+        <record id="faculty_rate_tree_view" model="ir.ui.view">
+            <field name="name">Accounts Payout</field>
+            <field name="model">accountant.payout</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="course"/>
+                    <field name="create_date"/>
+                    <field name="duration" sum="Total duration"/>
+                    <field name="per_hr_rate"/>
+                    <field name="tds" sum="TDS"/>
+                    <field name="tax" sum="Tax"/>
+                    <field name="extra_charge" sum="Extra Hours"/>
+                    <field name="total" sum="Total amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="faculty_accounts_payment_tree_view" model="ir.ui.view">
+            <field name="name">Total Payment</field>
+            <field name="model">total.payment</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="faculty_id"/>
+                    <!--                    <field name="from_date"/>-->
+                    <field name="month"/>
+
+                    <field name="amount_to_be_paid"/>
+                    <field name="advance_remaining"/>
+                    <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
+                    <field name="extra_payment"/>
+                    <field name="amount_pay_now" sum="Total amount"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_payout_form" model="ir.actions.act_window">
+            <field name="name">Payout Form</field>
+            <field name="res_model">accountant.payout</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="payout_wizard_view_form" model="ir.ui.view">
+            <field name="name">Payout</field>
+            <field name="model">payout.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Test">
+                    <group class="oe_title">
+                        <field name="faculty_id"/>
+                        <field name="from_date"/>
+                        <field name="to_date"/>
+                    </group>
+                    <footer>
+                        <button string="Ok" class="oe_highlight" type="object" name='done'/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="payout_model_wizard_action" model="ir.actions.act_window">
+            <field name="name">Generate Payout Entry</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payout.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="payout_wizard_view_form"/>
+            <field name="target">new</field>
+        </record>
+
+
+        <menuitem
+                id="menu_salary_per_hr"
+                name="Faculty Subject Rate"
+                parent="menu_course"
+                action="daily_class_rate_record_action"
+                sequence="2"/>
+        <!--        <menuitem name="Faculty Payout Entries"-->
+        <!--                  id="reporting_installation"-->
+        <!--                  parent="menu_payment"-->
+        <!--                  action="payout_model_wizard_action"-->
+        <!--                  sequence="1"/>-->
+        <menuitem name="Subject Standard Hours"
+                  id="subject_standard_hr_menu"
+                  parent="menu_course"
+                  action="action_subject_standard_hr"
+                  sequence="5"/>
+
+
+    </data>
+</odoo>

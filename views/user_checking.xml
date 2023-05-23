@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="user_view_order_form_inherit" model="ir.ui.view">
+        <field name="name">user inheritance</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='action_id']" position="after">
+                <field name="faculty_check"/>
+            </xpath>
+        </field>
+    </record>
+<!--    <record model="ir.rule" id="my_model_user_rule">-->
+<!--        <field name="name">My Model User Rule</field>-->
+<!--        <field name="model_id" ref="faculty.model_daily_class"/>-->
+<!--&lt;!&ndash;        <field name="domain_force">[('faculty_id', '=', user.id)]</field>&ndash;&gt;-->
+<!--        <field name="groups" eval="[(4, ref('faculty.group_faculty_user'))]"/>-->
+<!--        <field name="perm_read" eval="True"/>-->
+<!--        <field name="perm_create" eval="True"/>-->
+<!--        <field name="perm_write" eval="True"/>-->
+<!--        <field name="perm_unlink" eval="True"/>-->
+<!--    </record>-->
+</odoo>
