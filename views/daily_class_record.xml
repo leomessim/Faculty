@@ -24,6 +24,7 @@
                             groups="faculty.group_faculty_user"/>
                     <button name="rejected" class="oe_highlight" states="fac_approve" string="Reject" type="object"
                             groups="faculty.group_faculty_user"/>
+<!--                    <h1> hhhi </h1>-->
                     <!--                    <button name="rejected" class="oe_highlight" string="Reject" type="object"-->
                     <!--                            attrs="{'invisible':[('state', 'in', ['rejected','draft','approve'])]}"/>-->
                 </header>
