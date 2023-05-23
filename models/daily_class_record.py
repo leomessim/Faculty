@@ -20,14 +20,14 @@ class DailyClassRecord(models.Model):
     ], string='Status', required=True, readonly=True, copy=False,
         tracking=True, default='draft')
     branch_name = fields.Selection(selection=[
-        ('corporate_office', 'Corporate office & City campus'),
-        ('cochin_campus', 'Cochin campus'),
-        ('calicut_campus', 'Calicut campus'),
-        ('kottayam_campus', 'Kottayam campus'),
-        ('malappuram_campus', 'Malappuram campus'),
-        ('trivandrum_campus', 'Trivandrum campus'),
-        ('palakkad_campus', 'Palakkad campus'),
-        ('dubai_campus', 'Dubai campus'),
+        ('corporate_office', 'Palarivattom Campus'),
+        ('cochin_campus', 'KMM Campus'),
+        ('calicut_campus', 'Calicut Campus'),
+        ('kottayam_campus', 'Kottayam Campus'),
+        ('malappuram_campus', 'Malappuram Campus'),
+        ('trivandrum_campus', 'Trivandrum Campus'),
+        ('palakkad_campus', 'Palakkad Campus'),
+        ('dubai_campus', 'Dubai Campus'),
     ], string='Branch', copy=False,
         tracking=True, required=True)
     month_of_record = fields.Selection([
