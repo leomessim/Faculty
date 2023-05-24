@@ -137,6 +137,19 @@ class DailyClassRecord(models.Model):
     extra_hour_testing = fields.Float()
     total_extra_hour = fields.Float()
 
+    @api.depends('subject_id', 'course_id')
+    def _total_taken_classes(self):
+        total = 0
+        duration = self.env['daily.class.record'].search([])
+        for i in duration:
+            if self.faculty_id == i.faculty_id and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+                total += i.total_duration_sum
+                self.class_hour_till_now = total
+            else:
+
+                self.class_hour_till_now = 0
+    class_hour_till_now = fields.Float('Class hours till now', compute='_total_taken_classes', store=True)
+
     def confirm_record(self):
         total = 0
         var = []

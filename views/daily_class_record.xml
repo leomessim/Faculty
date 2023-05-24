@@ -48,7 +48,7 @@
                                    attrs="{'invisible':['|',('extra_hour_active', '=', False),('state', '=', 'draft')],'readonly':[('make_visible','=',False)]}"/>
                             <field name="extra_hour_reason"
                                    attrs="{'invisible':['|',('extra_hour_active', '=', False),('state', 'in', ('draft','to_approve'))], 'readonly':[('state','in',['approve','rejected'])]}"/>
-                            <!--                            <field name="total_duration_sum"/>-->
+<!--                            <field name="total_duration_sum" string="Class hours till now"/>-->
                             <field name="make_visible_coord" invisible="1"/>
                             <field name="extra_hour_testing" invisible="1"/>
 
@@ -79,8 +79,9 @@
                     <group name="note_group" col="6">
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
                             <field name="standard_hour" widget="monetary"/>
+                            <field name="class_hour_till_now"/>
 
-                            <!--                            <field name="total_duration_sum" widget="monetary"/>-->
+<!--                            <field name="total_duration_sum" widget="monetary"/>-->
                             <field name="subject_rate" widget="monetary"
                                    invisible="1"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Green;"

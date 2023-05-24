@@ -139,7 +139,9 @@ class TotalPayment(models.Model):
     @api.depends('advance_deduction', 'amount_tax_id', 'amount_to_be_paid', 'extra_payment', 'tds_amount')
     def _compute_total_payable_amount(self):
         for rec in self:
-            rec.amount_pay_now = (rec.amount_to_be_paid - rec.advance_deduction) - rec.tds_amount + rec.amount_tax_id
+            aa = (rec.amount_to_be_paid - rec.tds_amount) + rec.amount_tax_id
+            bb = aa - rec.advance_deduction
+            rec.amount_pay_now = bb
 
     amount_pay_now = fields.Float(string='Amount paying now', store=True, compute='_compute_total_payable_amount')
     amount_tds_check = fields.Float(string='Total excluded tds')
@@ -458,8 +460,10 @@ class PaymentTotal(models.Model):
     @api.depends('advance_deduction', 'amount_tax_id', 'amount_to_be_paid', 'extra_payment', 'tds_amount')
     def _compute_total_payable_amount(self):
         for rec in self:
-            rec.amount_pay_now = rec.extra_payment + (
-                    rec.amount_to_be_paid - rec.advance_deduction) - rec.tds_amount + rec.amount_tax_id
+            aa = (rec.amount_to_be_paid - rec.tds_amount) + rec.amount_tax_id
+            bb = aa - self.advance_deduction
+            rec.amount_pay_now = bb
+            print(aa,'dedu')
 
     amount_pay_now = fields.Float(string='Amount paying now', store=True, compute='_compute_total_payable_amount')
 
