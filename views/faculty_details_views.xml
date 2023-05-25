@@ -88,8 +88,9 @@
                                         <field name="bank_name"/>
                                         <field name="account_holder"/>
                                         <field name="bank_account_no"/>
+
                                         <field name="ifsc"/>
-                                        <field name="gst_number"/>
+                                        <field name="gst_number"  attrs="{'required': [('gst_status', '=', True)]}"/>
                                         <field name="pan_number"/>
                                     </group>
                                 </group>

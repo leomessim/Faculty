@@ -16,15 +16,15 @@ class FacultyDetails(models.Model):
     salary_hr = fields.Integer(string="Salary per Hour")
     bank_acc = fields.Many2one('res.partner.bank',
                                string="Bank Account",
-                               ondelete='restrict', copy=False)
+                               ondelete='restrict', copy=False, required=True)
     date_birth = fields.Date(string='Date of Birth')
     pan_number = fields.Char(string='Pan Number')
     payout_ids = fields.One2many('payout', 'payout_id')
     gst_number = fields.Char(string='Gst Number')
-    bank_name = fields.Char('Bank name')
+    bank_name = fields.Char('Bank name', required=True)
     account_holder = fields.Char('Account holder name')
-    bank_account_no = fields.Char('Bank account number')
-    ifsc = fields.Char('IFSC')
+    bank_account_no = fields.Char('Bank account number', required=True)
+    ifsc = fields.Char('IFSC', required=True)
     user_id = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user.id, readonly="1",
                               tracking=True)
     date_month = fields.Selection([

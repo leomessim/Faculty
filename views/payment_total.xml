@@ -10,8 +10,8 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,pay,pay_list"/>
                     <button name='confirm_payment' class="oe_highlight" states="draft" string="Confirm"
                             type="object"/>
-                    <button name='submit_button' class="oe_highlight" string="Pay now" states="pay"
-                            type="object"/>
+                    <button name='%(payout_model_wizard_action)d' class="oe_highlight" string="Pay now" states="pay"
+                            type="action"/>
                     <button name='refresh' string="Refresh" states="draft"
                             type="object"/>
                 </header>
@@ -46,13 +46,13 @@
                         <group>
 
                             <field name="faculty_id"/>
-                            <field name="branch" attrs="{'invisible':[('state', 'in', ['pay','pay_list'] )]}"/>
-                            <field name="month" attrs="{'invisible':[('state', 'in', ['pay','pay_list'] )]}"/>
+                            <field name="branch"/>
+                            <field name="month"/>
                             <!--                                <field name="to_date"/>-->
 
-                            <field name="class_room" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>
-                            <field name="course_id" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>
-                            <field name="subject_id" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>
+                            <field name="class_room"/>
+                            <field name="course_id"/>
+                            <field name="subject_id"/>
                             <field name="current_status" invisible="1"/>
                             <!--                                <field name="charge"-->
                             <!--                                       attrs="{'readonly':[('state','in',['pay_list','pay'])]}"/>-->
@@ -67,10 +67,8 @@
                         <group>
                             <field name="advance_remaining"/>
                             <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
-                            <field name="advance_deduction"/>
 
-                            <field name="extra_charge"
-                                   attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}"/>
+
                             <field name="tds_amount" attrs="{'invisible':[('state','in',['draft'])]}"/>
                             <field name="check_gst" invisible="1"/>
                             <field name="extra_hour_reason" string="Reason for extra hour"/>
@@ -87,11 +85,9 @@
                         <!--                                           widget="monetary" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
                         <!--                                </group>-->
                         <!--                            </group>-->
-                        <field name="bank" invisible="1"/>
                         <field name="ifsc" invisible="1"/>
                         <field invisible="1" name="account_holder"/>
                         <field name="account_number" invisible="1"/>
-
                     </group>
                     <notebook position="inside">
                         <page string="Payment" name="payments">
@@ -111,24 +107,38 @@
                     </notebook>
                     <group name="note_group" col="6">
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="payment">
-                            <field name="amount_to_be_paid" widget="monetary"/>
-<!--                            <field name="remaining_hours"/>-->
+                            <!--                            <field name="total_net_hour_amount"/>-->
+                            <!--                            <field name="duration_amount"/>-->
+                            <field name="total_duration_sum"/>
+                            <field name="rate_of_sub"/>
+                            <field name="amount_to_be_paid" widget="monetary" invisible="1"/>
+                            <!--                            <field name="remaining_hours"/>-->
                             <field name="standard_hours"/>
+                            <field name="class_hours_till"/>
+
                             <field name="extra_hr_testing" invisible="1"/>
                             <field name="correct_remaining_hours"/>
-                            <field name="total_duration_sum" invisible="1"/>
-                            <field name="extra_payment" />
+                            <field name="extra_charge"
+                                   attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}"/>
+
+                            <field name="extra_payment"/>
+                            <field name="added_payment_extra"/>
 
                             <field name="tds_amount"/>
+                            <field name="added_tds_payment"/>
                             <field name="tax_id"
                                    attrs="{'invisible':[('check_gst', '=', 'No')],'readonly':[('state', 'in', ['pay_list'])]}"
                                    widget="many2many_tags"/>
+                            <field name="amount_tax_id"/>
+                            <field name="added_tax_payment"/>
+                            <field name="advance_deduction"/>
+                            <field name="advance_ded_total"/>
                             <div class="oe_subtotal_footer_separator oe_inline">
                                 <label for="amount_pay_now" attrs="{'invisible':[('state','in',['draft'])]}"/>
                             </div>
                             <field name="amount_pay_now" nolabel="1" class="oe_subtotal_footer_separator"
                                    widget="monetary" options="{'currency_field': 'currency_id'}"/>
-<!--                                   attrs="{'invisible':[('state','in',['draft'])]}"/>-->
+                            <!--                                   attrs="{'invisible':[('state','in',['draft'])]}"/>-->
 
                         </group>
                     </group>
@@ -152,11 +162,12 @@
                 <field name="month"/>
 
                 <field name="amount_to_be_paid" sum="Total amount"/>
-                <field name="tds_amount"/>
-                <field name="total_duration_sum"/>
-                <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
                 <field name="extra_payment"/>
-<!--                <field name="remaining_hours"/>-->
+                <field name="tds_amount"/>
+                <field name="total_duration_sum" string="Class taken hours"/>
+                <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
+
+                <!--                <field name="remaining_hours"/>-->
                 <field name="amount_pay_now" sum="Total"/>
                 <field name="state"/>
             </tree>

@@ -45,7 +45,7 @@
                             <field name="extra_hour_active"
                                    attrs="{'invisible':['|','|',('state', '=', 'draft'),('actual_dur', '&gt;', 0),('actual_dur', '=', 0)],'readonly':[('make_visible','=',False)]}"/>
                             <field name="extra_hour"
-                                   attrs="{'invisible':['|',('extra_hour_active', '=', False),('state', '=', 'draft')],'readonly':[('make_visible','=',False)]}"/>
+                                   attrs="{'invisible':['|','|',('state', '=', 'draft'),('actual_dur', '&gt;', 0),('actual_dur', '=', 0)],'readonly':[('make_visible','=',False)]}"/>
                             <field name="extra_hour_reason"
                                    attrs="{'invisible':['|',('extra_hour_active', '=', False),('state', 'in', ('draft','to_approve'))], 'readonly':[('state','in',['approve','rejected'])]}"/>
 <!--                            <field name="total_duration_sum" string="Class hours till now"/>-->

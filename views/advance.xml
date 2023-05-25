@@ -1,140 +1,140 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
     <data>
-        <record id="faculty_total_rate_view" model="ir.ui.view">
-            <field name="name">Accounts Total</field>
-            <field name="model">total.payment</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form>
-                    <header>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,pay,pay_list"/>
-                        <button name='confirm_payment' class="oe_highlight" states="draft" string="Confirm"
-                                type="object"/>
-                        <button name='submit_button' class="oe_highlight" string="Pay now" states="pay"
-                                type="object"/>
-                    </header>
-                    <sheet>
-                        <div class="oe_button_box" name="button_box">
-                            <button
-                                    id="hr_presence_button"
-                                    class="oe_stat_button"
-                                    disabled="1">
-                                <div role="img" class="fa fa-fw fa-circle text-success o_button_icon"
-                                     attrs="{'invisible': [('current_status', '!=', 'active')]}" aria-label="Available"
-                                     title="Available"/>
-                                <div role="img" class="fa fa-fw fa-circle text-danger o_button_icon"
-                                     attrs="{'invisible': [('current_status', '!=', 'inactive')]}"
-                                     aria-label="Not available" title="Not available"/>
-                                <div class="o_stat_info" attrs="{'invisible': [('current_status', '=', 'active')]}">
-                                    <span class="o_stat_text">
-                                        Inactive
-                                    </span>
-                                </div>
-                                <div class="o_stat_info" attrs="{'invisible': [('current_status', '=', 'inactive')]}">
-                                    <span class="o_stat_text">
-                                        Active
-                                    </span>
-                                </div>
-                                <!--                        <button class="oe_stat_button" type="object" name="get_active_status"-->
-                                <!--                                icon="fa-car">-->
-                                <!--                                <field string="Vehicle" name="vehicle_count" widget="statinfo"/>-->
-                            </button>
-                        </div>
-                        <group>
-                            <group>
+<!--        <record id="faculty_total_rate_view" model="ir.ui.view">-->
+<!--            <field name="name">Accounts Total</field>-->
+<!--            <field name="model">total.payment</field>-->
+<!--            <field name="type">form</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form>-->
+<!--                    <header>-->
+<!--                        <field name="state" widget="statusbar" statusbar_visible="draft,pay,pay_list"/>-->
+<!--                        <button name='confirm_payment' class="oe_highlight" states="draft" string="Confirm"-->
+<!--                                type="object"/>-->
+<!--                        <button name='submit_button' class="oe_highlight" string="Pay now" states="pay"-->
+<!--                                type="object"/>-->
+<!--                    </header>-->
+<!--                    <sheet>-->
+<!--                        <div class="oe_button_box" name="button_box">-->
+<!--                            <button-->
+<!--                                    id="hr_presence_button"-->
+<!--                                    class="oe_stat_button"-->
+<!--                                    disabled="1">-->
+<!--                                <div role="img" class="fa fa-fw fa-circle text-success o_button_icon"-->
+<!--                                     attrs="{'invisible': [('current_status', '!=', 'active')]}" aria-label="Available"-->
+<!--                                     title="Available"/>-->
+<!--                                <div role="img" class="fa fa-fw fa-circle text-danger o_button_icon"-->
+<!--                                     attrs="{'invisible': [('current_status', '!=', 'inactive')]}"-->
+<!--                                     aria-label="Not available" title="Not available"/>-->
+<!--                                <div class="o_stat_info" attrs="{'invisible': [('current_status', '=', 'active')]}">-->
+<!--                                    <span class="o_stat_text">-->
+<!--                                        Inactive-->
+<!--                                    </span>-->
+<!--                                </div>-->
+<!--                                <div class="o_stat_info" attrs="{'invisible': [('current_status', '=', 'inactive')]}">-->
+<!--                                    <span class="o_stat_text">-->
+<!--                                        Active-->
+<!--                                    </span>-->
+<!--                                </div>-->
+<!--                                &lt;!&ndash;                        <button class="oe_stat_button" type="object" name="get_active_status"&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                icon="fa-car">&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                <field string="Vehicle" name="vehicle_count" widget="statinfo"/>&ndash;&gt;-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <group>-->
+<!--                            <group>-->
 
-                                <field name="faculty_id"/>
-                                <field name="branch" attrs="{'invisible':[('state', 'in', ['pay','pay_list'] )]}"/>
-                                <field name="month" attrs="{'invisible':[('state', 'in', ['pay','pay_list'] )]}"/>
-                                <!--                                <field name="to_date"/>-->
-                                <field name="advance_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>
-                                <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
-                                <field name="advance_deduction"
-                                       attrs="{'readonly':[('state','in',['pay_list'])],'invisible':[('state', '=', 'draft')]}"/>
+<!--                                <field name="faculty_id"/>-->
+<!--                                <field name="branch" attrs="{'invisible':[('state', 'in', ['pay','pay_list'] )]}"/>-->
+<!--                                <field name="month" attrs="{'invisible':[('state', 'in', ['pay','pay_list'] )]}"/>-->
+<!--                                &lt;!&ndash;                                <field name="to_date"/>&ndash;&gt;-->
+<!--                                <field name="advance_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
+<!--                                &lt;!&ndash;                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>&ndash;&gt;-->
+<!--                                <field name="advance_deduction"-->
+<!--                                       attrs="{'readonly':[('state','in',['pay_list'])],'invisible':[('state', '=', 'draft')]}"/>-->
 
-                                <field name="extra_charge"
-                                       attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}"/>
-                                <!--                                <field name="charge"-->
-                                <!--                                       attrs="{'readonly':[('state','in',['pay_list','pay'])]}"/>-->
-                                <!--                                <field name="extra_payment"-->
-                                <!--                                       attrs="{'readonly':[('state','in',['pay_list'])],'invisible':[('state', '=', 'draft')]}"/>-->
-                                <!--                                <field name="extra_total_accounts"-->
-                                <!--                                       attrs="{'invisible':[('state', '=', 'draft')], 'readonly':[('state','in',['pay_list','pay'])]}"/>-->
+<!--                                <field name="extra_charge"-->
+<!--                                       attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}"/>-->
+<!--                                &lt;!&ndash;                                <field name="charge"&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                       attrs="{'readonly':[('state','in',['pay_list','pay'])]}"/>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                <field name="extra_payment"&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                       attrs="{'readonly':[('state','in',['pay_list'])],'invisible':[('state', '=', 'draft')]}"/>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                <field name="extra_total_accounts"&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                       attrs="{'invisible':[('state', '=', 'draft')], 'readonly':[('state','in',['pay_list','pay'])]}"/>&ndash;&gt;-->
 
-                                <!--                                <field name="inactive_date"-->
-                                <!--                                       attrs="{'invisible':[('state', '=', 'draft')], 'readonly':[('state','in',['pay_list'])]}"/>-->
-                            </group>
-                            <group>
-                                <field name="tds_amount" attrs="{'invisible':[('state','in',['draft'])]}"/>
-                                <field name="check_gst" attrs="{'invisible':[('state', '=', 'draft')]}"/>
+<!--                                &lt;!&ndash;                                <field name="inactive_date"&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                       attrs="{'invisible':[('state', '=', 'draft')], 'readonly':[('state','in',['pay_list'])]}"/>&ndash;&gt;-->
+<!--                            </group>-->
+<!--                            <group>-->
+<!--                                <field name="tds_amount" attrs="{'invisible':[('state','in',['draft'])]}"/>-->
+<!--                                <field name="check_gst" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
 
-                                <field name="transaction_id"
-                                       attrs="{'readonly':[('state','in',['pay_list'])], 'invisible':[('state', '=', 'draft')]}"/>
+<!--                                <field name="transaction_id"-->
+<!--                                       attrs="{'readonly':[('state','in',['pay_list'])], 'invisible':[('state', '=', 'draft')]}"/>-->
 
-                                <field name="class_room" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>
-                                <field name="course_id" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>
-                                <field name="subject_id" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>
-                                <field name="current_status"
-                                       attrs="{'readonly':[('state','in',['pay_list','pay'])]}"/>
-                            </group>
+<!--                                <field name="class_room" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>-->
+<!--                                <field name="course_id" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>-->
+<!--                                <field name="subject_id" attrs="{'invisible':[('state','in',['pay_list','pay'])]}"/>-->
+<!--                                <field name="current_status"-->
+<!--                                       attrs="{'readonly':[('state','in',['pay_list','pay'])]}"/>-->
+<!--                            </group>-->
 
-                            <!--                            <group name="note_group" col="6">-->
-                            <!--                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">-->
-
-
-                            <!--                                    <field name="amount_pay_now" nolabel="1" class="oe_subtotal_footer_separator"-->
-                            <!--                                           widget="monetary" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
-                            <!--                                </group>-->
-                            <!--                            </group>-->
-                            <field name="bank" invisible="1"/>
-                            <field name="ifsc" invisible="1"/>
-                            <field invisible="1" name="account_holder"/>
-                            <field name="account_number" invisible="1"/>
-
-                        </group>
-                        <notebook position="inside">
-                            <page string="Payment" name="payments">
-                                <field name="payment_ids">
-                                    <tree editable="bottom">
-                                        <field name="date"/>
-                                        <field name="start_date"/>
-                                        <field name="end_date"/>
-                                        <field name="topic"/>
-                                        <field name="net_hour"/>
-                                        <field name="balance"/>
-                                    </tree>
-                                </field>
-                                <!--                                <field name="total_amount" widget="monetary"/>-->
-
-                            </page>
-                        </notebook>
-                        <group name="note_group" col="6">
-                            <group class="oe_subtotal_footer oe_right" colspan="2" name="payment">
-                                <field name="amount_to_be_paid" widget="monetary"/>
-                                <field name="tds_amount" attrs="{'invisible':[('state','in',['draft'])]}"/>
-                                <field name="tax_id"
-                                       attrs="{'invisible':['|',('check_gst', '=', 'No'),('state', 'in', 'draft')],'readonly':[('state', 'in', ['pay_list'])]}"
-                                       widget="many2many_tags"/>
-                                <div class="oe_subtotal_footer_separator oe_inline">
-                                    <label for="amount_pay_now" attrs="{'invisible':[('state','in',['draft'])]}"/>
-                                </div>
-                                <field name="amount_pay_now" nolabel="1" class="oe_subtotal_footer_separator"
-                                       widget="monetary" options="{'currency_field': 'currency_id'}"
-                                       attrs="{'invisible':[('state','in',['draft'])]}"/>
+<!--                            &lt;!&ndash;                            <group name="note_group" col="6">&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">&ndash;&gt;-->
 
 
-                            </group>
-                        </group>
-                    </sheet>
-                    <div class="oe_chatter">
-                        <field name="message_follower_ids"
-                               widget="mail_followers"/>
-                        <field name="message_ids" widget="mail_thread"/>
-                    </div>
-                </form>
-            </field>
-        </record>
+<!--                            &lt;!&ndash;                                    <field name="amount_pay_now" nolabel="1" class="oe_subtotal_footer_separator"&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                           widget="monetary" attrs="{'invisible':[('state', '=', 'draft')]}"/>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                                </group>&ndash;&gt;-->
+<!--                            &lt;!&ndash;                            </group>&ndash;&gt;-->
+<!--                            <field name="bank" invisible="1"/>-->
+<!--                            <field name="ifsc" invisible="1"/>-->
+<!--                            <field invisible="1" name="account_holder"/>-->
+<!--                            <field name="account_number" invisible="1"/>-->
+
+<!--                        </group>-->
+<!--                        <notebook position="inside">-->
+<!--                            <page string="Payment" name="payments">-->
+<!--                                <field name="payment_ids">-->
+<!--                                    <tree editable="bottom">-->
+<!--                                        <field name="date"/>-->
+<!--                                        <field name="start_date"/>-->
+<!--                                        <field name="end_date"/>-->
+<!--                                        <field name="topic"/>-->
+<!--                                        <field name="net_hour"/>-->
+<!--                                        <field name="balance"/>-->
+<!--                                    </tree>-->
+<!--                                </field>-->
+<!--                                &lt;!&ndash;                                <field name="total_amount" widget="monetary"/>&ndash;&gt;-->
+
+<!--                            </page>-->
+<!--                        </notebook>-->
+<!--                        <group name="note_group" col="6">-->
+<!--                            <group class="oe_subtotal_footer oe_right" colspan="2" name="payment">-->
+<!--                                <field name="amount_to_be_paid" widget="monetary"/>-->
+<!--                                <field name="tds_amount" attrs="{'invisible':[('state','in',['draft'])]}"/>-->
+<!--                                <field name="tax_id"-->
+<!--                                       attrs="{'invisible':['|',('check_gst', '=', 'No'),('state', 'in', 'draft')],'readonly':[('state', 'in', ['pay_list'])]}"-->
+<!--                                       widget="many2many_tags"/>-->
+<!--                                <div class="oe_subtotal_footer_separator oe_inline">-->
+<!--                                    <label for="amount_pay_now" attrs="{'invisible':[('state','in',['draft'])]}"/>-->
+<!--                                </div>-->
+<!--                                <field name="amount_pay_now" nolabel="1" class="oe_subtotal_footer_separator"-->
+<!--                                       widget="monetary" options="{'currency_field': 'currency_id'}"-->
+<!--                                       attrs="{'invisible':[('state','in',['draft'])]}"/>-->
+
+
+<!--                            </group>-->
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                    <div class="oe_chatter">-->
+<!--                        <field name="message_follower_ids"-->
+<!--                               widget="mail_followers"/>-->
+<!--                        <field name="message_ids" widget="mail_thread"/>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
 
         <record id="view_faculty_salary_advance_form" model="ir.ui.view">
             <field name="name">faculty.salary.advance.form</field>
@@ -217,12 +217,12 @@
             <field name="res_model">faculty.salary.advance</field>
             <field name="view_mode">tree,form</field>
         </record>
-        <record model="ir.actions.act_window" id="total_payment_view">
-            <field name="name">Total</field>
-            <field name="res_model">total.payment</field>
-            <field name="view_mode">tree,form</field>
+<!--        <record model="ir.actions.act_window" id="total_payment_view">-->
+<!--            <field name="name">Total</field>-->
+<!--            <field name="res_model">total.payment</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
 
-        </record>
+<!--        </record>-->
 <!--        <menuitem-->
 <!--                id="action_my_salary_total"-->
 <!--                name="Faculty Payment Calculation"-->

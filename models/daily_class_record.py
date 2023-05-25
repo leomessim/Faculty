@@ -19,17 +19,7 @@ class DailyClassRecord(models.Model):
 
     ], string='Status', required=True, readonly=True, copy=False,
         tracking=True, default='draft')
-    branch_name = fields.Selection(selection=[
-        ('corporate_office', 'Palarivattom Campus'),
-        ('cochin_campus', 'KMM Campus'),
-        ('calicut_campus', 'Calicut Campus'),
-        ('kottayam_campus', 'Kottayam Campus'),
-        ('malappuram_campus', 'Malappuram Campus'),
-        ('trivandrum_campus', 'Trivandrum Campus'),
-        ('palakkad_campus', 'Palakkad Campus'),
-        ('dubai_campus', 'Dubai Campus'),
-    ], string='Branch', copy=False,
-        tracking=True, required=True)
+    branch_name = fields.Many2one('logic.branches', string='Branch')
     month_of_record = fields.Selection([
         ('january', 'January'), ('february', 'February'),
         ('march', 'March'), ('april', 'April'),
@@ -46,7 +36,7 @@ class DailyClassRecord(models.Model):
     record_ids = fields.One2many('record.data', 'record_id', string='Records')
 
     subject_rate = fields.Float(string='Subject rate', compute='onchange_standard_hour', store=True)
-    extra_hour = fields.Float(string='Extra hour')
+    extra_hour = fields.Integer(string='Extra hour eligible for payment', required=True)
 
     @api.depends('subject_id')
     def _compute_standard_hour_taken(self):
@@ -73,7 +63,7 @@ class DailyClassRecord(models.Model):
             if self.faculty_id == j.name and self.course_id == j.course_id and self.subject_id == j.subject_id:
 
                 self.subject_rate = j.salary_per_hr
-                print( self.subject_rate,'rate')
+                print(self.subject_rate,'rate')
             else:
                 print('no')
 
@@ -212,8 +202,8 @@ class DailyClassRecord(models.Model):
             'course_id': self.course_id.id,
             'subject_id': self.subject_id.id,
             'current_status': self.faculty_id.current_status,
-            'branch': self.branch_name,
-            'charge': self.subject_rate,
+            'branch': self.branch_name.id,
+            # 'charge': self.subject_rate,
             'ifsc': self.faculty_id.ifsc,
             'bank': self.faculty_id.bank_name,
             'account_number': self.faculty_id.bank_account_no,
@@ -223,6 +213,7 @@ class DailyClassRecord(models.Model):
             'extra_hr_testing': self.total_extra_hour,
             'extra_hour_reason': self.extra_hour_reason,
             'correct_remaining_hours': self.total_remaining_hour,
+            'class_hours_till': self.class_hour_till_now,
         }
         )
 

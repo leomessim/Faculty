@@ -107,25 +107,25 @@
                 </tree>
             </field>
         </record>
-        <record id="faculty_accounts_payment_tree_view" model="ir.ui.view">
-            <field name="name">Total Payment</field>
-            <field name="model">total.payment</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <tree>
-                    <field name="faculty_id"/>
-                    <!--                    <field name="from_date"/>-->
-                    <field name="month"/>
+        <!--        <record id="faculty_accounts_payment_tree_view" model="ir.ui.view">-->
+        <!--            <field name="name">Total Payment</field>-->
+        <!--            <field name="model">total.payment</field>-->
+        <!--            <field name="type">tree</field>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <tree>-->
+        <!--                    <field name="faculty_id"/>-->
+        <!--                    &lt;!&ndash;                    <field name="from_date"/>&ndash;&gt;-->
+        <!--                    <field name="month"/>-->
 
-                    <field name="amount_to_be_paid"/>
-                    <field name="advance_remaining"/>
-                    <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
-                    <field name="extra_payment"/>
-                    <field name="amount_pay_now" sum="Total amount"/>
-                    <field name="state"/>
-                </tree>
-            </field>
-        </record>
+        <!--                    <field name="amount_to_be_paid"/>-->
+        <!--                    <field name="advance_remaining"/>-->
+        <!--                    &lt;!&ndash;                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>&ndash;&gt;-->
+        <!--                    <field name="extra_payment"/>-->
+        <!--                    <field name="amount_pay_now" sum="Total amount"/>-->
+        <!--                    <field name="state"/>-->
+        <!--                </tree>-->
+        <!--            </field>-->
+        <!--        </record>-->
 
         <record id="action_payout_form" model="ir.actions.act_window">
             <field name="name">Payout Form</field>
@@ -136,21 +136,27 @@
             <field name="name">Payout</field>
             <field name="model">payout.wizard</field>
             <field name="arch" type="xml">
-                <form string="Test">
-                    <group class="oe_title">
-                        <field name="faculty_id"/>
-                        <field name="from_date"/>
-                        <field name="to_date"/>
+                <form string="Register Payment">
+                    <group>
+                        <group class="oe_title">
+                            <field name="journal"/>
+                            <field name="payment_date"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="transaction_id"/>
+                        </group>
                     </group>
                     <footer>
-                        <button string="Ok" class="oe_highlight" type="object" name='done'/>
+                        <button string="Create Payment" class="oe_highlight" type="object" name='done'/>
+                        <button string="Discard" type="object" name='cancel'/>
                     </footer>
                 </form>
             </field>
         </record>
 
         <record id="payout_model_wizard_action" model="ir.actions.act_window">
-            <field name="name">Generate Payout Entry</field>
+            <field name="name">Register Payment</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">payout.wizard</field>
             <field name="view_mode">form</field>
