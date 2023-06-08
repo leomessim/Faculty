@@ -13,8 +13,9 @@
                             <group>
                                 <field name="name"/>
                                 <field name="course_id"/>
-                                <field name="subject_id"/>
+                                <field name="subject_id" options="{'no_create': True}"/>
                                 <field name="salary_per_hr"/>
+
                             </group>
                         </group>
                     </sheet>

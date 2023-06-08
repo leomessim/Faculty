@@ -21,9 +21,10 @@ class FacultySalary(models.Model):
     _inherit = 'mail.thread'
 
     name = fields.Many2one('faculty.details', string='Faculty')
-    subject_id = fields.Many2one('subject.details', string='Subject')
+
     salary_per_hr = fields.Float(string='Salary per hour')
     course_id = fields.Many2one('courses.details', string='Course')
+    subject_id = fields.Many2one('subject.details', domain="[('course_sub_id', '=', course_id)]", string='Subject')
     # name = fields.Char(string='hhhi')
 
 
