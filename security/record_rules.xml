@@ -12,6 +12,16 @@
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
+        <record id="coordinator_own_documents" model="ir.rule">
+            <field name="name">See Only Own Documents</field>
+            <field name="model_id" ref="model_daily_class_record"/>
+            <field name="domain_force">[('coordinator.id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('coordinator_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
 
         <record id="faculty_user_access_profile" model="ir.rule">
             <field name="name">See Only His Profile</field>

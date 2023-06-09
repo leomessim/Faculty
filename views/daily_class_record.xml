@@ -30,6 +30,7 @@
                 <sheet>
                     <group>
                         <group>
+                            <field name="coordinator" invisible="1"/>
                             <field name="faculty_id" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="branch_name" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="month_of_record" attrs="{'readonly':[('make_visible','=',False)]}"/>
@@ -48,7 +49,7 @@
                                    attrs="{'invisible':['|','|',('state', '=', 'draft'),('actual_dur', '&gt;', 0),('actual_dur', '=', 0)],'readonly':[('make_visible','=',False)]}"/>
                             <field name="extra_hour_reason"
                                    attrs="{'invisible':['|',('extra_hour_active', '=', False),('state', 'in', ('draft','to_approve'))], 'readonly':[('state','in',['approve','rejected'])]}"/>
-<!--                            <field name="total_duration_sum" string="Class hours till now"/>-->
+                            <!--                            <field name="total_duration_sum" string="Class hours till now"/>-->
                             <field name="make_visible_coord" invisible="1"/>
                             <field name="extra_hour_testing" invisible="1"/>
 
@@ -57,10 +58,9 @@
                     </group>
                     <notebook position="inside">
                         <page string="Record" name="record">
-                            <field name="record_ids" attrs="{'readonly':[('make_visible','=',False)]}">
+                            <field name="record_ids" attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
 
                                 <tree editable="bottom">
-                                    <!--                                    <field name="make_visible" invisible="1"/>-->
                                     <field name="date"/>
                                     <field name="start_date"/>
                                     <field name="end_date"/>
@@ -81,24 +81,24 @@
                             <field name="standard_hour" widget="monetary"/>
                             <field name="class_hour_till_now"/>
 
-<!--                            <field name="total_duration_sum" widget="monetary"/>-->
+                            <!--                            <field name="total_duration_sum" widget="monetary"/>-->
                             <field name="subject_rate" widget="monetary"
                                    invisible="1"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Green;"
-                            attrs="{'invisible':['|',('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0)]}"/>
+                                   attrs="{'invisible':['|',('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0)]}"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"
-                            attrs="{'invisible':['|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)]}"/>
-<!--                            <field name="total_remaining_hour" string='Balance standard hours'-->
-<!--                                   attrs="{'visible':[('total_remaining_hour', '&gt;', 0)]}"/>-->
-<!--                            <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"-->
-<!--                                   attrs="{'invisible':['|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)]}"/>-->
+                                   attrs="{'invisible':['|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)]}"/>
+                            <!--                            <field name="total_remaining_hour" string='Balance standard hours'-->
+                            <!--                                   attrs="{'visible':[('total_remaining_hour', '&gt;', 0)]}"/>-->
+                            <!--                            <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"-->
+                            <!--                                   attrs="{'invisible':['|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)]}"/>-->
                             <field name="total_amount" widget="monetary" invisible="1"/>
                         </group>
                     </group>
-<!--                    <h4 align="center" style="color:red"-->
-<!--                        attrs="{'invisible':['|','|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0),('state', '=', 'draft')]}">-->
-<!--                        This Faculty class is over...-->
-<!--                    </h4>-->
+                    <!--                    <h4 align="center" style="color:red"-->
+                    <!--                        attrs="{'invisible':['|','|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0),('state', '=', 'draft')]}">-->
+                    <!--                        This Faculty class is over...-->
+                    <!--                    </h4>-->
                 </sheet>
                 <div class="oe_chatter">
                     <field name="message_follower_ids"

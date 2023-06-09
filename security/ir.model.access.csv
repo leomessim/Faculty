@@ -39,11 +39,11 @@ faculty_records,daily_record,model_daily_class_record,group_faculty_administrato
 faculty_records_ids,record,model_record_data,group_faculty_administrator,1,1,1,1
 faculty_payment_details,record,model_payment_details_tree,group_faculty_administrator,1,1,1,1
 payment_details,payment_record,model_payment_details_tree,group_accounting_manager,1,1,1,1
-faculty_records_coordinator,daily_record,model_daily_class_record,coordinator_user,1,1,1,0
+faculty_records_coordinator,daily_record,model_daily_class_record,coordinator_user,1,1,1,1
 subject_rae_coo,rate,model_faculty_subject_rate,coordinator_user,0,1,1,0
 subject_details_coo_YY,rate,model_subject_details,coordinator_user,1,1,1,0
 subject_details_coo,rate,model_subject_details,group_accounting_manager,1,1,1,1
-faculty_payment_coo,record,model_record_data,coordinator_user,1,1,1,0
+faculty_payment_coo,record,model_record_data,coordinator_user,1,1,1,1
 payment_details_fac,payment_record,model_payment_details_tree,group_faculty_user,0,0,1,0
 faculty_records_faculty,daily_record,model_daily_class_record,group_faculty_user,1,1,0,0
 faculty_pay,daily_payment,model_payment_total,group_faculty_administrator,1,1,1,1

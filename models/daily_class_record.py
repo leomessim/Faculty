@@ -10,6 +10,8 @@ class DailyClassRecord(models.Model):
 
     faculty_id = fields.Many2one('faculty.details', 'Name', index=True, required=True)
     class_room = fields.Many2one('class.room', string='Class', required=True)
+    coordinator = fields.Many2one('res.users', 'user', default=lambda self: self.env.user.id)
+
     state = fields.Selection(selection=[
         ('draft', 'Draft'),
         ('to_approve', 'To Approve'),
@@ -127,7 +129,7 @@ class DailyClassRecord(models.Model):
     extra_hour_testing = fields.Float()
     total_extra_hour = fields.Float()
 
-    @api.depends('subject_id', 'course_id')
+    @api.depends('subject_id', 'course_id', 'record_ids.net_hour')
     def _total_taken_classes(self):
         total = 0
         duration = self.env['daily.class.record'].search([])
@@ -136,7 +138,6 @@ class DailyClassRecord(models.Model):
                 total += i.total_duration_sum
                 self.class_hour_till_now = total
             else:
-
                 self.class_hour_till_now = 0
     class_hour_till_now = fields.Float('Class hours till now', compute='_total_taken_classes', store=True)
 
@@ -290,6 +291,7 @@ class RecordData(models.Model):
             record.balance = record.net_hour * record.record_id.subject_rate
 
     balance = fields.Float(string='Balance', compute='_compute_balance', store=True)
+
 
     # @api.depends('net_hour')
     # def _compute_total_remaining_hour(self):
