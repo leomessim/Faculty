@@ -36,7 +36,7 @@ class DailyClassRecord(models.Model):
     extra_hour_active = fields.Boolean('Add extra hour', required=True)
     extra_hour_reason = fields.Text('Extra hour reason')
     record_ids = fields.One2many('record.data', 'record_id', string='Records')
-
+    skip_ids = fields.One2many('skipped.classes','skip_id', string='Skipped classes')
     subject_rate = fields.Float(string='Subject rate', compute='onchange_standard_hour', store=True)
     extra_hour = fields.Integer(string='Extra hour eligible for payment', required=True)
 
@@ -298,3 +298,10 @@ class RecordData(models.Model):
     #     for rec in self:
     #
     #         rec.remaining_hours = rec.record_id.total_remaining_hour
+
+class SkippedClasses(models.Model):
+    _name = 'skipped.classes'
+
+    date_skip = fields.Date(string='Date')
+    reason_skip = fields.Char(string='Reason')
+    skip_id = fields.Many2one('daily.class.record')

@@ -75,6 +75,17 @@
                             <!--                                <field name="total_amount" widget="monetary"/>-->
 
                         </page>
+                        <page string="Skipped Classes" name="skip">
+                            <field name="skip_ids" attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
+
+                                <tree editable="bottom">
+                                    <field name="date_skip"/>
+                                    <field name="reason_skip"/>
+                                </tree>
+                            </field>
+                            <!--                                <field name="total_amount" widget="monetary"/>-->
+
+                        </page>
                     </notebook>
                     <group name="note_group" col="6">
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
