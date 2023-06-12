@@ -51,6 +51,7 @@
                             <!--                                <field name="to_date"/>-->
 
                             <field name="class_room"/>
+                            <field name="currency_id" invisible="1"/>
                             <field name="course_id"/>
                             <field name="subject_id"/>
                             <field name="current_status" invisible="1"/>
@@ -65,6 +66,7 @@
                             <!--                                       attrs="{'invisible':[('state', '=', 'draft')], 'readonly':[('state','in',['pay_list'])]}"/>-->
                         </group>
                         <group>
+                            <field name="company_id" invisible="1"/>
                             <field name="advance_remaining"/>
                             <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
 
@@ -110,7 +112,7 @@
                             <!--                            <field name="total_net_hour_amount"/>-->
                             <!--                            <field name="duration_amount"/>-->
                             <field name="total_duration_sum"/>
-                            <field name="rate_of_sub"/>
+                            <field name="rate_of_sub" widget="monetary"/>
                             <field name="amount_to_be_paid" widget="monetary" invisible="1"/>
                             <!--                            <field name="remaining_hours"/>-->
                             <field name="standard_hours"/>
@@ -119,25 +121,27 @@
                             <field name="extra_hr_testing" invisible="1"/>
                             <field name="correct_remaining_hours"/>
                             <field name="extra_charge"
-                                   attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}"/>
+                                   attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}" widget="monetary"/>
 
-                            <field name="extra_payment"/>
-                            <field name="added_payment_extra"/>
+                            <field name="extra_payment" widget="monetary"/>
+                            <field name="added_payment_extra" widget="monetary"/>
 
-                            <field name="tds_amount"/>
-                            <field name="added_tds_payment"/>
+                            <field name="tds_amount" widget="monetary"/>
+                            <field name="added_tds_payment" widget="monetary"/>
                             <field name="tax_id"
                                    attrs="{'invisible':[('check_gst', '=', 'No')],'readonly':[('state', 'in', ['pay_list'])]}"
                                    widget="many2many_tags"/>
                             <field name="amount_tax_id"/>
-                            <field name="added_tax_payment"/>
-                            <field name="advance_deduction"/>
-                            <field name="advance_ded_total"/>
+                            <field name="added_tax_payment" widget="monetary"/>
+                            <field name="advance_deduction" widget="monetary"/>
+                            <field name="advance_ded_total" widget="monetary"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
                             <div class="oe_subtotal_footer_separator oe_inline">
                                 <label for="amount_pay_now" attrs="{'invisible':[('state','in',['draft'])]}"/>
                             </div>
                             <field name="amount_pay_now" nolabel="1" class="oe_subtotal_footer_separator"
-                                   widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                   widget="monetary"/>
                             <!--                                   attrs="{'invisible':[('state','in',['draft'])]}"/>-->
 
                         </group>
@@ -160,15 +164,15 @@
                 <field name="faculty_id"/>
                 <!--                    <field name="from_date"/>-->
                 <field name="month"/>
-
-                <field name="amount_to_be_paid" sum="Total amount"/>
-                <field name="extra_payment"/>
-                <field name="tds_amount"/>
-                <field name="total_duration_sum" string="Class taken hours"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="amount_to_be_paid" sum="Total amount" widget="monetary"/>
+                <field name="extra_payment" widget="monetary"/>
+                <field name="tds_amount" widget="monetary"/>
+                <field name="total_duration_sum" string="Class taken hours" widget="monetary"/>
                 <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
 
                 <!--                <field name="remaining_hours"/>-->
-                <field name="amount_pay_now" sum="Total"/>
+                <field name="amount_pay_now" sum="Total" widget="monetary"/>
                 <field name="state"/>
             </tree>
         </field>

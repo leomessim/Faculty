@@ -11,10 +11,11 @@
                     <sheet>
                         <group>
                             <group>
+                                <field name="currency_id" invisible="1"/>
                                 <field name="name"/>
                                 <field name="course_id"/>
                                 <field name="subject_id" options="{'no_create': True}"/>
-                                <field name="salary_per_hr"/>
+                                <field name="salary_per_hr" widget="monetary"/>
 
                             </group>
                         </group>
@@ -34,7 +35,12 @@
             <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree>
+                    <field name="currency_id" invisible="1"/>
                     <field name="name"/>
+                    <field name="course_id"/>
+                    <field name="subject_id" options="{'no_create': True}"/>
+                    <field name="salary_per_hr" widget="monetary"/>
+
                 </tree>
             </field>
         </record>
@@ -140,11 +146,12 @@
                 <form string="Register Payment">
                     <group>
                         <group class="oe_title">
+                            <field name="currency_id" invisible="1"/>
                             <field name="journal"/>
                             <field name="payment_date"/>
                         </group>
                         <group>
-                            <field name="amount"/>
+                            <field name="amount" widget="monetary"/>
                             <field name="transaction_id"/>
                         </group>
                     </group>

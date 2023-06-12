@@ -25,6 +25,8 @@ class FacultySalary(models.Model):
     salary_per_hr = fields.Float(string='Salary per hour')
     course_id = fields.Many2one('courses.details', string='Course')
     subject_id = fields.Many2one('subject.details', domain="[('course_sub_id', '=', course_id)]", string='Subject')
+    currency_id = fields.Many2one('res.currency', string='Currency', required=True,
+                                  default=lambda self: self.env.user.company_id.currency_id)
     # name = fields.Char(string='hhhi')
 
 
@@ -248,6 +250,8 @@ class PayoutWizard(models.TransientModel):
     amount = fields.Float(string='Amount')
     payment_date = fields.Date(string='Payment Date', required=True)
     transaction_id = fields.Char(string='Transaction Id')
+    currency_id = fields.Many2one('res.currency', string='Currency', required=True,
+                                  default=lambda self: self.env.user.company_id.currency_id)
 
     @api.model
     def default_get(self, fields):
@@ -296,6 +300,8 @@ class PaymentTotal(models.Model):
     currency_id = fields.Many2one('res.currency',
                                   default=lambda self: self.env['res.currency'].search([('name', '=', 'INR')]).id,
                                   readonly=True)
+    company_id = fields.Many2one('res.company', string='Company', required=True, readonly=True, default=lambda self: self.env.company)
+
     extra_charge = fields.Float('Extra hour eligible for payment')
 
     advance_deduction = fields.Float(string='Advance deduction')
