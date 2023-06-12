@@ -43,7 +43,7 @@
                         </button>
                     </div>
                     <widget name="web_ribbon" text="Paid"
-                            attrs="{'invisible': [('state', '=', ['draft','pay'])]}"/>
+                            attrs="{'invisible':[('state', 'in', ['pay','draft'])]}"/>
 
                     <group>
                         <group>
