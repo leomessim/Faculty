@@ -184,7 +184,7 @@
         <!--                  parent="menu_payment"-->
         <!--                  action="payout_model_wizard_action"-->
         <!--                  sequence="1"/>-->
-        <menuitem name="Subject Standard Hours"
+        <menuitem name="Standard Hours"
                   id="subject_standard_hr_menu"
                   parent="menu_course"
                   action="action_subject_standard_hr"

@@ -152,12 +152,12 @@
             </field>
         </record>
         <record id="action_subject_standard_hr" model="ir.actions.act_window">
-            <field name="name">Standard Hours</field>
+            <field name="name">Standard Hours View</field>
             <field name="res_model">subject.details</field>
             <field name="view_mode">tree</field>
         </record>
         <record id="action_subject" model="ir.actions.act_window">
-            <field name="name">Standard Hours</field>
+            <field name="name">Standard Hours Details</field>
             <field name="res_model">subject.details</field>
             <field name="view_mode">tree,form</field>
         </record>
