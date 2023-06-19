@@ -36,15 +36,15 @@ class DailyClassRecord(models.Model):
     extra_hour_active = fields.Boolean('Add extra hour', required=True)
     extra_hour_reason = fields.Text('Extra hour reason')
     record_ids = fields.One2many('record.data', 'record_id', string='Records')
-    skip_ids = fields.One2many('skipped.classes','skip_id', string='Skipped classes')
+    skip_ids = fields.One2many('skipped.classes', 'skip_id', string='Skipped classes')
     subject_rate = fields.Float(string='Subject rate', compute='onchange_standard_hour', store=True)
-    extra_hour = fields.Integer(string='Extra hour eligible for payment', required=True)
+    extra_hour = fields.Float(string='Extra hour eligible for payment', required=True)
 
     @api.depends('subject_id')
     def _compute_standard_hour_taken(self):
         standard = self.env['subject.details'].search([])
         for j in standard:
-            print(self.subject_id.name,'kl')
+            print(self.subject_id.name, 'kl')
             print(j.name, 'kl')
             if self.subject_id.name == j.name and self.course_id == j.course_sub_id:
                 print(j.stnd_hr, 'yes')
@@ -65,7 +65,7 @@ class DailyClassRecord(models.Model):
             if self.faculty_id == j.name and self.course_id == j.course_id and self.subject_id == j.subject_id:
 
                 self.subject_rate = j.salary_per_hr
-                print(self.subject_rate,'rate')
+                print(self.subject_rate, 'rate')
             else:
                 print('no')
 
@@ -95,7 +95,7 @@ class DailyClassRecord(models.Model):
             for i in jj.record_ids:
                 self.total_remaining_hour = aa
         print(total, 'kklk')
-                # self.total_remaining_hour = self.total_duration_sum - total
+        # self.total_remaining_hour = self.total_duration_sum - total
 
     total_remaining_hour = fields.Float(string='Balance standard hours', compute='remaining_hour', store=True)
 
@@ -123,6 +123,7 @@ class DailyClassRecord(models.Model):
                 })
             else:
                 record.total_amount = record.standard_hour * record.subject_rate
+
     total_amount = fields.Float('Total', compute='_amount_total', store=True)
     check_coordinator_id = fields.Integer()
     actual_dur = fields.Float()
@@ -139,6 +140,7 @@ class DailyClassRecord(models.Model):
                 self.class_hour_till_now = total
             else:
                 self.class_hour_till_now = 0
+
     class_hour_till_now = fields.Float('Class hours till now', compute='_total_taken_classes', store=True)
 
     def confirm_record(self):
@@ -151,18 +153,18 @@ class DailyClassRecord(models.Model):
         var.append(total)
         aa = self.standard_hour - total
         self.actual_dur = aa
-        if self.actual_dur <0:
+        if self.actual_dur < 0:
             self.extra_hour_testing = abs(self.actual_dur)
             aaaa = self.total_duration_sum - self.extra_hour_testing
             if aaaa == 0:
-                if self.total_remaining_hour <0:
+                if self.total_remaining_hour < 0:
                     self.total_extra_hour = self.total_remaining_hour
             else:
                 self.total_extra_hour = aaaa
 
             print(self.extra_hour_testing, 'total extra')
             print(self.total_duration_sum, 'total dur')
-            print(aaaa,'tes')
+            print(aaaa, 'tes')
         else:
             print('cherdh')
         for record in self:
@@ -173,7 +175,7 @@ class DailyClassRecord(models.Model):
 
     def head_approve(self):
         print(self.check_coordinator_id, 'employee')
-        print(self.env.user.id,'user')
+        print(self.env.user.id, 'user')
         if not self.check_coordinator_id == self.env.user.id:
             raise UserError('Coordinator manager approve button')
         #
@@ -260,7 +262,7 @@ class RecordData(models.Model):
 
     record_id = fields.Many2one('daily.class.record')
     break_reason = fields.Char(string='Break reason')
-    break_time = fields.Integer(string='Break time')
+    break_time = fields.Float(string='Break Time', digits=(16, 2), widget='timepicker', help='Enter time in hours')
     topic = fields.Char(string='Topic')
     date = fields.Date(string='Date', default=fields.Date.today)
     remaining_hours = fields.Float('Remaining hours')
@@ -283,7 +285,8 @@ class RecordData(models.Model):
         for record in self:
             record.net_hour = record.net_duration - record.break_time
 
-    net_hour = fields.Integer(string='Net hours', compute='_compute_net_total_duration', store=True)
+    net_hour = fields.Float(string='Net Hour', digits=(16, 2), widget='timepicker', help='Enter time in hours',
+                            compute='_compute_net_total_duration', store=True)
 
     @api.depends('net_hour', 'record_id.subject_rate')
     def _compute_balance(self):
@@ -292,12 +295,12 @@ class RecordData(models.Model):
 
     balance = fields.Float(string='Balance', compute='_compute_balance', store=True)
 
-
     # @api.depends('net_hour')
     # def _compute_total_remaining_hour(self):
     #     for rec in self:
     #
     #         rec.remaining_hours = rec.record_id.total_remaining_hour
+
 
 class SkippedClasses(models.Model):
     _name = 'skipped.classes'

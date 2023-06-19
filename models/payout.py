@@ -280,11 +280,11 @@ class PaymentDetailsTree(models.Model):
     start_date = fields.Datetime(string='Start time')
     end_date = fields.Datetime(string='End time')
     break_reason = fields.Char(string='Break reason')
-    break_time = fields.Integer(string='Break time')
+    break_time = fields.Float(string='Break time')
     topic = fields.Char(string='Topic')
     date = fields.Date(string='Date')
     payment_details_id = fields.Many2one('payment.total', string='Payments record')
-    net_hour = fields.Integer(string='Net hour')
+    net_hour = fields.Float(string='Net hour')
     balance = fields.Float(string='Amount')
 
 
