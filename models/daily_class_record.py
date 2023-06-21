@@ -262,7 +262,7 @@ class RecordData(models.Model):
 
     record_id = fields.Many2one('daily.class.record')
     break_reason = fields.Char(string='Break reason')
-    break_time = fields.Float(string='Break Time', digits=(16, 2), widget='timepicker', help='Enter time in hours')
+    break_time = fields.Float(string='Break Time', widget='time')
     topic = fields.Char(string='Topic')
     date = fields.Date(string='Date', default=fields.Date.today)
     remaining_hours = fields.Float('Remaining hours')
