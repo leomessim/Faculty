@@ -170,13 +170,13 @@ class DailyClassRecord(models.Model):
         for record in self:
             # print(self.record_ids.balance)
             record.state = 'to_approve'
-        self.check_coordinator_id = self.env.user.employee_parent_id.user_id
+        # self.check_coordinator_id = self.env.user.employee_parent_id.user_id
         # print(self.check_coordinator_id, 'cooo')
 
     def head_approve(self):
-        print(self.check_coordinator_id, 'employee')
-        print(self.env.user.id, 'user')
-        if not self.check_coordinator_id == self.env.user.id:
+        print(self.coordinator.employee_id.parent_id.user_id.id, 'employee')
+        print(self.env.user, 'user')
+        if not self.coordinator.employee_id.parent_id.user_id.id == self.env.user.id:
             raise UserError('Coordinator manager approve button')
         #
         else:
