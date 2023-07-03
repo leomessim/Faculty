@@ -54,6 +54,9 @@ faculty_hr,daily_payment,model_payment_total,group_hr,1,0,0,0
 faculty__coooo,record,model_skipped_classes,group_faculty_user,1,1,1,0
 oooo,record,model_skipped_classes,coordinator_user,1,1,1,1
 faculty__coooord,record,model_skipped_classes,group_faculty_administrator,1,1,1,1
+faculty_records_accounts,daily_record_acc,model_daily_class_record,group_accounting_manager,1,1,0,0
+faculty__coord_accounts,record,model_skipped_classes,group_accounting_manager,1,1,1,0
+faculty_records_acc,record,model_record_data,group_accounting_manager,1,1,1,0
 
 
 
