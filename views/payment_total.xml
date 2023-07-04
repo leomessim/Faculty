@@ -135,6 +135,7 @@
                                    attrs="{'invisible':[('check_gst', '=', 'No')],'readonly':[('state', 'in', ['pay_list'])]}"
                                    widget="many2many_tags"/>
                             <field name="amount_tax_id"/>
+                            <field name="added_gross_before_tds_custom" widget="monetary"/>
                             <field name="added_tax_payment" widget="monetary"/>
                             <field name="advance_deduction" widget="monetary"/>
                             <field name="advance_ded_total" widget="monetary"/>

@@ -300,7 +300,8 @@ class PaymentTotal(models.Model):
     currency_id = fields.Many2one('res.currency',
                                   default=lambda self: self.env['res.currency'].search([('name', '=', 'INR')]).id,
                                   readonly=True)
-    company_id = fields.Many2one('res.company', string='Company', required=True, readonly=True, default=lambda self: self.env.company)
+    company_id = fields.Many2one('res.company', string='Company', required=True, readonly=True,
+                                 default=lambda self: self.env.company)
 
     extra_charge = fields.Float('Extra hour eligible for payment')
 
@@ -419,6 +420,7 @@ class PaymentTotal(models.Model):
             self.check_gst = 'No'
         self.state = 'pay'
 
+
     @api.depends('course_id')
     def _compute_advanced_remaining(self):
         advance = self.env['faculty.salary.advance'].search([])
@@ -493,12 +495,12 @@ class PaymentTotal(models.Model):
     added_tds_payment = fields.Float(compute='_tds_extra_payment', store=True,
                                      string='Gross payable after TDS deduction')
 
-    @api.depends('added_tds_payment', 'tax_id.amount')
+    @api.depends('added_tds_payment', 'tax_id.amount', 'added_payment_extra')
     def _compute_tax_id_amount(self):
         for rec in self:
             if rec.tax_id:
                 for tax in rec.tax_id:
-                    rec.amount_tax_id = (rec.added_tds_payment * tax.amount) / 100
+                    rec.amount_tax_id = (rec.added_payment_extra * tax.amount) / 100
 
             else:
                 rec.amount_tax_id = 0
@@ -506,12 +508,14 @@ class PaymentTotal(models.Model):
     amount_tax_id = fields.Monetary(string='GST Amount', store=True, readonly=True, currency_field='currency_id',
                                     compute='_compute_tax_id_amount')
 
-    @api.depends('added_tds_payment', 'tax_id', 'amount_tax_id')
+    @api.depends('added_tds_payment', 'tax_id', 'amount_tax_id', 'added_payment_extra')
     def _tax_extra_payment(self):
         for i in self:
-            i.added_tax_payment = i.added_tds_payment + i.amount_tax_id
+            i.added_tax_payment = i.added_payment_extra + i.amount_tax_id - i.tds_amount
 
     added_tax_payment = fields.Float(compute='_tax_extra_payment', store=True, string='Gross payable')
+
+
 
     @api.depends('amount_to_be_paid', 'advance_remaining')
     def _compute_advance_remaining(self):
@@ -541,6 +545,19 @@ class PaymentTotal(models.Model):
             rec.advance_ded_total = rec.added_tax_payment - rec.advance_deduction
 
     advance_ded_total = fields.Float('Net payable', compute='advance_deduction_total', store=True)
+
+    @api.depends('amount_tax_id', 'added_payment_extra')
+    def _gst_added_gross_before_tds(self):
+        for i in self:
+            i.added_gross_before_tds_custom = i.added_payment_extra + i.amount_tax_id
+
+    added_gross_before_tds_custom = fields.Float(compute='_gst_added_gross_before_tds', store=True, string='Gross payable before TDS + GST')
+
+    #     for i in self:
+    #         i.added_gross_before_tds = i.added_payment_extra + i.amount_tax_id
+    #
+    # added_gross_before_tds = fields.Float(compute='_gst_added_gross_before_tds', store=True,
+    #                                       string='Gross payable before TDS + GST')
 
     @api.depends('added_tds_payment', 'added_tax_payment', 'amount_to_be_paid', 'extra_payment', 'added_payment_extra',
                  'advance_ded_total')
