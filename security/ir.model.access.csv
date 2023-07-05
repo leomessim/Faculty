@@ -22,6 +22,9 @@ a_reason,access_payout,model_payout,base.group_user,1,1,1,1
 a_reasonn,access_payout,model_payout,group_faculty_administrator,1,1,1,1
 subject_ratee,rate,model_faculty_subject_rate,group_faculty_administrator,0,1,1,0
 subject_accounts,rate,model_faculty_subject_rate,group_accounting_manager,1,1,1,1
+subject_accounts_history,rate_history,model_rate_history,group_accounting_manager,1,1,1,1
+subject_history_admin,rate,model_rate_history,group_faculty_administrator,1,1,1,1
+subject_history_coord,rate,model_rate_history,coordinator_user,1,1,1,1
 payout_accountant,payout_account,model_accountant_payout,group_accounting_manager,1,1,1,1
 payout_accountantt,payout_account,model_accountant_payout,group_faculty_administrator,1,1,1,1
 accesseee_payout_wizard,wizard,model_payout_wizard,base.group_user,1,1,1,1
@@ -43,6 +46,9 @@ faculty_records_coordinator,daily_record,model_daily_class_record,coordinator_us
 subject_rae_coo,rate,model_faculty_subject_rate,coordinator_user,0,1,1,0
 subject_details_coo_YY,rate,model_subject_details,coordinator_user,1,1,1,0
 subject_details_coo,rate,model_subject_details,group_accounting_manager,1,1,1,1
+as_admin_old,access_eason,model_old_standard_hours,group_faculty_administrator,1,1,1,1
+as_coord_old,access_eason,model_old_standard_hours,coordinator_user,1,1,1,1
+as_account_old,access_eason,model_old_standard_hours,group_accounting_manager,1,1,1,1
 faculty_payment_coo,record,model_record_data,coordinator_user,1,1,1,1
 payment_details_fac,payment_record,model_payment_details_tree,group_faculty_user,0,0,1,0
 faculty_records_faculty,daily_record,model_daily_class_record,group_faculty_user,1,1,0,0

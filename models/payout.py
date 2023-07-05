@@ -28,6 +28,30 @@ class FacultySalary(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency', required=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
     # name = fields.Char(string='hhhi')
+    old_rate_ids = fields.One2many('rate.history', 'old_rate_id', string='Rate History', compute='old_salary_hr', store=True)
+
+    @api.depends('salary_per_hr')
+    def old_salary_hr(self):
+        new = []
+        datas = {
+            'old_rate': self.salary_per_hr,
+            'date_update': self.create_date,
+            'name': self.env.user.name
+        }
+        new.append((0, 0, datas))
+        self.old_rate_ids = new
+
+
+class RateHistory(models.Model):
+    _name = 'rate.history'
+    _inherit = 'mail.thread'
+
+    old_rate = fields.Float(string='Old Subject Rate')
+    date_update = fields.Date(string='Update Date')
+    name = fields.Char(string='Name')
+    old_rate_id = fields.Many2one('faculty.subject.rate', string='old Rate')
+
+
 
 
 class AccountantPayout(models.Model):

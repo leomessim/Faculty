@@ -103,14 +103,51 @@ class Courses(models.Model):
 
 class SubjectDetails(models.Model):
     _name = 'subject.details'
+    _inherit = 'mail.thread'
 
     name = fields.Char(string='Subject Name')
     stnd_hr = fields.Float(string='Standard Hours')
     rec_id = fields.Integer()
     course_sub_id = fields.Many2one('courses.details', string='course')
+    old_ids = fields.One2many('old.standard.hours', 'old_id', compute='old_standard_hr', store=True)
+
+    # @api.model
+    # def create(self, vals):
+    #     new = []
+    #     datas = {
+    #         'name': self.name,
+    #     }
+    #     new.append((0, 0, datas))
+    #     self.env['subject.details'].create({
+    #         'old_ids': new,
+    #     }
+    #     )
+    #     return super(SubjectDetails, self).create(vals)
+
+    @api.depends('stnd_hr')
+    def old_standard_hr(self):
+        new = []
+        datas = {
+            'old_hr': self.stnd_hr,
+            'date_update': self.create_date,
+            'name': self.env.user.name
+        }
+        new.append((0, 0, datas))
+        self.old_ids = new
 
     # @api.onchange('name')
     # def _onchange_name(self):
     #     self.env['courses.details'].search([])
     #     self.rec_id = self.id
     #     print(self.rec_id, 'record')
+
+
+class OldStandardHours(models.Model):
+    _name = 'old.standard.hours'
+    _inherit = 'mail.thread'
+
+    old_hr = fields.Float(string='Old Standard Hours')
+    date_update = fields.Date(string='Update Date')
+    name = fields.Char(string='Name')
+    old_id = fields.Many2one('subject.details', string='old standard hours')
+

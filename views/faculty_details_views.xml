@@ -57,7 +57,7 @@
                                 <group>
                                     <group>
 
-<!--                                        <field name="gst_number"/>-->
+                                        <!--                                        <field name="gst_number"/>-->
                                         <field name="test"/>
                                         <field name="gst_status"/>
                                     </group>
@@ -67,21 +67,21 @@
                                 </group>
                             </page>
 
-<!--                            <page string="Payout" name="payout">-->
-<!--                                <field name="payout_ids" domain="[('topic', '=', 'abc')]">-->
-<!--                                    <tree editable="bottom">-->
-<!--                                        <field name="subject_id"/>-->
-<!--                                        &lt;!&ndash;                                        <field name="classroom_id"/>&ndash;&gt;-->
-<!--                                        <field name="courses_id"/>-->
-<!--                                        <field name="topic"/>-->
-<!--                                        <field name="start_time"/>-->
-<!--                                        <field name="end_time"/>-->
+                            <!--                            <page string="Payout" name="payout">-->
+                            <!--                                <field name="payout_ids" domain="[('topic', '=', 'abc')]">-->
+                            <!--                                    <tree editable="bottom">-->
+                            <!--                                        <field name="subject_id"/>-->
+                            <!--                                        &lt;!&ndash;                                        <field name="classroom_id"/>&ndash;&gt;-->
+                            <!--                                        <field name="courses_id"/>-->
+                            <!--                                        <field name="topic"/>-->
+                            <!--                                        <field name="start_time"/>-->
+                            <!--                                        <field name="end_time"/>-->
 
-<!--                                    </tree>-->
-<!--                                </field>-->
-<!--                                &lt;!&ndash;                                <field name="total_amount" widget="monetary"/>&ndash;&gt;-->
+                            <!--                                    </tree>-->
+                            <!--                                </field>-->
+                            <!--                                &lt;!&ndash;                                <field name="total_amount" widget="monetary"/>&ndash;&gt;-->
 
-<!--                            </page>-->
+                            <!--                            </page>-->
 
                             <page string="Bank Details" name="fields">
                                 <group>
@@ -91,7 +91,7 @@
                                         <field name="bank_account_no"/>
 
                                         <field name="ifsc"/>
-                                        <field name="gst_number"  attrs="{'required': [('gst_status', '=', True)]}"/>
+                                        <field name="gst_number" attrs="{'required': [('gst_status', '=', True)]}"/>
                                         <field name="pan_number"/>
                                     </group>
                                 </group>
@@ -133,9 +133,25 @@
                             </group>
 
                         </group>
-
+                        <notebook>
+                            <page name="old_hr" string="Old Hour">
+                                <group>
+                                    <field name="old_ids" widget="one2many" nolabel="1">
+                                        <tree string="Old Hour" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="date_update"/>
+                                            <field name="old_hr"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
                     </sheet>
-
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"
+                               widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
                 </form>
             </field>
         </record>

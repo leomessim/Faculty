@@ -19,6 +19,19 @@
 
                             </group>
                         </group>
+                        <notebook>
+                            <page name="old_rate" string="Rate History">
+                                <group>
+                                    <field name="old_rate_ids" widget="one2many" nolabel="1">
+                                        <tree string="Rate History" editable="bottom">
+                                            <field name="name"/>
+                                            <field name="date_update"/>
+                                            <field name="old_rate"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
                     </sheet>
                     <div class="oe_chatter">
                         <field name="message_follower_ids"
