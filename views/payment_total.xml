@@ -169,7 +169,7 @@
                 <!--                    <field name="from_date"/>-->
                 <field name="month"/>
                 <field name="currency_id" invisible="1"/>
-                <field name="amount_to_be_paid" sum="Total amount" widget="monetary"/>
+                <field name="rate_of_sub" sum="Total amount" widget="monetary"/>
                 <field name="extra_payment" widget="monetary"/>
                 <field name="tds_amount" widget="monetary"/>
                 <field name="total_duration_sum" string="Class taken hours" widget="monetary"/>
