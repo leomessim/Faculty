@@ -8,7 +8,7 @@ class DailyClassRecord(models.Model):
     _inherit = 'mail.thread'
     _rec_name = 'faculty_id'
 
-    faculty_id = fields.Many2one('faculty.details', 'Name', index=True, required=True)
+    faculty_id = fields.Many2one('faculty.details', 'Faculty', index=True, required=True)
     class_room = fields.Many2one('class.room', string='Class', required=True)
     coordinator = fields.Many2one('res.users', 'user', default=lambda self: self.env.user.id)
 
