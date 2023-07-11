@@ -40,8 +40,8 @@
                         <group>
                             <field name="make_visible" invisible="1"/>
                             <field name="class_room" attrs="{'readonly':[('make_visible','=',False)]}"/>
-                            <field name="course_id" attrs="{'readonly':[('make_visible','=',False)]}"/>
-                            <field name="subject_id" attrs="{'readonly':[('make_visible','=',False)]}"/>
+                            <field name="course_id" options="{'no_create': True}" attrs="{'readonly':[('make_visible','=',False)]}"/>
+                            <field name="subject_id" options="{'no_create': True}" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="actual_dur" invisible="1"/>
 
                             <field name="extra_hour_active"
