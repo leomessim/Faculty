@@ -27,6 +27,7 @@ class FacultyDetails(models.Model):
     ifsc = fields.Char('IFSC', required=True)
     user_id = fields.Many2one('res.users', string="Approved By", default=lambda self: self.env.user.id, readonly="1",
                               tracking=True)
+    scheduled_ids = fields.One2many('scheduled.classes', 'schedule_id')
     date_month = fields.Selection([
         ('january', 'January'), ('february', 'February'),
         ('march', 'March'), ('april', 'April'),
@@ -151,3 +152,18 @@ class OldStandardHours(models.Model):
     name = fields.Char(string='Name')
     old_id = fields.Many2one('subject.details', string='old standard hours')
 
+
+class ScheduledClasses(models.Model):
+    _name = 'scheduled.classes'
+    _description = 'Scheduled classes'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+
+    date = fields.Date(string='Date', required=True)
+    day = fields.Char(string='Day')
+    time_from = fields.Float(string='Time From', widget='time')
+    time_to = fields.Float(string='Time To', widget='time')
+    faculty_id = fields.Many2one('res.users', string='Faculty', domain=[('faculty_check', '=', True)])
+    subject_id = fields.Many2one('subject.details', string='Subject')
+    record_id = fields.Integer()
+
+    schedule_id = fields.Many2one('faculty.details', string='Scheduled Classes')

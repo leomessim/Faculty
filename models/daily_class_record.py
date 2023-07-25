@@ -257,8 +257,8 @@ class DailyClassRecord(models.Model):
 class RecordData(models.Model):
     _name = 'record.data'
 
-    start_date = fields.Datetime(string='Start time', widget='time', required=True)
-    end_date = fields.Datetime(string='End time', widget='time', required=True)
+    start_date = fields.Float(string='Start time', required=True, store=True, help='Enter rail way time')
+    end_date = fields.Float(string='End time', required=True, store=True, help='Enter rail way time')
 
     record_id = fields.Many2one('daily.class.record')
     break_reason = fields.Char(string='Break reason')
@@ -271,10 +271,7 @@ class RecordData(models.Model):
     def _compute_net_time(self):
         for record in self:
             if record.start_date and record.end_date:
-                datetime_diff = datetime.strptime(str(record.end_date), '%Y-%m-%d %H:%M:%S') - datetime.strptime(
-                    str(record.start_date), '%Y-%m-%d %H:%M:%S')
-                seconds_diff = datetime_diff.total_seconds()
-                record.net_duration = seconds_diff / 3600.0
+                record.net_duration = record.end_date - record.start_date
             else:
                 record.net_duration = 0.0
 
@@ -308,3 +305,4 @@ class SkippedClasses(models.Model):
     date_skip = fields.Date(string='Date')
     reason_skip = fields.Char(string='Reason')
     skip_id = fields.Many2one('daily.class.record')
+

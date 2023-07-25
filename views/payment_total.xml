@@ -99,10 +99,10 @@
                             <field name="payment_ids">
                                 <tree editable="bottom">
                                     <field name="date"/>
-                                    <field name="start_date"/>
-                                    <field name="end_date"/>
+                                    <field name="start_date" widget="float_time"/>
+                                    <field name="end_date" widget="float_time"/>
                                     <field name="topic"/>
-                                    <field name="net_hour"/>
+                                    <field name="net_hour" widget="float_time"/>
                                     <field name="balance" invisible="1"/>
                                 </tree>
                             </field>
@@ -114,15 +114,15 @@
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="payment">
                             <!--                            <field name="total_net_hour_amount"/>-->
                             <!--                            <field name="duration_amount"/>-->
-                            <field name="total_duration_sum"/>
+                            <field name="total_duration_sum" widget="float_time"/>
                             <field name="rate_of_sub" widget="monetary"/>
                             <field name="amount_to_be_paid" widget="monetary" invisible="1"/>
                             <!--                            <field name="remaining_hours"/>-->
-                            <field name="standard_hours"/>
-                            <field name="class_hours_till"/>
+                            <field name="standard_hours" widget="float_time"/>
+                            <field name="class_hours_till" widget="float_time"/>
 
                             <field name="extra_hr_testing" invisible="1"/>
-                            <field name="correct_remaining_hours"/>
+                            <field name="correct_remaining_hours" widget="float_time"/>
                             <field name="extra_charge"
                                    attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}" widget="monetary"/>
 
@@ -172,7 +172,7 @@
                 <field name="rate_of_sub" sum="Total amount" widget="monetary"/>
                 <field name="extra_payment" widget="monetary"/>
                 <field name="tds_amount" widget="monetary"/>
-                <field name="total_duration_sum" string="Class taken hours" widget="monetary"/>
+                <field name="total_duration_sum" string="Class taken hours" widget="float_time"/>
                 <!--                                <field name="total_class_remaining" attrs="{'invisible':[('state', '=', 'draft')]}"/>-->
 
                 <!--                <field name="remaining_hours"/>-->

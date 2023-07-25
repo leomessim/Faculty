@@ -5,6 +5,7 @@ access_courses,acces_faculty,model_courses_details,base.group_user,1,1,1,1
 access_coursesss,acces_faculty,model_courses_details,group_faculty_administrator,1,1,1,1
 access_faculty_coordinator,acce_faculty,model_faculty_details,coordinator_user,1,0,0,0
 acce_form_dept,access_facy,model_form_department,base.group_user,1,1,1,1
+faculty_scheduled_class,access_facy,model_scheduled_classes,base.group_user,1,1,1,1
 acce_formm_dept,access_facy,model_form_department,group_faculty_administrator,1,1,1,1
 acce_faculty_dept,access_facy,model_faculty_department,group_faculty_administrator,1,1,1,1
 acc_faculty_admin,faculty,model_faculty_details,group_faculty_administrator,1,1,1,1

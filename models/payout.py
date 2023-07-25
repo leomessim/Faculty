@@ -301,8 +301,8 @@ class PayoutWizard(models.TransientModel):
 class PaymentDetailsTree(models.Model):
     _name = 'payment.details.tree'
 
-    start_date = fields.Datetime(string='Start time')
-    end_date = fields.Datetime(string='End time')
+    start_date = fields.Float(string='Start time')
+    end_date = fields.Float(string='End time')
     break_reason = fields.Char(string='Break reason')
     break_time = fields.Float(string='Break time')
     topic = fields.Char(string='Topic')

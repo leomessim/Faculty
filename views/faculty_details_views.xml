@@ -96,6 +96,20 @@
                                     </group>
                                 </group>
                             </page>
+                            <page string="Scheduled Classes" name="scheduled_classes">
+                                <field name="scheduled_ids">
+                                    <tree editable="bottom">
+                                        <field name="date"/>
+                                        <field name="day"/>
+                                        <field name="time_from" widget="float_time"/>
+                                        <field name="time_to" widget="float_time"/>
+                                        <field name="faculty_id"/>
+                                        <field name="subject_id"/>
+                                        <field name="record_id" invisible="1"/>
+
+                                    </tree>
+                                </field>
+                            </page>
                         </notebook>
                     </sheet>
                     <div class="oe_chatter">
@@ -129,7 +143,7 @@
                             <group>
                                 <field name="name"/>
                                 <field name="course_sub_id"/>
-                                <field name="stnd_hr"/>
+                                <field name="stnd_hr" widget="float_time"/>
                             </group>
 
                         </group>
@@ -163,7 +177,7 @@
                 <tree>
                     <field name="name"/>
                     <field name="course_sub_id"/>
-                    <field name="stnd_hr"/>
+                    <field name="stnd_hr" widget="float_time"/>
                 </tree>
             </field>
         </record>

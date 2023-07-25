@@ -40,8 +40,10 @@
                         <group>
                             <field name="make_visible" invisible="1"/>
                             <field name="class_room" attrs="{'readonly':[('make_visible','=',False)]}"/>
-                            <field name="course_id" options="{'no_create': True}" attrs="{'readonly':[('make_visible','=',False)]}"/>
-                            <field name="subject_id" options="{'no_create': True}" attrs="{'readonly':[('make_visible','=',False)]}"/>
+                            <field name="course_id" options="{'no_create': True}"
+                                   attrs="{'readonly':[('make_visible','=',False)]}"/>
+                            <field name="subject_id" options="{'no_create': True}"
+                                   attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="actual_dur" invisible="1"/>
 
                             <field name="extra_hour_active"
@@ -59,16 +61,17 @@
                     </group>
                     <notebook position="inside">
                         <page string="Record" name="record">
-                            <field name="record_ids" attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
+                            <field name="record_ids"
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
 
                                 <tree editable="bottom">
                                     <field name="date"/>
-                                    <field name="start_date"/>
-                                    <field name="end_date"/>
+                                    <field name="start_date" widget="float_time"/>
+                                    <field name="end_date" widget="float_time"/>
                                     <field name="topic"/>
                                     <field name="break_reason"/>
                                     <field name="break_time" widget="float_time"/>
-                                    <field name="net_hour"/>
+                                    <field name="net_hour" widget="float_time"/>
                                     <field name="remaining_hours" invisible="1"/>
                                     <field name="balance" invisible="1"/>
                                 </tree>
@@ -77,7 +80,8 @@
 
                         </page>
                         <page string="Skipped Classes" name="skip">
-                            <field name="skip_ids" attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
+                            <field name="skip_ids"
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
 
                                 <tree editable="bottom">
                                     <field name="date_skip"/>
@@ -90,16 +94,16 @@
                     </notebook>
                     <group name="note_group" col="6">
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
-                            <field name="standard_hour" widget="monetary"/>
-                            <field name="class_hour_till_now"/>
+                            <field name="standard_hour" widget="float_time"/>
+                            <field name="class_hour_till_now" widget="float_time"/>
 
                             <!--                            <field name="total_duration_sum" widget="monetary"/>-->
                             <field name="subject_rate" widget="monetary"
                                    invisible="1"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Green;"
-                                   attrs="{'invisible':['|',('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0)]}"/>
+                                   attrs="{'invisible':['|',('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0)]}" widget="float_time"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"
-                                   attrs="{'invisible':['|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)]}"/>
+                                   attrs="{'invisible':['|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)]}" widget="float_time"/>
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours'-->
                             <!--                                   attrs="{'visible':[('total_remaining_hour', '&gt;', 0)]}"/>-->
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"-->
@@ -133,9 +137,9 @@
                 <field name="class_room"/>
                 <field name="course_id"/>
                 <field name="subject_id"/>
-                <field name="standard_hour"/>
-                <field name="total_duration_sum"/>
-                <field name="total_remaining_hour"/>
+                <field name="standard_hour" widget="float_time"/>
+                <field name="total_duration_sum" widget="float_time"/>
+                <field name="total_remaining_hour" widget="float_time"/>
                 <field name="state"/>
             </tree>
         </field>
@@ -150,5 +154,6 @@
               parent="menu_view_faculty"
               action="action_class_record"
               sequence="10"/>
+
 
 </odoo>
