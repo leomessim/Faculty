@@ -15,7 +15,7 @@ class DailyClassRecord(models.Model):
     state = fields.Selection(selection=[
         ('draft', 'Draft'),
         ('to_approve', 'To Approve'),
-        ('fac_approve', 'Faculty Approve'),
+        # ('fac_approve', 'Faculty Approve'),
         ('approve', 'Approved'),
         ('rejected', 'Rejected')
 
@@ -180,54 +180,89 @@ class DailyClassRecord(models.Model):
             raise UserError('Coordinator manager approve button')
         #
         else:
-            self.state = 'fac_approve'
+            self.state = 'approve'
+            abc = []
+            for rec in self.record_ids:
+                res_list = {
+                    'date': rec.date,
+                    # 'classroom_id': self.class_room.name,
+                    'start_date': rec.start_date,
+                    'end_date': rec.end_date,
+                    'balance': rec.balance,
+                    'net_hour': rec.net_hour,
+                }
+                abc.append((0, 0, res_list))
+            record = self.env['payment.total'].create({
+                'faculty_id': self.faculty_id.id,
+                'month': self.month_of_record,
+                'extra_reason': self.extra_hour_reason,
+                'extra_charge': self.extra_hour,
+                'payment_ids': abc,
+                # 'amount_to_be_paid': self.total_amount,
+                'class_room': self.class_room.id,
+                'course_id': self.course_id.id,
+                'subject_id': self.subject_id.id,
+                'current_status': self.faculty_id.current_status,
+                'branch': self.branch_name.id,
+                # 'charge': self.subject_rate,
+                'ifsc': self.faculty_id.ifsc,
+                'bank': self.faculty_id.bank_name,
+                'account_number': self.faculty_id.bank_account_no,
+                'account_holder': self.faculty_id.account_holder,
+                'remaining_hours': self.total_remaining_hour,
+                'standard_hours': self.standard_hour,
+                'extra_hr_testing': self.total_extra_hour,
+                'extra_hour_reason': self.extra_hour_reason,
+                'correct_remaining_hours': self.total_remaining_hour,
+                'class_hours_till': self.class_hour_till_now,
+            }
+            )
+
+            # self.state = 'approve'
 
     def faculty_approve(self):
-        abc = []
-        for rec in self.record_ids:
-            res_list = {
-                'date': rec.date,
-                # 'classroom_id': self.class_room.name,
-                'start_date': rec.start_date,
-                'end_date': rec.end_date,
-                'balance': rec.balance,
-                'net_hour': rec.net_hour,
-            }
-            abc.append((0, 0, res_list))
-        record = self.env['payment.total'].create({
-            'faculty_id': self.faculty_id.id,
-            'month': self.month_of_record,
-            'extra_reason': self.extra_hour_reason,
-            'extra_charge': self.extra_hour,
-            'payment_ids': abc,
-            # 'amount_to_be_paid': self.total_amount,
-            'class_room': self.class_room.id,
-            'course_id': self.course_id.id,
-            'subject_id': self.subject_id.id,
-            'current_status': self.faculty_id.current_status,
-            'branch': self.branch_name.id,
-            # 'charge': self.subject_rate,
-            'ifsc': self.faculty_id.ifsc,
-            'bank': self.faculty_id.bank_name,
-            'account_number': self.faculty_id.bank_account_no,
-            'account_holder': self.faculty_id.account_holder,
-            'remaining_hours': self.total_remaining_hour,
-            'standard_hours': self.standard_hour,
-            'extra_hr_testing': self.total_extra_hour,
-            'extra_hour_reason': self.extra_hour_reason,
-            'correct_remaining_hours': self.total_remaining_hour,
-            'class_hours_till': self.class_hour_till_now,
-        }
-        )
+        # abc = []
+        # for rec in self.record_ids:
+        #     res_list = {
+        #         'date': rec.date,
+        #         # 'classroom_id': self.class_room.name,
+        #         'start_date': rec.start_date,
+        #         'end_date': rec.end_date,
+        #         'balance': rec.balance,
+        #         'net_hour': rec.net_hour,
+        #     }
+        #     abc.append((0, 0, res_list))
+        # record = self.env['payment.total'].create({
+        #     'faculty_id': self.faculty_id.id,
+        #     'month': self.month_of_record,
+        #     'extra_reason': self.extra_hour_reason,
+        #     'extra_charge': self.extra_hour,
+        #     'payment_ids': abc,
+        #     # 'amount_to_be_paid': self.total_amount,
+        #     'class_room': self.class_room.id,
+        #     'course_id': self.course_id.id,
+        #     'subject_id': self.subject_id.id,
+        #     'current_status': self.faculty_id.current_status,
+        #     'branch': self.branch_name.id,
+        #     # 'charge': self.subject_rate,
+        #     'ifsc': self.faculty_id.ifsc,
+        #     'bank': self.faculty_id.bank_name,
+        #     'account_number': self.faculty_id.bank_account_no,
+        #     'account_holder': self.faculty_id.account_holder,
+        #     'remaining_hours': self.total_remaining_hour,
+        #     'standard_hours': self.standard_hour,
+        #     'extra_hr_testing': self.total_extra_hour,
+        #     'extra_hour_reason': self.extra_hour_reason,
+        #     'correct_remaining_hours': self.total_remaining_hour,
+        #     'class_hours_till': self.class_hour_till_now,
+        # }
+        # )
 
         self.state = 'approve'
 
     def rejected(self):
         self.state = 'rejected'
 
-    make_visible = fields.Boolean(string="User", default=True, compute='get_user')
-
-    @api.depends('make_visible')
     def get_user(self):
         print('kkkll')
         user_crnt = self.env.user.id
@@ -238,6 +273,8 @@ class DailyClassRecord(models.Model):
 
         else:
             self.make_visible = True
+
+    make_visible = fields.Boolean(string="User", default=True, compute='get_user')
 
     make_visible_coord = fields.Boolean(string="User", default=True, compute='get_coord')
 
@@ -253,12 +290,25 @@ class DailyClassRecord(models.Model):
         else:
             self.make_visible_coord = True
 
+    def head_academic(self):
+        print('head_check')
+        user_crnt = self.env.user.id
+
+        res_user = self.env['res.users'].search([('id', '=', self.env.user.id)])
+        if res_user.has_group('faculty.group_faculty_administrator'):
+            self.make_academic_head = False
+
+        else:
+            self.make_academic_head = True
+
+    make_academic_head = fields.Boolean(string="Academic Head", default=True, compute='head_academic')
+
 
 class RecordData(models.Model):
     _name = 'record.data'
 
-    start_date = fields.Float(string='Start time', required=True, store=True, help='Enter rail way time')
-    end_date = fields.Float(string='End time', required=True, store=True, help='Enter rail way time')
+    start_date = fields.Float(string='Start time', required=True, help='Enter rail way time')
+    end_date = fields.Float(string='End time', required=True, help='Enter rail way time')
 
     record_id = fields.Many2one('daily.class.record')
     break_reason = fields.Char(string='Break reason')

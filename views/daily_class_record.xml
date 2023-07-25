@@ -8,7 +8,7 @@
             <form string="Rate">
                 <header>
                     <field name="state" widget="statusbar"
-                           statusbar_visible="draft,to_approve,fac_approve,approve,rejected"/>
+                           statusbar_visible="draft,to_approve,approve,rejected"/>
                     <button name="confirm_record" class="oe_highlight" states="draft" string="Confirm"
                             type="object"
                             groups="faculty.coordinator_user"/>
@@ -19,11 +19,11 @@
                     <button name="rejected" class="oe_highlight" states="to_approve" string="Reject" type="object"
                             groups="faculty.group_faculty_administrator"/>
 
-                    <button name="faculty_approve" class="oe_highlight" states="fac_approve" string="Approve"
-                            type="object"
-                            groups="faculty.group_faculty_user"/>
-                    <button name="rejected" class="oe_highlight" states="fac_approve" string="Reject" type="object"
-                            groups="faculty.group_faculty_user"/>
+<!--                    <button name="faculty_approve" class="oe_highlight" states="fac_approve" string="Approve"-->
+<!--                            type="object"-->
+<!--                            groups="faculty.group_faculty_user"/>-->
+<!--                    <button name="rejected" class="oe_highlight" states="" string="Reject" type="object"-->
+<!--                            groups="faculty.group_faculty_user"/>-->
                     <!--                    <button name="rejected" class="oe_highlight" string="Reject" type="object"-->
                     <!--                            attrs="{'invisible':[('state', 'in', ['rejected','draft','approve'])]}"/>-->
                 </header>
@@ -39,6 +39,7 @@
                         </group>
                         <group>
                             <field name="make_visible" invisible="1"/>
+                            <field name="make_academic_head" invisible="1"/>
                             <field name="class_room" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="course_id" options="{'no_create': True}"
                                    attrs="{'readonly':[('make_visible','=',False)]}"/>
@@ -62,7 +63,7 @@
                     <notebook position="inside">
                         <page string="Record" name="record">
                             <field name="record_ids"
-                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','reject'])]}">
 
                                 <tree editable="bottom">
                                     <field name="date"/>
@@ -81,7 +82,7 @@
                         </page>
                         <page string="Skipped Classes" name="skip">
                             <field name="skip_ids"
-                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','fac_approve','approve','reject'])]}">
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','reject'])]}">
 
                                 <tree editable="bottom">
                                     <field name="date_skip"/>
