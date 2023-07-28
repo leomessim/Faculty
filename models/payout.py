@@ -276,6 +276,8 @@ class PayoutWizard(models.TransientModel):
     transaction_id = fields.Char(string='Transaction Id')
     currency_id = fields.Many2one('res.currency', string='Currency', required=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
+    current_id = fields.Integer(string='Current Id')
+    current_record_id = fields.Integer(string='Current Record Id')
 
     @api.model
     def default_get(self, fields):
@@ -284,18 +286,29 @@ class PayoutWizard(models.TransientModel):
         brws = self.env['payment.total'].browse(int(active_id))
         if active_id:
             res['amount'] = brws.amount_pay_now
+            res['current_id'] = brws.id
+            res['current_record_id'] = brws.current_id
+
         return res
 
     def done(self):
         ss = self.env['payment.total'].search([])
 
         for i in ss:
-            i.state = 'pay_list'
+            if self.current_id == i.id:
+                i.state = 'pay_list'
+
+        record = self.env['daily.class.record'].search([])
+
+        for rec in record:
+            if self.current_record_id == rec.id:
+                rec.state = 'paid'
 
     def cancel(self):
         ss = self.env['payment.total'].search([])
         for i in ss:
-            i.state = 'pay'
+            if self.current_id == i.id:
+                i.state = 'pay'
 
 
 class PaymentDetailsTree(models.Model):
@@ -320,6 +333,7 @@ class PaymentTotal(models.Model):
     faculty_id = fields.Many2one('faculty.details', string='Faculty', required=True)
     from_date = fields.Date(string='From Date')
     to_date = fields.Date(string='To Date')
+    current_id = fields.Integer(string='Current Id')
 
     currency_id = fields.Many2one('res.currency',
                                   default=lambda self: self.env['res.currency'].search([('name', '=', 'INR')]).id,

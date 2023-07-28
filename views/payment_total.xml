@@ -51,6 +51,7 @@
                             <field name="faculty_id"/>
                             <field name="branch"/>
                             <field name="month"/>
+                            <field name="current_id" invisible="1"/>
                             <!--                                <field name="to_date"/>-->
 
                             <field name="class_room"/>

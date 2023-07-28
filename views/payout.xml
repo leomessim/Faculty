@@ -162,6 +162,8 @@
                             <field name="currency_id" invisible="1"/>
                             <field name="journal"/>
                             <field name="payment_date"/>
+                            <field name="current_id" invisible="1"/>
+                            <field name="current_record_id" invisible="1"/>
                         </group>
                         <group>
                             <field name="amount" widget="monetary"/>

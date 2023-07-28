@@ -17,7 +17,8 @@ class DailyClassRecord(models.Model):
         ('to_approve', 'To Approve'),
         # ('fac_approve', 'Faculty Approve'),
         ('approve', 'Approved'),
-        ('rejected', 'Rejected')
+        ('rejected', 'Rejected'),
+        ('paid', 'Paid'),
 
     ], string='Status', required=True, readonly=True, copy=False,
         tracking=True, default='draft')
@@ -143,6 +144,7 @@ class DailyClassRecord(models.Model):
 
     class_hour_till_now = fields.Float('Class hours till now', compute='_total_taken_classes', store=True)
 
+
     def confirm_record(self):
         total = 0
         var = []
@@ -194,6 +196,7 @@ class DailyClassRecord(models.Model):
                 abc.append((0, 0, res_list))
             record = self.env['payment.total'].create({
                 'faculty_id': self.faculty_id.id,
+                'current_id': self.id,
                 'month': self.month_of_record,
                 'extra_reason': self.extra_hour_reason,
                 'extra_charge': self.extra_hour,
@@ -302,6 +305,20 @@ class DailyClassRecord(models.Model):
             self.make_academic_head = True
 
     make_academic_head = fields.Boolean(string="Academic Head", default=True, compute='head_academic')
+    change_faculty_boolean = fields.Boolean(string='Change Faculty', default=False)
+    old_faculty = fields.Many2one('faculty.details', string='Old Faculty')
+    new_faculty = fields.Many2one('faculty.details', string='New Faculty')
+    old_faculty_class_time = fields.Float(string='Old Faculty Class Time')
+
+    def change_faculty(self):
+        self.old_faculty_class_time = self.class_hour_till_now
+        self.change_faculty_boolean = True
+
+    def faculty_change_done(self):
+        self.class_hour_till_now = self.old_faculty_class_time
+        self.faculty_id = self.new_faculty
+        self.record_ids.net_hour = self.old_faculty_class_time
+        self.change_faculty_boolean = False
 
 
 class RecordData(models.Model):
