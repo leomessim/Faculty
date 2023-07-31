@@ -8,7 +8,7 @@ acce_form_dept,access_facy,model_form_department,base.group_user,1,1,1,1
 faculty_scheduled_class,access_facy,model_scheduled_classes,base.group_user,1,1,1,1
 acce_formm_dept,access_facy,model_form_department,group_faculty_administrator,1,1,1,1
 acce_faculty_dept,access_facy,model_faculty_department,group_faculty_administrator,1,1,1,1
-acc_faculty_admin,faculty,model_faculty_details,group_faculty_administrator,1,1,1,1
+acc_faculty_admin,faculty,model_faculty_details,group_faculty_administrator,1,0,0,0
 accesss_form_class,ss_faculty,model_form_department,base.group_user,1,1,1,1
 accesseee_dail_class,acceculty,model_approvals,base.group_user,1,1,1,1
 accesstt_reason,access_reason,model_break_reason,base.group_user,1,1,1,1
@@ -39,7 +39,7 @@ access_class_accounts,access_faculty_accounts,model_daily_class,group_accounting
 access_faculty_acc,access_faculty_acc,model_faculty_details,group_accounting_manager,1,0,0,0
 accessss_faculty_acc,access_faculty_acc,model_faculty_details,group_faculty_user,1,1,0,0
 access_s_advance_wizard,advance_salary,model_faculty_salary_advance,group_accounting_manager,1,1,1,1
-faculty_records,daily_record,model_daily_class_record,group_faculty_administrator,1,1,1,1
+faculty_records,daily_record,model_daily_class_record,group_faculty_administrator,1,1,0,0
 faculty_records_ids,record,model_record_data,group_faculty_administrator,1,1,1,1
 faculty_payment_details,record,model_payment_details_tree,group_faculty_administrator,1,1,1,1
 payment_details,payment_record,model_payment_details_tree,group_accounting_manager,1,1,1,1

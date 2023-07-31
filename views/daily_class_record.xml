@@ -11,8 +11,8 @@
                     <button name="confirm_record" class="oe_highlight" states="draft" string="Confirm"
                             type="object"
                             groups="faculty.coordinator_user"/>
-<!--                    <button name="change_faculty" states="draft" string="Change Faculty"-->
-<!--                            type="object" groups="faculty.coordinator_user"/>-->
+                    <!--                    <button name="change_faculty" states="draft" string="Change Faculty"-->
+                    <!--                            type="object" groups="faculty.coordinator_user"/>-->
                     <button name="faculty_change_done" string="Done"
                             type="object" attrs="{'invisible':[('change_faculty_boolean', '=', False)]}"/>
 
@@ -21,6 +21,10 @@
                             groups="faculty.group_faculty_administrator"/>
                     <button name="rejected" class="oe_highlight" states="to_approve" string="Reject" type="object"
                             groups="faculty.group_faculty_administrator"/>
+                    <button name="refresh_record"
+                            help="Please click on the Refresh button provided below to update the record. Once you do that, you'll be able to view and verify the correct hours."
+                            string="Refresh" type="object"
+                            attrs="{'invisible':['|','|',('state', '!=', 'to_approve'),('total_remaining_hour', '&gt;', 0),('make_academic_head', '!=', False)]}"/>
 
                     <!--                    <button name="faculty_approve" class="oe_highlight" states="fac_approve" string="Approve"-->
                     <!--                            type="object"-->
@@ -34,15 +38,17 @@
                     <group>
                         <group>
                             <field name="change_faculty_boolean" invisible="1"/>
-<!--                            <field name="old_faculty"-->
-<!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
+                            <!--                            <field name="old_faculty"-->
+                            <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
                             <field name="new_faculty"
                                    attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>
-                            <field name="old_faculty_class_time" attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>
+                            <field name="old_faculty_class_time"
+                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>
                             <field name="coordinator" invisible="1"/>
                             <field name="faculty_id" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="branch_name" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="month_of_record" attrs="{'readonly':[('make_visible','=',False)]}"/>
+                            <field name="over_time_check" invisible="1"/>
 
 
                         </group>
@@ -57,9 +63,9 @@
                             <field name="actual_dur" invisible="1"/>
 
                             <field name="extra_hour_active"
-                                   attrs="{'invisible':['|','|',('state', '=', 'draft'),('actual_dur', '&gt;', 0),('actual_dur', '=', 0)],'readonly':[('make_visible','=',False)]}"/>
+                                   attrs="{'invisible':['|','|',('state', '=', 'draft'),('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)],'readonly':[('make_visible_coord','=',False)]}"/>
                             <field name="extra_hour"
-                                   attrs="{'invisible':['|','|',('state', '=', 'draft'),('actual_dur', '&gt;', 0),('actual_dur', '=', 0)],'readonly':[('make_visible','=',False)]}"/>
+                                   attrs="{'invisible':['|','|',('state', '=', 'draft'),('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)],'readonly':[('make_visible_coord','=',False)]}"/>
                             <field name="extra_hour_reason"
                                    attrs="{'invisible':['|',('extra_hour_active', '=', False),('state', 'in', ('draft','to_approve'))], 'readonly':[('state','in',['approve','rejected'])]}"/>
                             <!--                            <field name="total_duration_sum" string="Class hours till now"/>-->

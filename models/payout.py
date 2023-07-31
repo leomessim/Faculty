@@ -320,7 +320,7 @@ class PaymentDetailsTree(models.Model):
     break_time = fields.Float(string='Break time')
     topic = fields.Char(string='Topic')
     date = fields.Date(string='Date')
-    payment_details_id = fields.Many2one('payment.total', string='Payments record')
+    payment_details_id = fields.Many2one('payment.total', string='Payments record', ondelete='cascade')
     net_hour = fields.Float(string='Net hour')
     balance = fields.Float(string='Amount')
 
@@ -329,6 +329,7 @@ class PaymentTotal(models.Model):
     _name = 'payment.total'
     _rec_name = 'faculty_id'
     _inherit = 'mail.thread'
+    _description = 'Payment'
 
     faculty_id = fields.Many2one('faculty.details', string='Faculty', required=True)
     from_date = fields.Date(string='From Date')
@@ -552,8 +553,6 @@ class PaymentTotal(models.Model):
             i.added_tax_payment = i.added_payment_extra + i.amount_tax_id - i.tds_amount
 
     added_tax_payment = fields.Float(compute='_tax_extra_payment', store=True, string='Gross payable')
-
-
 
     @api.depends('amount_to_be_paid', 'advance_remaining')
     def _compute_advance_remaining(self):

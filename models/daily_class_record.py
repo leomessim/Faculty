@@ -84,14 +84,15 @@ class DailyClassRecord(models.Model):
 
     total_duration_sum = fields.Float(string='Total duration', compute='_amount_all', store=True)
 
-    @api.depends('standard_hour', 'total_duration_sum')
+    @api.depends('standard_hour', 'total_duration_sum', 'state')
     def remaining_hour(self):
         total = 0
         net_hour = self.env['daily.class.record'].search([])
 
         for jj in net_hour:
-            if self.faculty_id == jj.faculty_id and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
-                total += jj.total_duration_sum
+            if self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+                if jj.state != 'rejected':
+                    total += jj.total_duration_sum
             aa = self.standard_hour - total
             for i in jj.record_ids:
                 self.total_remaining_hour = aa
@@ -136,44 +137,65 @@ class DailyClassRecord(models.Model):
         total = 0
         duration = self.env['daily.class.record'].search([])
         for i in duration:
-            if self.faculty_id == i.faculty_id and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
-                total += i.total_duration_sum
-                self.class_hour_till_now = total
+            if self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+                if i.state != 'rejected':
+                    total += i.total_duration_sum
+                    self.class_hour_till_now = total
             else:
                 self.class_hour_till_now = 0
 
     class_hour_till_now = fields.Float('Class hours till now', compute='_total_taken_classes', store=True)
-
+    over_time_check = fields.Boolean()
 
     def confirm_record(self):
-        total = 0
-        var = []
-        net_hour = self.env['daily.class.record'].search([])
-        for j in net_hour:
-            if j.faculty_id == self.faculty_id and self.subject_id == j.subject_id and self.course_id == j.course_id:
-                total += j.total_duration_sum
-        var.append(total)
-        aa = self.standard_hour - total
-        self.actual_dur = aa
-        if self.actual_dur < 0:
-            self.extra_hour_testing = abs(self.actual_dur)
-            aaaa = self.total_duration_sum - self.extra_hour_testing
-            if aaaa == 0:
-                if self.total_remaining_hour < 0:
-                    self.total_extra_hour = self.total_remaining_hour
-            else:
-                self.total_extra_hour = aaaa
-
-            print(self.extra_hour_testing, 'total extra')
-            print(self.total_duration_sum, 'total dur')
-            print(aaaa, 'tes')
+        if self.total_remaining_hour < 0:
+            self.over_time_check = True
         else:
-            print('cherdh')
+            self.over_time_check = False
+        # total = 0
+        # var = []
+        # net_hour = self.env['daily.class.record'].search([])
+        # for j in net_hour:
+        #     if self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
+        #         if j.state != 'rejected':
+        #             total += j.total_duration_sum
+        # var.append(total)
+        # aa = self.standard_hour - total
+        # self.actual_dur = aa
+        # if self.actual_dur < 0:
+        #     self.extra_hour_testing = abs(self.actual_dur)
+        #     aaaa = self.total_duration_sum - self.extra_hour_testing
+        #     if aaaa == 0:
+        #         if self.total_remaining_hour < 0:
+        #             self.total_extra_hour = self.total_remaining_hour
+        #     else:
+        #         self.total_extra_hour = aaaa
+        #
+        #     print(self.extra_hour_testing, 'total extra')
+        #     print(self.total_duration_sum, 'total dur')
+        #     print(aaaa, 'tes')
+        # else:
+        #     print('cherdh')
         for record in self:
             # print(self.record_ids.balance)
             record.state = 'to_approve'
         # self.check_coordinator_id = self.env.user.employee_parent_id.user_id
         # print(self.check_coordinator_id, 'cooo')
+
+    def refresh_record(self):
+        ff = self.env['daily.class.record'].search([])
+        print('refresh')
+        total = 0
+        for ii in ff:
+            if self.class_room == ii.class_room and self.subject_id == ii.subject_id and self.course_id == ii.course_id:
+                if ii.state != 'rejected':
+                    total += ii.total_duration_sum
+                    self.class_hour_till_now = total
+                    self.extra_hour = 0
+                    self.total_remaining_hour = self.standard_hour - total
+
+            else:
+                self.class_hour_till_now = 0
 
     def head_approve(self):
         print(self.coordinator.employee_id.parent_id.user_id.id, 'employee')
@@ -182,44 +204,135 @@ class DailyClassRecord(models.Model):
             raise UserError('Coordinator manager approve button')
         #
         else:
-            self.state = 'approve'
-            abc = []
-            for rec in self.record_ids:
-                res_list = {
-                    'date': rec.date,
-                    # 'classroom_id': self.class_room.name,
-                    'start_date': rec.start_date,
-                    'end_date': rec.end_date,
-                    'balance': rec.balance,
-                    'net_hour': rec.net_hour,
+            if self.over_time_check == True:
+                total = 0
+                var = []
+                net_hour = self.env['daily.class.record'].search([])
+                for j in net_hour:
+                    if self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
+                        if j.state != 'rejected':
+                            total += j.total_duration_sum
+                var.append(total)
+                aa = self.standard_hour - total
+                self.actual_dur = aa
+                if self.actual_dur < 0:
+                    self.extra_hour_testing = abs(self.actual_dur)
+                    aaaa = self.total_duration_sum - self.extra_hour_testing
+                    if aaaa == 0:
+                        if self.total_remaining_hour < 0:
+                            self.total_extra_hour = self.total_remaining_hour
+                    else:
+                        self.total_extra_hour = aaaa
+
+                    print(self.extra_hour_testing, 'total extra')
+                    print(self.total_duration_sum, 'total dur')
+                    print(aaaa, 'tes')
+                else:
+                    print('cherdh')
+                self.write({'state': 'approve'})
+                # self.state = 'approve'
+                abc = []
+                for rec in self.record_ids:
+                    res_list = {
+                        'date': rec.date,
+                        # 'classroom_id': self.class_room.name,
+                        'start_date': rec.start_date,
+                        'end_date': rec.end_date,
+                        'balance': rec.balance,
+                        'net_hour': rec.net_hour,
+                    }
+                    abc.append((0, 0, res_list))
+                record = self.env['payment.total'].create({
+                    'faculty_id': self.faculty_id.id,
+                    'current_id': self.id,
+                    'month': self.month_of_record,
+                    'extra_reason': self.extra_hour_reason,
+                    'extra_charge': self.extra_hour,
+                    'payment_ids': abc,
+                    # 'amount_to_be_paid': self.total_amount,
+                    'class_room': self.class_room.id,
+                    'course_id': self.course_id.id,
+                    'subject_id': self.subject_id.id,
+                    'current_status': self.faculty_id.current_status,
+                    'branch': self.branch_name.id,
+                    # 'charge': self.subject_rate,
+                    'ifsc': self.faculty_id.ifsc,
+                    'bank': self.faculty_id.bank_name,
+                    'account_number': self.faculty_id.bank_account_no,
+                    'account_holder': self.faculty_id.account_holder,
+                    'remaining_hours': self.total_remaining_hour,
+                    'standard_hours': self.standard_hour,
+                    'extra_hr_testing': self.total_extra_hour,
+                    'extra_hour_reason': self.extra_hour_reason,
+                    'correct_remaining_hours': self.total_remaining_hour,
+                    'class_hours_till': self.class_hour_till_now,
                 }
-                abc.append((0, 0, res_list))
-            record = self.env['payment.total'].create({
-                'faculty_id': self.faculty_id.id,
-                'current_id': self.id,
-                'month': self.month_of_record,
-                'extra_reason': self.extra_hour_reason,
-                'extra_charge': self.extra_hour,
-                'payment_ids': abc,
-                # 'amount_to_be_paid': self.total_amount,
-                'class_room': self.class_room.id,
-                'course_id': self.course_id.id,
-                'subject_id': self.subject_id.id,
-                'current_status': self.faculty_id.current_status,
-                'branch': self.branch_name.id,
-                # 'charge': self.subject_rate,
-                'ifsc': self.faculty_id.ifsc,
-                'bank': self.faculty_id.bank_name,
-                'account_number': self.faculty_id.bank_account_no,
-                'account_holder': self.faculty_id.account_holder,
-                'remaining_hours': self.total_remaining_hour,
-                'standard_hours': self.standard_hour,
-                'extra_hr_testing': self.total_extra_hour,
-                'extra_hour_reason': self.extra_hour_reason,
-                'correct_remaining_hours': self.total_remaining_hour,
-                'class_hours_till': self.class_hour_till_now,
-            }
-            )
+                )
+            else:
+                total = 0
+                var = []
+                net_hour = self.env['daily.class.record'].search([])
+                for j in net_hour:
+                    if self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
+                        if j.state != 'rejected':
+                            total += j.total_duration_sum
+                var.append(total)
+                aa = self.standard_hour - total
+                self.actual_dur = aa
+                # if self.actual_dur < 0:
+                #     self.extra_hour_testing = abs(self.actual_dur)
+                #     aaaa = self.total_duration_sum - self.extra_hour_testing
+                #     if aaaa == 0:
+                #         if self.total_remaining_hour < 0:
+                #             self.total_extra_hour = self.total_remaining_hour
+                #     else:
+                #         self.total_extra_hour = aaaa
+                #
+                #     print(self.extra_hour_testing, 'total extra')
+                #     print(self.total_duration_sum, 'total dur')
+                #     print(aaaa, 'tes')
+                # else:
+                #     print('cherdh')
+                # self.state = 'approve'
+                self.write({'state': 'approve'})
+
+                abc = []
+                for rec in self.record_ids:
+                    res_list = {
+                        'date': rec.date,
+                        # 'classroom_id': self.class_room.name,
+                        'start_date': rec.start_date,
+                        'end_date': rec.end_date,
+                        'balance': rec.balance,
+                        'net_hour': rec.net_hour,
+                    }
+                    abc.append((0, 0, res_list))
+                record = self.env['payment.total'].create({
+                    'faculty_id': self.faculty_id.id,
+                    'current_id': self.id,
+                    'month': self.month_of_record,
+                    'extra_reason': self.extra_hour_reason,
+                    'extra_charge': self.extra_hour,
+                    'payment_ids': abc,
+                    # 'amount_to_be_paid': self.total_amount,
+                    'class_room': self.class_room.id,
+                    'course_id': self.course_id.id,
+                    'subject_id': self.subject_id.id,
+                    'current_status': self.faculty_id.current_status,
+                    'branch': self.branch_name.id,
+                    # 'charge': self.subject_rate,
+                    'ifsc': self.faculty_id.ifsc,
+                    'bank': self.faculty_id.bank_name,
+                    'account_number': self.faculty_id.bank_account_no,
+                    'account_holder': self.faculty_id.account_holder,
+                    'remaining_hours': self.total_remaining_hour,
+                    'standard_hours': self.standard_hour,
+                    'extra_hr_testing': self.total_extra_hour,
+                    'extra_hour_reason': self.extra_hour_reason,
+                    'correct_remaining_hours': self.total_remaining_hour,
+                    'class_hours_till': self.class_hour_till_now,
+                }
+                )
 
             # self.state = 'approve'
 
@@ -266,6 +379,7 @@ class DailyClassRecord(models.Model):
     def rejected(self):
         self.state = 'rejected'
 
+    @api.depends('make_visible')
     def get_user(self):
         print('kkkll')
         user_crnt = self.env.user.id
@@ -327,7 +441,7 @@ class RecordData(models.Model):
     start_date = fields.Float(string='Start time', required=True, help='Enter rail way time')
     end_date = fields.Float(string='End time', required=True, help='Enter rail way time')
 
-    record_id = fields.Many2one('daily.class.record')
+    record_id = fields.Many2one('daily.class.record', ondelete='cascade')
     break_reason = fields.Char(string='Break reason')
     break_time = fields.Float(string='Break Time', widget='time')
     topic = fields.Char(string='Topic')
