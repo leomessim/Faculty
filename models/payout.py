@@ -389,7 +389,7 @@ class PaymentTotal(models.Model):
         remaining = self.env['payment.total'].search([])
         for rec in remaining:
             if rec.faculty_id == self.faculty_id:
-                if rec.class_room == self.class_room and rec.course_id == self.course_id and rec.subject_id == self.subject_id:
+                if rec.class_room == self.class_room and self.branch == rec.branch and rec.course_id == self.course_id and rec.subject_id == self.subject_id:
                     total += rec.total_duration_sum
                     self.check_remain = total
                 else:

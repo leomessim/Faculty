@@ -12,16 +12,16 @@
             <field name="perm_create" eval="False"/>
             <field name="perm_unlink" eval="False"/>
         </record>
-        <record id="coordinator_remove_delete_access" model="ir.rule">
-            <field name="name">Only draft state can be deleted</field>
-            <field name="model_id" ref="model_daily_class_record"/>
-            <field name="domain_force">[('state', '=', 'to_approve')]</field>
-            <field name="groups" eval="[(4, ref('faculty.coordinator_user'))]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_unlink" eval="False"/>
-        </record>
+<!--        <record id="coordinator_remove_delete_access" model="ir.rule">-->
+<!--            <field name="name">Only draft state can be deleted</field>-->
+<!--            <field name="model_id" ref="model_daily_class_record"/>-->
+<!--            <field name="domain_force">[('state', '=', 'to_approve')]</field>-->
+<!--            <field name="groups" eval="[(4, ref('faculty.coordinator_user'))]"/>-->
+<!--            <field name="perm_read" eval="True"/>-->
+<!--            <field name="perm_write" eval="True"/>-->
+<!--            <field name="perm_create" eval="True"/>-->
+<!--            <field name="perm_unlink" eval="False"/>-->
+<!--        </record>-->
         <record id="accounts_daily_record_view" model="ir.rule">
             <field name="name">Daily record view accounts</field>
             <field name="model_id" ref="model_daily_class_record"/>

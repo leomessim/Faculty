@@ -7,6 +7,7 @@ class DailyClassRecord(models.Model):
     _name = 'daily.class.record'
     _inherit = 'mail.thread'
     _rec_name = 'faculty_id'
+    _description = 'Class Record'
 
     faculty_id = fields.Many2one('faculty.details', 'Faculty', index=True, required=True)
     class_room = fields.Many2one('class.room', string='Class', required=True)
@@ -22,7 +23,7 @@ class DailyClassRecord(models.Model):
 
     ], string='Status', required=True, readonly=True, copy=False,
         tracking=True, default='draft')
-    branch_name = fields.Many2one('logic.branches', string='Branch')
+    branch_name = fields.Many2one('logic.branches', string='Branch', required=True)
     month_of_record = fields.Selection([
         ('january', 'January'), ('february', 'February'),
         ('march', 'March'), ('april', 'April'),
@@ -90,7 +91,7 @@ class DailyClassRecord(models.Model):
         net_hour = self.env['daily.class.record'].search([])
 
         for jj in net_hour:
-            if self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+            if self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
                 if jj.state != 'rejected':
                     total += jj.total_duration_sum
             aa = self.standard_hour - total
@@ -137,7 +138,7 @@ class DailyClassRecord(models.Model):
         total = 0
         duration = self.env['daily.class.record'].search([])
         for i in duration:
-            if self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+            if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
                 if i.state != 'rejected':
                     total += i.total_duration_sum
                     self.class_hour_till_now = total
@@ -187,15 +188,14 @@ class DailyClassRecord(models.Model):
         print('refresh')
         total = 0
         for ii in ff:
-            if self.class_room == ii.class_room and self.subject_id == ii.subject_id and self.course_id == ii.course_id:
+            if self.branch_name == ii.branch_name and self.class_room == ii.class_room and self.subject_id == ii.subject_id and self.course_id == ii.course_id:
                 if ii.state != 'rejected':
                     total += ii.total_duration_sum
                     self.class_hour_till_now = total
                     self.extra_hour = 0
                     self.total_remaining_hour = self.standard_hour - total
-
-            else:
-                self.class_hour_till_now = 0
+                # else:
+                #     self._total_taken_classes()
 
     def head_approve(self):
         print(self.coordinator.employee_id.parent_id.user_id.id, 'employee')
@@ -209,7 +209,7 @@ class DailyClassRecord(models.Model):
                 var = []
                 net_hour = self.env['daily.class.record'].search([])
                 for j in net_hour:
-                    if self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
+                    if self.branch_name == j.branch_name and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
                         if j.state != 'rejected':
                             total += j.total_duration_sum
                 var.append(total)
@@ -273,7 +273,7 @@ class DailyClassRecord(models.Model):
                 var = []
                 net_hour = self.env['daily.class.record'].search([])
                 for j in net_hour:
-                    if self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
+                    if self.faculty_id == j.faculty_id and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
                         if j.state != 'rejected':
                             total += j.total_duration_sum
                 var.append(total)
