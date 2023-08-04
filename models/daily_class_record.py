@@ -9,12 +9,13 @@ class DailyClassRecord(models.Model):
     _rec_name = 'faculty_id'
     _description = 'Class Record'
 
-    faculty_id = fields.Many2one('faculty.details', 'Faculty', index=True, required=True)
-    class_room = fields.Many2one('class.room', string='Class', required=True)
-    coordinator = fields.Many2one('res.users', 'user', default=lambda self: self.env.user.id)
+    faculty_id = fields.Many2one('faculty.details', 'Faculty', index=True, required=True, ondelete='restrict')
+    class_room = fields.Many2one('class.room', string='Class', required=True, ondelete='restrict')
+    coordinator = fields.Many2one('res.users', 'user', default=lambda self: self.env.user.id, ondelete='restrict')
 
     state = fields.Selection(selection=[
         ('draft', 'Draft'),
+        ('sent_approve', 'Sent to Approve'),
         ('to_approve', 'To Approve'),
         # ('fac_approve', 'Faculty Approve'),
         ('approve', 'Approved'),
@@ -23,7 +24,7 @@ class DailyClassRecord(models.Model):
 
     ], string='Status', required=True, readonly=True, copy=False,
         tracking=True, default='draft')
-    branch_name = fields.Many2one('logic.branches', string='Branch', required=True)
+    branch_name = fields.Many2one('logic.branches', string='Branch', required=True, ondelete='restrict')
     month_of_record = fields.Selection([
         ('january', 'January'), ('february', 'February'),
         ('march', 'March'), ('april', 'April'),
@@ -33,8 +34,8 @@ class DailyClassRecord(models.Model):
         string='Month of record', copy=False,
         tracking=True)
 
-    course_id = fields.Many2one('courses.details', string='Course', required=True)
-    subject_id = fields.Many2one('subject.details', string='Subject', required=True)
+    course_id = fields.Many2one('courses.details', string='Course', required=True, ondelete='restrict')
+    subject_id = fields.Many2one('subject.details', string='Subject', required=True, ondelete='restrict')
     extra_hour_active = fields.Boolean('Add extra hour', required=True)
     extra_hour_reason = fields.Text('Extra hour reason')
     record_ids = fields.One2many('record.data', 'record_id', string='Records')
@@ -57,6 +58,32 @@ class DailyClassRecord(models.Model):
                 print('no')
 
     standard_hour = fields.Float(string='Standard hour', compute='_compute_standard_hour_taken', store=True)
+
+    def sent_to_approval(self):
+        total = 0
+        duration = self.env['daily.class.record'].search([])
+        for i in duration:
+            if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
+                    total += i.total_duration_sum
+                    self.class_hour_till_now = total
+            else:
+                self.class_hour_till_now = 0
+        self.state = 'to_approve'
+        net_hour = self.env['daily.class.record'].search([])
+        total_rem = 0
+        for jj in net_hour:
+            if self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+                if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid':
+                    total_rem += jj.total_duration_sum
+            aa = self.standard_hour - total_rem
+
+            self.total_remaining_hour = aa
+
+        # self.total_remaining_hour = self.total_duration_sum - total
+
+    total_remaining_hour = fields.Float(string='Balance standard hours', readonly=True)
+    class_hour_till_now = fields.Float('Class hours till now', readonly=True)
 
     @api.depends('subject_id')
     def onchange_standard_hour(self):
@@ -85,22 +112,6 @@ class DailyClassRecord(models.Model):
 
     total_duration_sum = fields.Float(string='Total duration', compute='_amount_all', store=True)
 
-    @api.depends('standard_hour', 'total_duration_sum', 'state')
-    def remaining_hour(self):
-        total = 0
-        net_hour = self.env['daily.class.record'].search([])
-
-        for jj in net_hour:
-            if self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
-                if jj.state != 'rejected':
-                    total += jj.total_duration_sum
-            aa = self.standard_hour - total
-            for i in jj.record_ids:
-                self.total_remaining_hour = aa
-        print(total, 'kklk')
-        # self.total_remaining_hour = self.total_duration_sum - total
-
-    total_remaining_hour = fields.Float(string='Balance standard hours', compute='remaining_hour', store=True)
 
     @api.depends('record_ids.net_hour', 'subject_rate')
     def _compute_subtotal_amount(self):
@@ -133,19 +144,18 @@ class DailyClassRecord(models.Model):
     extra_hour_testing = fields.Float()
     total_extra_hour = fields.Float()
 
-    @api.depends('subject_id', 'course_id', 'record_ids.net_hour')
-    def _total_taken_classes(self):
-        total = 0
-        duration = self.env['daily.class.record'].search([])
-        for i in duration:
-            if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
-                if i.state != 'rejected':
-                    total += i.total_duration_sum
-                    self.class_hour_till_now = total
-            else:
-                self.class_hour_till_now = 0
+    # @api.depends('subject_id', 'course_id', 'record_ids.net_hour')
+    # def _total_taken_classes(self):
+        # total = 0
+        # duration = self.env['daily.class.record'].search([])
+        # for i in duration:
+        #     if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+        #         if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
+        #             total += i.total_duration_sum
+        #             self.class_hour_till_now = total
+        #     else:
+        #         self.class_hour_till_now = 0
 
-    class_hour_till_now = fields.Float('Class hours till now', compute='_total_taken_classes', store=True)
     over_time_check = fields.Boolean()
 
     def confirm_record(self):
@@ -179,7 +189,7 @@ class DailyClassRecord(models.Model):
         #     print('cherdh')
         for record in self:
             # print(self.record_ids.balance)
-            record.state = 'to_approve'
+            record.state = 'sent_approve'
         # self.check_coordinator_id = self.env.user.employee_parent_id.user_id
         # print(self.check_coordinator_id, 'cooo')
 
@@ -210,7 +220,7 @@ class DailyClassRecord(models.Model):
                 net_hour = self.env['daily.class.record'].search([])
                 for j in net_hour:
                     if self.branch_name == j.branch_name and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
-                        if j.state != 'rejected':
+                        if j.state in 'to_approve' or j.state in 'approve' or j.state in 'sent_approve' or j.state in 'paid':
                             total += j.total_duration_sum
                 var.append(total)
                 aa = self.standard_hour - total
@@ -224,11 +234,6 @@ class DailyClassRecord(models.Model):
                     else:
                         self.total_extra_hour = aaaa
 
-                    print(self.extra_hour_testing, 'total extra')
-                    print(self.total_duration_sum, 'total dur')
-                    print(aaaa, 'tes')
-                else:
-                    print('cherdh')
                 self.write({'state': 'approve'})
                 # self.state = 'approve'
                 abc = []
@@ -335,6 +340,23 @@ class DailyClassRecord(models.Model):
                 )
 
             # self.state = 'approve'
+
+    def compute_count(self):
+        for record in self:
+            record.payment_count = self.env['payment.total'].search_count(
+                [('current_id', '=', self.id)])
+
+    payment_count = fields.Integer(compute='compute_count')
+
+    def get_payments(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Payments',
+            'view_mode': 'tree,form',
+            'res_model': 'payment.total',
+            'domain': [('current_id', '=', self.id)],
+            'context': "{'create': False}"
+        }
 
     def faculty_approve(self):
         # abc = []
@@ -486,4 +508,3 @@ class SkippedClasses(models.Model):
     date_skip = fields.Date(string='Date')
     reason_skip = fields.Char(string='Reason')
     skip_id = fields.Many2one('daily.class.record')
-

@@ -11,6 +11,8 @@
                     <button name="confirm_record" class="oe_highlight" states="draft" string="Confirm"
                             type="object"
                             groups="faculty.coordinator_user"/>
+                    <button name="sent_to_approval" states="sent_approve" string="Sent to Approval" type="object"
+                            class="oe_highlight" groups="faculty.coordinator_user"/>
                     <!--                    <button name="change_faculty" states="draft" string="Change Faculty"-->
                     <!--                            type="object" groups="faculty.coordinator_user"/>-->
                     <button name="faculty_change_done" string="Done"
@@ -35,6 +37,13 @@
                     <!--                            attrs="{'invisible':[('state', 'in', ['rejected','draft','approve'])]}"/>-->
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" name="get_payments"
+                                icon="fa-money" groups="faculty.group_accounting_manager">
+                            <field string="Payment" name="payment_count" widget="statinfo"
+                                   groups="faculty.group_accounting_manager"/>
+                        </button>
+                    </div>
                     <group>
                         <group>
                             <field name="change_faculty_boolean" invisible="1"/>
@@ -46,7 +55,8 @@
                                    attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>
                             <field name="coordinator" invisible="1"/>
                             <field name="faculty_id" attrs="{'readonly':[('make_visible','=',False)]}"/>
-                            <field name="branch_name" attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"/>
+                            <field name="branch_name"
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"/>
                             <field name="month_of_record" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="over_time_check" invisible="1"/>
 
@@ -68,8 +78,9 @@
                                    attrs="{'invisible':['|','|',('state', '=', 'draft'),('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)],'readonly':[('make_visible_coord','=',False)]}"/>
                             <field name="extra_hour_reason"
                                    attrs="{'invisible':['|',('extra_hour_active', '=', False),('state', 'in', ('draft','to_approve'))], 'readonly':[('state','in',['approve','rejected'])]}"/>
-                            <!--                            <field name="total_duration_sum" string="Class hours till now"/>-->
+                            <field name="total_duration_sum" string="till" invisible="1"/>
                             <field name="make_visible_coord" invisible="1"/>
+                            <field name="total_extra_hour" invisible="1"/>
                             <field name="extra_hour_testing" invisible="1"/>
 
 
@@ -111,16 +122,16 @@
                     <group name="note_group" col="6">
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
                             <field name="standard_hour" widget="float_time"/>
-                            <field name="class_hour_till_now" widget="float_time"/>
+                            <field name="class_hour_till_now" widget="float_time" attrs="{'invisible':[('state', 'in', ['draft','sent_approve'])]}"/>
 
                             <!--                            <field name="total_duration_sum" widget="monetary"/>-->
                             <field name="subject_rate" widget="monetary"
                                    invisible="1"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Green;"
-                                   attrs="{'invisible':['|',('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0)]}"
+                                   attrs="{'invisible':['|', '|', ('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0),('state', 'in', ['draft','sent_approve'])]}"
                                    widget="float_time"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"
-                                   attrs="{'invisible':['|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0)]}"
+                                   attrs="{'invisible':['|', '|', ('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0),('state', 'in', ['draft','sent_approve'])]}"
                                    widget="float_time"/>
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours'-->
                             <!--                                   attrs="{'visible':[('total_remaining_hour', '&gt;', 0)]}"/>-->

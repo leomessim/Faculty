@@ -16,6 +16,9 @@
                             type="object"/>
                 </header>
                 <sheet>
+                    <!--                    <div class="oe_button_box" name="button_box">-->
+                    <!--                        -->
+                    <!--                    </div>-->
                     <div class="oe_button_box" name="button_box">
                         <button
                                 id="hr_presence_button"
@@ -37,9 +40,15 @@
                                     Active
                                 </span>
                             </div>
+
                             <!--                        <button class="oe_stat_button" type="object" name="get_active_status"-->
                             <!--                                icon="fa-car">-->
                             <!--                                <field string="Vehicle" name="vehicle_count" widget="statinfo"/>-->
+                        </button>
+                        <button class="oe_stat_button" type="object" name="get_payments_form"
+                                icon="fa-list-alt" groups="faculty.group_accounting_manager">
+                            <field string="Class Record" name="form_count" widget="statinfo"
+                                   groups="faculty.group_accounting_manager"/>
                         </button>
                     </div>
                     <widget name="web_ribbon" text="Paid"
@@ -117,7 +126,7 @@
                             <!--                            <field name="duration_amount"/>-->
                             <field name="total_duration_sum" widget="float_time"/>
                             <field name="rate_of_sub" widget="monetary"/>
-                            <field name="amount_to_be_paid" widget="monetary" invisible="1"/>
+                            <field name="amount_to_be_paid" widget="monetary" string="Amount to be paid" invisible="1"/>
                             <!--                            <field name="remaining_hours"/>-->
                             <field name="standard_hours" widget="float_time"/>
                             <field name="class_hours_till" widget="float_time"/>
@@ -192,5 +201,6 @@
             name="Payment Details"
             parent="menu_payment"
             action="faculty_payment_form"
+            groups="faculty.group_accounting_manager"
             sequence="1"/>
 </odoo>

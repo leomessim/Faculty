@@ -80,7 +80,7 @@ class Courses(models.Model):
     _inherit = 'mail.thread'
 
     name = fields.Char(string='Course Name', required=True)
-    subject_ids = fields.Many2many('subject.details', string='Subject')
+    subject_ids = fields.Many2many('subject.details', string='Subject', ondelete='restrict')
     # department = fields.Many2one('primary.department', string='Primary department', required=True)
     state = fields.Selection(selection=[
         ('draft', 'Draft'),
@@ -106,7 +106,7 @@ class SubjectDetails(models.Model):
     _name = 'subject.details'
     _inherit = 'mail.thread'
 
-    name = fields.Char(string='Subject Name')
+    name = fields.Char(string='Subject Name', ondelete='restrict')
     stnd_hr = fields.Float(string='Standard Hours')
     rec_id = fields.Integer()
     course_sub_id = fields.Many2one('courses.details', string='Course')
