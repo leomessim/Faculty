@@ -103,13 +103,13 @@ class PayoutWizard(models.TransientModel):
         return res
 
     def done(self):
-        ss = self.env['payment.total'].search([])
+        ss = self.env['payment.total'].sudo().search([])
 
         for i in ss:
             if self.current_id == i.id:
                 i.state = 'pay_list'
 
-        record = self.env['daily.class.record'].search([])
+        record = self.env['daily.class.record'].sudo().search([])
 
         for rec in record:
             if self.current_record_id == rec.id:

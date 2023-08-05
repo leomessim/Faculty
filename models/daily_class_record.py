@@ -61,7 +61,7 @@ class DailyClassRecord(models.Model):
 
     def sent_to_approval(self):
         total = 0
-        duration = self.env['daily.class.record'].search([])
+        duration = self.env['daily.class.record'].sudo().search([])
         for i in duration:
             if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
                 if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
@@ -70,7 +70,7 @@ class DailyClassRecord(models.Model):
             else:
                 self.class_hour_till_now = 0
         self.state = 'to_approve'
-        net_hour = self.env['daily.class.record'].search([])
+        net_hour = self.env['daily.class.record'].sudo().search([])
         total_rem = 0
         for jj in net_hour:
             if self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
@@ -88,7 +88,7 @@ class DailyClassRecord(models.Model):
     @api.depends('subject_id')
     def onchange_standard_hour(self):
         print(self.subject_id, 'facul')
-        rate = self.env['faculty.subject.rate'].search([])
+        rate = self.env['faculty.subject.rate'].sudo().search([])
         for j in rate:
             print(j.subject_id, 'co')
             if self.faculty_id == j.name and self.course_id == j.course_id and self.subject_id == j.subject_id:
@@ -159,6 +159,9 @@ class DailyClassRecord(models.Model):
     over_time_check = fields.Boolean()
 
     def confirm_record(self):
+        ss = self.env['daily.class.record'].sudo().search([])
+        for hh in ss:
+            print(hh.id, 'rec id')
         if self.total_remaining_hour < 0:
             self.over_time_check = True
         else:
@@ -194,7 +197,7 @@ class DailyClassRecord(models.Model):
         # print(self.check_coordinator_id, 'cooo')
 
     def refresh_record(self):
-        ff = self.env['daily.class.record'].search([])
+        ff = self.env['daily.class.record'].sudo().search([])
         print('refresh')
         total = 0
         for ii in ff:
@@ -217,7 +220,7 @@ class DailyClassRecord(models.Model):
             if self.over_time_check == True:
                 total = 0
                 var = []
-                net_hour = self.env['daily.class.record'].search([])
+                net_hour = self.env['daily.class.record'].sudo().search([])
                 for j in net_hour:
                     if self.branch_name == j.branch_name and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
                         if j.state in 'to_approve' or j.state in 'approve' or j.state in 'sent_approve' or j.state in 'paid':
@@ -276,7 +279,7 @@ class DailyClassRecord(models.Model):
             else:
                 total = 0
                 var = []
-                net_hour = self.env['daily.class.record'].search([])
+                net_hour = self.env['daily.class.record'].sudo().search([])
                 for j in net_hour:
                     if self.faculty_id == j.faculty_id and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
                         if j.state != 'rejected':
