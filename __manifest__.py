@@ -16,7 +16,8 @@
         'views/payout.xml',
         'views/department.xml',
         'views/payment_total.xml',
-        'views/daily_class_record.xml'
+        'views/daily_class_record.xml',
+        'views/changed_faculty.xml',
 
     ],
     'demo': [],

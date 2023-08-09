@@ -60,7 +60,9 @@ faculty_pay_academic,daily_payment,model_payment_total,group_faculty_administrat
 faculty__coo,record,model_record_data,group_faculty_user,1,1,1,0
 faculty_hr,daily_payment,model_payment_total,group_hr,1,0,0,0
 faculty_hr_coord,daily_payment,model_payment_total,coordinator_user,1,1,1,0
-
+faculty_changed,daily_payment,model_changed_standard_hours,coordinator_user,1,1,1,1
+faculty_changed_head,daily_payment,model_changed_standard_hours,group_faculty_administrator,0,1,1,1
+faculty_changed_acc,daily_payment,model_changed_standard_hours,group_accounting_manager,1,1,1,1
 faculty__coooo,record,model_skipped_classes,group_faculty_user,1,1,1,0
 oooo,record,model_skipped_classes,coordinator_user,1,1,1,1
 faculty__coooord,record,model_skipped_classes,group_faculty_administrator,1,1,1,1

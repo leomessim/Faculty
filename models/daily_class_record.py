@@ -31,7 +31,7 @@ class DailyClassRecord(models.Model):
         ('may', 'May'), ('june', 'June'), ('july', 'July'), ('august', 'August'),
         ('september', 'September'), ('october', 'October'), ('november', 'November'),
         ('december', 'December')],
-        string='Month of record', copy=False,
+        string='Month of Record', copy=False,
         tracking=True)
 
     course_id = fields.Many2one('courses.details', string='Course', required=True, ondelete='restrict')
@@ -43,27 +43,44 @@ class DailyClassRecord(models.Model):
     subject_rate = fields.Float(string='Subject rate', compute='onchange_standard_hour', store=True)
     extra_hour = fields.Float(string='Extra hour eligible for payment', required=True)
 
-    @api.depends('subject_id')
-    def _compute_standard_hour_taken(self):
+    @api.depends('subject_id', 'faculty_id', 'record_ids.date')
+    def compute_standard_hour_taken(self):
         standard = self.env['subject.details'].search([])
-        for j in standard:
-            print(self.subject_id.name, 'kl')
-            print(j.name, 'kl')
-            if self.subject_id.name == j.name and self.course_id == j.course_sub_id:
-                print(j.stnd_hr, 'yes')
-                self.standard_hour = j.stnd_hr
-                break
-            else:
-                self.standard_hour = 0
-                print('no')
+        change = self.env['changed.standard.hours'].search([])
+        if self.is_it_changed == True:
+            for hour in change:
+                if self.faculty_id == hour.faculty_id and self.subject_id == hour.subject_id and self.course_id == hour.course_id:
+                    print('same_sub')
+                    self.standard_hour = hour.standard_hour
+                else:
+                    for j in standard:
+                        print(self.subject_id.name, 'kl')
+                        if self.subject_id.name == j.name and self.course_id == j.course_sub_id:
+                            print(j.stnd_hr, 'yes')
+                            self.standard_hour = j.stnd_hr
+                        # else:
+                        #     self.standard_hour = 0
+                        #     print('no')
+        else:
+            print('no same')
+            for j in standard:
+                print(self.subject_id.name, 'subject')
+                print(j.name, 'hour sub')
+                if self.subject_id.name == j.name and self.course_id == j.course_sub_id:
+                    print(j.stnd_hr, 'hour')
+                    self.standard_hour = j.stnd_hr
 
-    standard_hour = fields.Float(string='Standard hour', compute='_compute_standard_hour_taken', store=True)
+                # else:
+                #     self.standard_hour = 0
+                #     print('no')
+
+    standard_hour = fields.Float(string='Standard hour', compute='compute_standard_hour_taken', store=True)
 
     def sent_to_approval(self):
-        total = 0
         duration = self.env['daily.class.record'].sudo().search([])
+        total = 0
         for i in duration:
-            if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+            if self.faculty_id == i.faculty_id and self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
                 if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
                     total += i.total_duration_sum
                     self.class_hour_till_now = total
@@ -73,12 +90,17 @@ class DailyClassRecord(models.Model):
         net_hour = self.env['daily.class.record'].sudo().search([])
         total_rem = 0
         for jj in net_hour:
-            if self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+            if self.faculty_id == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
                 if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid':
                     total_rem += jj.total_duration_sum
             aa = self.standard_hour - total_rem
 
             self.total_remaining_hour = aa
+
+        # fac = self.env['faculty.details'].search([])
+        # for faculty in fac:
+        #     if self.faculty_id.id == faculty.id:
+        #         faculty.sudo().write({'is_it_changed_faculty': False})
 
         # self.total_remaining_hour = self.total_duration_sum - total
 
@@ -89,6 +111,7 @@ class DailyClassRecord(models.Model):
     def onchange_standard_hour(self):
         print(self.subject_id, 'facul')
         rate = self.env['faculty.subject.rate'].sudo().search([])
+
         for j in rate:
             print(j.subject_id, 'co')
             if self.faculty_id == j.name and self.course_id == j.course_id and self.subject_id == j.subject_id:
@@ -111,7 +134,6 @@ class DailyClassRecord(models.Model):
         })
 
     total_duration_sum = fields.Float(string='Total duration', compute='_amount_all', store=True)
-
 
     @api.depends('record_ids.net_hour', 'subject_rate')
     def _compute_subtotal_amount(self):
@@ -146,23 +168,37 @@ class DailyClassRecord(models.Model):
 
     # @api.depends('subject_id', 'course_id', 'record_ids.net_hour')
     # def _total_taken_classes(self):
-        # total = 0
-        # duration = self.env['daily.class.record'].search([])
-        # for i in duration:
-        #     if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
-        #         if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
-        #             total += i.total_duration_sum
-        #             self.class_hour_till_now = total
-        #     else:
-        #         self.class_hour_till_now = 0
+    # total = 0
+    # duration = self.env['daily.class.record'].search([])
+    # for i in duration:
+    #     if self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+    #         if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
+    #             total += i.total_duration_sum
+    #             self.class_hour_till_now = total
+    #     else:
+    #         self.class_hour_till_now = 0
 
     over_time_check = fields.Boolean()
+    over_time = fields.Float()
 
     def confirm_record(self):
         ss = self.env['daily.class.record'].sudo().search([])
+        net_hour = self.env['daily.class.record'].sudo().search([])
+        total_rem = 0
+        std_hr = []
+        for jj in net_hour:
+            if self.faculty_id == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+                if jj.state != 'rejected':
+                    total_rem += jj.total_duration_sum
+            aa = self.standard_hour - total_rem
+        std_hr.append(aa)
+        self.over_time = aa
+        print(self.standard_hour, 'total hr ddddddddddddd')
+        print(std_hr, 'class hour till sssssss')
+        print(total_rem, 'class hour till remmmm')
         for hh in ss:
             print(hh.id, 'rec id')
-        if self.total_remaining_hour < 0:
+        if self.over_time < 0:
             self.over_time_check = True
         else:
             self.over_time_check = False
@@ -200,8 +236,9 @@ class DailyClassRecord(models.Model):
         ff = self.env['daily.class.record'].sudo().search([])
         print('refresh')
         total = 0
+
         for ii in ff:
-            if self.branch_name == ii.branch_name and self.class_room == ii.class_room and self.subject_id == ii.subject_id and self.course_id == ii.course_id:
+            if self.faculty_id == ii.faculty_id and self.branch_name == ii.branch_name and self.class_room == ii.class_room and self.subject_id == ii.subject_id and self.course_id == ii.course_id:
                 if ii.state != 'rejected':
                     total += ii.total_duration_sum
                     self.class_hour_till_now = total
@@ -222,13 +259,14 @@ class DailyClassRecord(models.Model):
                 var = []
                 net_hour = self.env['daily.class.record'].sudo().search([])
                 for j in net_hour:
-                    if self.branch_name == j.branch_name and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
+                    if self.faculty_id == j.faculty_id and self.branch_name == j.branch_name and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
                         if j.state in 'to_approve' or j.state in 'approve' or j.state in 'sent_approve' or j.state in 'paid':
                             total += j.total_duration_sum
                 var.append(total)
                 aa = self.standard_hour - total
                 self.actual_dur = aa
                 if self.actual_dur < 0:
+                    print('hhhhhhhhhhhhhhhh')
                     self.extra_hour_testing = abs(self.actual_dur)
                     aaaa = self.total_duration_sum - self.extra_hour_testing
                     if aaaa == 0:
@@ -282,7 +320,7 @@ class DailyClassRecord(models.Model):
                 net_hour = self.env['daily.class.record'].sudo().search([])
                 for j in net_hour:
                     if self.faculty_id == j.faculty_id and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
-                        if j.state != 'rejected':
+                        if j.state in 'to_approve' or j.state in 'approve' or j.state in 'sent_approve' or j.state in 'paid':
                             total += j.total_duration_sum
                 var.append(total)
                 aa = self.standard_hour - total
@@ -448,16 +486,79 @@ class DailyClassRecord(models.Model):
     old_faculty = fields.Many2one('faculty.details', string='Old Faculty')
     new_faculty = fields.Many2one('faculty.details', string='New Faculty')
     old_faculty_class_time = fields.Float(string='Old Faculty Class Time')
+    cng_course_id = fields.Many2one('changed.standard.hours', string='Course')
+    cng_subject_id = fields.Many2one('changed.standard.hours', string='Subject')
 
     def change_faculty(self):
-        self.old_faculty_class_time = self.class_hour_till_now
+        self.old_faculty = self.faculty_id
+        net_hour = self.env['daily.class.record'].sudo().search([])
+        total_rem = 0
+        for jj in net_hour:
+            if self.faculty_id == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+                if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid':
+                    total_rem += jj.total_duration_sum
+            aa = self.standard_hour - total_rem
+        # print(aa, 'class hour till')
+        stand = self.env['subject.details'].sudo().search([])
+        # for rec in stand:
+        #     if self.
         self.change_faculty_boolean = True
 
+    @api.onchange('faculty_id', 'record_ids.date', 'is_it_changed')
+    def _onchange_is_it_changed(self):
+        print('working')
+        if self.faculty_id.is_it_changed_faculty == True:
+            print('true')
+            self.is_it_changed = True
+        else:
+            print('false')
+            self.is_it_changed = False
+
+    is_it_changed = fields.Boolean(string='Is It Changed')
+
     def faculty_change_done(self):
-        self.class_hour_till_now = self.old_faculty_class_time
-        self.faculty_id = self.new_faculty
-        self.record_ids.net_hour = self.old_faculty_class_time
+        if not self.new_faculty:
+            raise UserError('Please Select New Faculty')
+        else:
+            partner = self.env['faculty.details'].browse(self.new_faculty.id)
+            partner.sudo().write({
+                'is_it_changed_faculty': True})
+            self.faculty_id = self.new_faculty
+            net_hour = self.env['daily.class.record'].sudo().search([])
+            total_rem = 0
+            std_hr = []
+            for jj in net_hour:
+                if self.old_faculty == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+                    if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid':
+                        total_rem += jj.total_duration_sum
+                aa = self.standard_hour - total_rem
+                std_hr.append(aa)
+            print(std_hr, 'class hour till')
+            # self.new_faculty.faculty_current_id = self.faculty_id.id
+            self.change_faculty_boolean = False
+            new_fac = self.env['changed.standard.hours'].sudo().search([])
+
+            new_fac.sudo().create({'faculty_id': self.new_faculty.id,
+                                   'course_id': self.course_id.id,
+                                   'subject_id': self.subject_id.id,
+                                   'standard_hour': aa,
+                                   'old_standard_hour': self.standard_hour,
+                                   'coordinator_id': self.create_uid.id,
+                                   'date_update': self.create_date
+                                   })
+            self.is_it_changed = True
+
+    def faculty_change_cancel(self):
+        self.new_faculty = False
         self.change_faculty_boolean = False
+
+    @api.onchange('faculty_id')
+    def onchange_faculty_changed(self):
+        print('changedddd')
+        if self.faculty_id.is_it_changed_faculty == True:
+            self.is_it_changed = True
+        else:
+            self.is_it_changed = False
 
 
 class RecordData(models.Model):

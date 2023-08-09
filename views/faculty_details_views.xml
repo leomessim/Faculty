@@ -42,6 +42,7 @@
                                 <field name="qualification"/>
                                 <field name="exp"/>
                                 <field name="course" widget="many2many_tags"/>
+                                <field name="is_it_changed_faculty" invisible="1"/>
                             </group>
                             <group>
                                 <field name="bank_acc"/>
@@ -155,6 +156,7 @@
                                             <field name="name"/>
                                             <field name="date_update"/>
                                             <field name="old_hr"/>
+<!--                                            <field name="change_faculty"/>-->
                                         </tree>
                                     </field>
                                 </group>

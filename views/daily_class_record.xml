@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-     <record id="faculty_kanban_view" model="ir.ui.view">
+    <record id="faculty_kanban_view" model="ir.ui.view">
         <field name="name">Class Record</field>
         <field name="model">daily.class.record</field>
         <field name="priority" eval="100"/>
@@ -9,7 +9,7 @@
                     sample="1">
                 <field name="faculty_id"/>
                 <field name="state" readonly="1"/>
-<!--                <field name="currency_id" invisible="1"/>-->
+                <!--                <field name="currency_id" invisible="1"/>-->
                 <!--                <progressbar field="status"-->
                 <!--                             colors='{"paid": "success", "head_assign": "warning", "reject": "danger", "manager": "info", "accounts": "Secondary", "cancelled": "danger"}'/>-->
                 <templates>
@@ -42,9 +42,10 @@
             <form string="Rate">
                 <header>
                     <field name="state" widget="statusbar"/>
-                    <button name="confirm_record" class="oe_highlight" states="draft" string="Confirm"
+                    <button name="confirm_record" class="oe_highlight" string="Confirm"
                             type="object"
-                            groups="faculty.coordinator_user"/>
+                            groups="faculty.coordinator_user"
+                            attrs="{'invisible':['|',('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
                     <button name="sent_to_approval" states="sent_approve" string="Sent to Approval" type="object"
                             class="oe_highlight" groups="faculty.coordinator_user"/>
                     <!--                    <button name="change_faculty" states="draft" string="Change Faculty"-->
@@ -62,11 +63,13 @@
                             string="Refresh" type="object"
                             attrs="{'invisible':['|','|',('state', '!=', 'to_approve'),('total_remaining_hour', '&gt;', 0),('make_academic_head', '!=', False)]}"/>
 
-                    <!--                    <button name="faculty_approve" class="oe_highlight" states="fac_approve" string="Approve"-->
-                    <!--                            type="object"-->
-                    <!--                            groups="faculty.group_faculty_user"/>-->
-                    <!--                    <button name="rejected" class="oe_highlight" states="" string="Reject" type="object"-->
-                    <!--                            groups="faculty.group_faculty_user"/>-->
+                    <button name="change_faculty" string="Change Faculty"
+                            type="object"
+                            groups="faculty.coordinator_user"
+                            attrs="{'invisible':['|',('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
+                    <button name="faculty_change_cancel" string="Cancel" type="object"
+                            groups="faculty.coordinator_user"
+                            attrs="{'invisible':[('change_faculty_boolean', '=', False)]}"/>
                     <!--                    <button name="rejected" class="oe_highlight" string="Reject" type="object"-->
                     <!--                            attrs="{'invisible':[('state', 'in', ['rejected','draft','approve'])]}"/>-->
                 </header>
@@ -81,18 +84,19 @@
                     <group>
                         <group>
                             <field name="change_faculty_boolean" invisible="1"/>
-                            <!--                            <field name="old_faculty"-->
-                            <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
+<!--                            <field name="old_faculty"-->
+<!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
                             <field name="new_faculty"
-                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>
-                            <field name="old_faculty_class_time"
                                    attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>
+<!--                            <field name="old_faculty_class_time"-->
+<!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>-->
                             <field name="coordinator" invisible="1"/>
                             <field name="faculty_id" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="branch_name"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"/>
                             <field name="month_of_record" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="over_time_check" invisible="1"/>
+                            <field name="over_time" invisible="1"/>
 
 
                         </group>
@@ -116,6 +120,7 @@
                             <field name="make_visible_coord" invisible="1"/>
                             <field name="total_extra_hour" invisible="1"/>
                             <field name="extra_hour_testing" invisible="1"/>
+                            <field name="is_it_changed" invisible="1"/>
 
 
                         </group>
@@ -156,7 +161,8 @@
                     <group name="note_group" col="6">
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
                             <field name="standard_hour" widget="float_time"/>
-                            <field name="class_hour_till_now" widget="float_time" attrs="{'invisible':[('state', 'in', ['draft','sent_approve'])]}"/>
+                            <field name="class_hour_till_now" widget="float_time"
+                                   attrs="{'invisible':[('state', 'in', ['draft','sent_approve'])]}"/>
 
                             <!--                            <field name="total_duration_sum" widget="monetary"/>-->
                             <field name="subject_rate" widget="monetary"
@@ -187,6 +193,25 @@
             </form>
         </field>
 
+    </record>
+    <record id="view_search_group_daily_class" model="ir.ui.view">
+        <field name="name">daily.class.search</field>
+        <field name="model">daily.class.record</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="faculty_id"/>
+                <field name="branch_name"/>
+                <field name="class_room"/>
+                <field name="course_id"/>
+                <field name="subject_id"/>
+                <field name="state"/>
+                <filter string="To Approve" name="state" domain="[('state', '=','to_approve')]"/>
+                <filter string="Paid" name="state" domain="[('state', '=','paid')]"/>
+                <filter string="Approved" name="state" domain="[('state', '=','approve')]"/>
+                <filter string="Rejected" name="state" domain="[('state', '=','rejected')]"/>
+
+            </search>
+        </field>
     </record>
     <record id="view_faculty_search" model="ir.ui.view">
         <field name="name">res.faculty</field>

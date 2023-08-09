@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="logic_changed_faculty_standard_hour" model="ir.ui.view">
+        <field name="name">Standard Hours</field>
+        <field name="model">changed.standard.hours</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Quality" duplicate="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="faculty_id"/>
+                            <field name="course_id"/>
+                            <field name="subject_id"/>
+                            <field name="standard_hour"/>
+                            <field name="old_standard_hour"/>
+                            <field name="coordinator_id"/>
+                            <field name="date_update"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="logic_changed_faculty_standard_hour_tree" model="ir.ui.view">
+        <field name="name">Standard Hours</field>
+        <field name="model">changed.standard.hours</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="faculty_id"/>
+                <field name="course_id"/>
+                <field name="subject_id"/>
+                <field name="standard_hour"/>
+
+
+            </tree>
+
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_changed_faculty_standard_hour">
+        <field name="name">Changed Faculty Standard Hours</field>
+        <field name="res_model">changed.standard.hours</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Changed Faculty" id="menu_quality_view"
+              action="action_changed_faculty_standard_hour"
+              parent="menu_course"
+              sequence="3"/>
+</odoo>

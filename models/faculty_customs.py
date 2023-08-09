@@ -40,6 +40,7 @@ class FacultyDetails(models.Model):
         ('active', 'Active'), ('inactive', 'Inactive')], string='Current status', default='active')
     inactive_date = fields.Date(string='Inactive date')
     gst_status = fields.Boolean('Gst status')
+    is_it_changed_faculty = fields.Boolean('Changed Faculty')
 
     @api.onchange('date_birth')
     def _onchange_date_birth(self):
@@ -78,6 +79,7 @@ class FacultyDetails(models.Model):
 class Courses(models.Model):
     _name = 'courses.details'
     _inherit = 'mail.thread'
+    _description = 'Courses'
 
     name = fields.Char(string='Course Name', required=True)
     subject_ids = fields.Many2many('subject.details', string='Subject', ondelete='restrict')
@@ -105,12 +107,14 @@ class Courses(models.Model):
 class SubjectDetails(models.Model):
     _name = 'subject.details'
     _inherit = 'mail.thread'
+    _description = 'Subject'
 
     name = fields.Char(string='Subject Name', ondelete='restrict')
     stnd_hr = fields.Float(string='Standard Hours')
     rec_id = fields.Integer()
     course_sub_id = fields.Many2one('courses.details', string='Course')
     old_ids = fields.One2many('old.standard.hours', 'old_id', compute='old_standard_hr', store=True)
+    change_faculty = fields.Boolean()
 
     # @api.model
     # def create(self, vals):
@@ -167,3 +171,18 @@ class ScheduledClasses(models.Model):
     record_id = fields.Integer()
 
     schedule_id = fields.Many2one('faculty.details', string='Scheduled Classes')
+
+
+class ChangedStandardHours(models.Model):
+    _name = 'changed.standard.hours'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'Changed Faculty'
+    _rec_name = 'faculty_id'
+
+    date_update = fields.Datetime(string='Update Date')
+    faculty_id = fields.Many2one('faculty.details', string='Faculty')
+    subject_id = fields.Many2one('subject.details', string='Subject')
+    course_id = fields.Many2one('courses.details', string='Course')
+    standard_hour = fields.Float(string='Standard Hours')
+    old_standard_hour = fields.Float(string='Old Standard Hours')
+    coordinator_id = fields.Many2one('res.users', string='Changed by')
