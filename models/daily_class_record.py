@@ -74,7 +74,7 @@ class DailyClassRecord(models.Model):
                 #     self.standard_hour = 0
                 #     print('no')
 
-    standard_hour = fields.Float(string='Standard hour', compute='compute_standard_hour_taken', store=True)
+    standard_hour = fields.Float(string='Standard Hour', compute='compute_standard_hour_taken', store=True)
 
     def sent_to_approval(self):
         duration = self.env['daily.class.record'].sudo().search([])
@@ -104,7 +104,7 @@ class DailyClassRecord(models.Model):
 
         # self.total_remaining_hour = self.total_duration_sum - total
 
-    total_remaining_hour = fields.Float(string='Balance standard hours', readonly=True)
+    total_remaining_hour = fields.Float(string='Balance Standard Hours', readonly=True)
     class_hour_till_now = fields.Float('Class hours till now', readonly=True)
 
     @api.depends('subject_id')
@@ -559,6 +559,31 @@ class DailyClassRecord(models.Model):
             self.is_it_changed = True
         else:
             self.is_it_changed = False
+
+    @api.depends('faculty_id', 'subject_id', 'course_id', 'record_ids.net_hour')
+    def _class_till_now_view(self):
+        hour = self.env['daily.class.record'].sudo().search([])
+        total = 0
+        for i in hour:
+            if i.faculty_id == self.faculty_id and i.subject_id == self.subject_id and i.course_id == self.course_id:
+                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'draft':
+                    print(i.total_duration_sum, 'fac hour till')
+                    total += i.total_duration_sum
+                    self.class_till_view = total
+            else:
+                self.class_till_view = 0
+
+    class_till_view = fields.Float(string='Class Hours Till Now', compute='_class_till_now_view', store=True)
+
+    @api.depends('class_till_view', 'standard_hour')
+    def _compute_remaining_hours(self):
+        for rec in self:
+            if rec.standard_hour != 0:
+                rec.remaining_hour_view = rec.standard_hour - rec.class_till_view
+            else:
+                rec.remaining_hour_view = 0
+
+    remaining_hour_view = fields.Float(string='Remaining Hours', compute='_compute_remaining_hours', store=True)
 
 
 class RecordData(models.Model):

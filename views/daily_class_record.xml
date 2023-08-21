@@ -84,12 +84,12 @@
                     <group>
                         <group>
                             <field name="change_faculty_boolean" invisible="1"/>
-<!--                            <field name="old_faculty"-->
-<!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
+                            <!--                            <field name="old_faculty"-->
+                            <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
                             <field name="new_faculty"
                                    attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>
-<!--                            <field name="old_faculty_class_time"-->
-<!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>-->
+                            <!--                            <field name="old_faculty_class_time"-->
+                            <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>-->
                             <field name="coordinator" invisible="1"/>
                             <field name="faculty_id" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="branch_name"
@@ -161,18 +161,21 @@
                     <group name="note_group" col="6">
                         <group class="oe_subtotal_footer oe_right" colspan="2" name="sale_total">
                             <field name="standard_hour" widget="float_time"/>
-                            <field name="class_hour_till_now" widget="float_time"
+                            <field name="class_hour_till_now" widget="float_time" string="Class Hours Till Now"
                                    attrs="{'invisible':[('state', 'in', ['draft','sent_approve'])]}"/>
+                            <field name="class_till_view" widget="float_time"
+                                   attrs="{'invisible':[('state', 'in', ['to_approve','approve','rejected','paid'])]}"/>
 
                             <!--                            <field name="total_duration_sum" widget="monetary"/>-->
                             <field name="subject_rate" widget="monetary"
                                    invisible="1"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Green;"
-                                   attrs="{'invisible':['|', '|', ('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0),('state', 'in', ['draft','sent_approve'])]}"
+                                   attrs="{'invisible':['|','|',('total_remaining_hour', '&lt;', 0),('total_remaining_hour', '=', 0), ('state', 'in', ['draft','sent_approve'])]}"
                                    widget="float_time"/>
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"
-                                   attrs="{'invisible':['|', '|', ('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0),('state', 'in', ['draft','sent_approve'])]}"
+                                   attrs="{'invisible':['|', '|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0), ('state', 'in', ['draft','sent_approve'])]}"
                                    widget="float_time"/>
+                            <field name="remaining_hour_view" widget="float_time" attrs="{'invisible':[('state', 'in', ['to_approve','approve','rejected','paid'])]}"/>
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours'-->
                             <!--                                   attrs="{'visible':[('total_remaining_hour', '&gt;', 0)]}"/>-->
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"-->
