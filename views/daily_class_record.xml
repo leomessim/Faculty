@@ -48,8 +48,8 @@
                             attrs="{'invisible':['|',('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
                     <button name="sent_to_approval" states="sent_approve" string="Sent to Approval" type="object"
                             class="oe_highlight" groups="faculty.coordinator_user"/>
-                    <!--                    <button name="change_faculty" states="draft" string="Change Faculty"-->
-                    <!--                            type="object" groups="faculty.coordinator_user"/>-->
+                    <button name="reset_to_draft" states="sent_approve" string="Reset to Draft"
+                            type="object" groups="faculty.coordinator_user"/>
                     <button name="faculty_change_done" string="Done"
                             type="object" attrs="{'invisible':[('change_faculty_boolean', '=', False)]}"/>
 
@@ -175,7 +175,8 @@
                             <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"
                                    attrs="{'invisible':['|', '|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0), ('state', 'in', ['draft','sent_approve'])]}"
                                    widget="float_time"/>
-                            <field name="remaining_hour_view" widget="float_time" attrs="{'invisible':[('state', 'in', ['to_approve','approve','rejected','paid'])]}"/>
+                            <field name="remaining_hour_view" widget="float_time"
+                                   attrs="{'invisible':[('state', 'in', ['to_approve','approve','rejected','paid'])]}"/>
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours'-->
                             <!--                                   attrs="{'visible':[('total_remaining_hour', '&gt;', 0)]}"/>-->
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"-->

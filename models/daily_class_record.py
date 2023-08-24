@@ -389,6 +389,9 @@ class DailyClassRecord(models.Model):
 
     payment_count = fields.Integer(compute='compute_count')
 
+    def reset_to_draft(self):
+        self.write({'state': 'draft'})
+
     def get_payments(self):
         return {
             'type': 'ir.actions.act_window',
