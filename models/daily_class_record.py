@@ -43,7 +43,7 @@ class DailyClassRecord(models.Model):
     subject_rate = fields.Float(string='Subject rate', compute='onchange_standard_hour', store=True)
     extra_hour = fields.Float(string='Extra hour eligible for payment', required=True)
 
-    @api.depends('subject_id', 'faculty_id', 'record_ids.date')
+    @api.depends('subject_id', 'faculty_id', 'record_ids.date', 'course_id')
     def compute_standard_hour_taken(self):
         standard = self.env['subject.details'].search([])
         change = self.env['changed.standard.hours'].search([])
@@ -563,14 +563,14 @@ class DailyClassRecord(models.Model):
         else:
             self.is_it_changed = False
 
-    @api.depends('faculty_id', 'subject_id', 'course_id', 'record_ids.net_hour')
+    @api.depends('faculty_id', 'subject_id', 'course_id', 'record_ids.net_hour', 'class_room', 'branch_name')
     def _class_till_now_view(self):
         hour = self.env['daily.class.record'].sudo().search([])
         total = 0
         for i in hour:
-            if i.faculty_id == self.faculty_id and i.subject_id == self.subject_id and i.course_id == self.course_id:
-                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'draft':
-                    print(i.total_duration_sum, 'fac hour till')
+            if self.faculty_id == i.faculty_id and self.branch_name == i.branch_name and self.class_room == i.class_room and self.course_id == i.course_id and self.subject_id == i.subject_id:
+                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'draft' :
+                    print(i.total_duration_sum, 'total duration')
                     total += i.total_duration_sum
                     self.class_till_view = total
             else:
