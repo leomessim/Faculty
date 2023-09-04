@@ -569,7 +569,7 @@ class DailyClassRecord(models.Model):
         total = 0
         for i in hour:
             if self.faculty_id == i.faculty_id and self.branch_name == i.branch_name and self.class_room == i.class_room and self.course_id == i.course_id and self.subject_id == i.subject_id:
-                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'draft' :
+                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'draft':
                     print(i.total_duration_sum, 'total duration')
                     total += i.total_duration_sum
                     self.class_till_view = total
@@ -587,6 +587,43 @@ class DailyClassRecord(models.Model):
                 rec.remaining_hour_view = 0
 
     remaining_hour_view = fields.Float(string='Remaining Hours', compute='_compute_remaining_hours', store=True)
+
+    def action_print_daily_class(self):
+        rep = self.env['daily.class.record'].search([])
+        # print(self.env.context.get('active_ids'), 'ids')
+        # print(rep, 'rep')
+
+        all_zero_records = self.env['daily.class.record'].sudo().search([('class_hour_till_now', '=', 0), ('month_of_record', '=', 'august')])
+        already_done=[]
+        for j in all_zero_records:
+            recs = self.env['daily.class.record'].sudo().search([('id','not in',already_done),('faculty_id', '=', j.faculty_id.id),('class_room', '=', j.class_room.id), ('branch_name', '=', j.branch_name.id), ('course_id', '=', j.course_id.id), ('state', 'not in', ['rejected','draft']), ('subject_id', '=', j.subject_id.id)])
+            total = 0
+            print(recs, 'recs')
+            for rec in recs:
+
+                total += rec.total_duration_sum
+            j.class_hour_till_now = total
+            already_done.append(j.id)
+        all_rec_for_payment = self.env['daily.class.record'].sudo().search([])
+        for pay_rec in all_rec_for_payment:
+            payment = self.env['payment.total'].search([('class_hours_till', '=', 0)])
+
+            for payments in payment:
+                if payments.current_id == pay_rec.id:
+                    payments.class_hours_till = pay_rec.class_hour_till_now
+
+
+        # for rec in rep:
+        #     if rec.state == 'approve':
+        #         if rec.subject_id == all_records.subject_id and rec.course_id == all_records.course_id and rec.branch_name == all_records.branch_name and rec.class_room == all_records.class_room:
+        #             total += all_records.total_duration_sum
+        #             rec.class_hour_till_now = total
+        #             print(total, 'total')
+        #         else:
+        #             rec.class_hour_till_now = rec.total_duration_sum
+
+                # print(total, 'total')
+                # if rec.class_hour_till_now == 0:
 
 
 class RecordData(models.Model):

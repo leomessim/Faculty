@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="action_set_class_hours_till_now" model="ir.actions.server">
+        	<field name="name">Set Class Hours Till Now</field>
+        	<field name="model_id" ref="faculty.model_daily_class_record"/>
+        	<field name="state">code</field>
+            <field name="code">action = records.action_print_daily_class()</field>
+    	</record>
+    </data>
+</odoo>
