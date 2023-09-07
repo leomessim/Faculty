@@ -134,7 +134,7 @@
                             <field name="extra_hr_testing" invisible="1"/>
                             <field name="correct_remaining_hours" widget="float_time"/>
                             <field name="extra_charge"
-                                   attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}" widget="monetary"/>
+                                   attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}"/>
 
                             <field name="extra_payment" widget="monetary"/>
                             <field name="added_payment_extra" widget="monetary"/>

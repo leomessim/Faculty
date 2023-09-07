@@ -470,6 +470,7 @@ class PaymentTotal(models.Model):
     def refresh(self):
         sssss = self.env['faculty.subject.rate'].search([])
         adv = self.env['faculty.salary.advance'].search([])
+        daily_record = self.env['daily.class.record'].search([('id', '=', self.current_id)])
         for i in self:
             for j in i.payment_ids:
                 j.net_hour = j.net_hour
@@ -480,3 +481,4 @@ class PaymentTotal(models.Model):
                 if self.faculty_id == advance.employee_id:
                     self.advance_remaining = advance.advance
             self.subject_id = self.subject_id
+            i.added_total_extra_payment()

@@ -48,10 +48,12 @@ class DailyClassRecord(models.Model):
         standard = self.env['subject.details'].search([])
         change = self.env['changed.standard.hours'].search([])
         if self.is_it_changed == True:
+            print('changed')
             for hour in change:
                 if self.faculty_id == hour.faculty_id and self.subject_id == hour.subject_id and self.course_id == hour.course_id:
                     print('same_sub')
                     self.standard_hour = hour.standard_hour
+
                 else:
                     for j in standard:
                         print(self.subject_id.name, 'kl')
@@ -61,6 +63,16 @@ class DailyClassRecord(models.Model):
                         # else:
                         #     self.standard_hour = 0
                         #     print('no')
+            if self.standard_hour == 0:
+                print('this is zero')
+                for ref in standard:
+                    # print(self.subject_id.name, 'subject')
+                    # print(j.name, 'hour sub')
+                    if self.subject_id.name == ref.name and self.course_id == ref.course_sub_id:
+                        # print(j.stnd_hr, 'hour')
+                        self.standard_hour = ref.stnd_hr
+            else:
+                print('this is not zero')
         else:
             print('no same')
             for j in standard:
