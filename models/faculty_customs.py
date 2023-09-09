@@ -17,6 +17,7 @@ class FacultyDetails(models.Model):
     bank_acc = fields.Many2one('res.partner.bank',
                                string="Bank Account",
                                ondelete='restrict', copy=False, required=True)
+    email_address = fields.Char(string="Email")
     date_birth = fields.Date(string='Date of Birth')
     pan_number = fields.Char(string='Pan Number')
     payout_ids = fields.One2many('payout', 'payout_id')

@@ -1,5 +1,9 @@
 from odoo import fields, models, _, api
 from odoo.exceptions import UserError
+import requests
+import base64
+from pdf2docx import parse
+from datetime import date, datetime
 
 
 class Payout(models.Model):
@@ -28,7 +32,8 @@ class FacultySalary(models.Model):
     currency_id = fields.Many2one('res.currency', string='Currency', required=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
     # name = fields.Char(string='hhhi')
-    old_rate_ids = fields.One2many('rate.history', 'old_rate_id', string='Rate History', compute='old_salary_hr', store=True)
+    old_rate_ids = fields.One2many('rate.history', 'old_rate_id', string='Rate History', compute='old_salary_hr',
+                                   store=True)
 
     @api.depends('salary_per_hr')
     def old_salary_hr(self):
@@ -50,8 +55,6 @@ class RateHistory(models.Model):
     date_update = fields.Date(string='Update Date')
     name = fields.Char(string='Name')
     old_rate_id = fields.Many2one('faculty.subject.rate', string='old Rate')
-
-
 
 
 class AccountantPayout(models.Model):
@@ -88,7 +91,10 @@ class PayoutWizard(models.TransientModel):
     currency_id = fields.Many2one('res.currency', string='Currency', required=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
     current_id = fields.Integer(string='Current Id')
+    file_ids = fields.Many2many('ir.attachment', string='Attachments')
+
     current_record_id = fields.Integer(string='Current Record Id')
+    report_file = fields.Binary(string='Report File')
 
     @api.model
     def default_get(self, fields):
@@ -99,21 +105,99 @@ class PayoutWizard(models.TransientModel):
             res['amount'] = brws.amount_pay_now
             res['current_id'] = brws.id
             res['current_record_id'] = brws.current_id
+            res['transaction_id'] = brws.transaction_id
 
         return res
 
-    def done(self):
-        ss = self.env['payment.total'].sudo().search([])
+    # date_field = fields.Date(string='Date Field')
+    #
+    # @api.model
+    # def update_date(self):
+    #     for record in self:
+    #         # Set the date field to the current date
+    #         record.date_field = fields.Date.today()
 
-        for i in ss:
-            if self.current_id == i.id:
-                i.state = 'pay_list'
-
-        record = self.env['daily.class.record'].sudo().search([])
-
+    @api.onchange('payment_date')
+    def onchange_payment_date(self):
+        print('wwwwww')
+        active_wizard_id = self.env.context.get('active_id')
+        record = self.env['payment.total'].sudo().search([('id', '=', active_wizard_id)])
         for rec in record:
-            if self.current_record_id == rec.id:
-                rec.state = 'paid'
+            print(rec.faculty_id.email_address, 'email')
+        print("Active Wizard ID:", active_wizard_id)
+
+    def done(self):
+
+        purchase_ids = self.env.context.get('active_ids', [])
+        purchase_rec = self.env['payment.total'].browse(purchase_ids)
+        print(purchase_ids, 'wiz')
+        print(purchase_rec, 'pur')
+        purchase_rec.date_of_payment = self.payment_date
+        purchase_rec.transaction_id = self.transaction_id
+        purchase_rec.state = 'pay_list'
+        current_date = datetime.now().strftime('%Y-%m-%d')
+        # data = {
+        #     'docs': purchase_rec,  # Your report data
+        #     'context': {'current_date': current_date},
+        #
+        # }
+
+        email = []
+        active_wizard_id = self.env.context.get('active_id')
+        record = self.env['payment.total'].sudo().search([('id', '=', active_wizard_id)])
+        pdf_content = \
+            self.env.ref('faculty.report_faculty_payout')._render_qweb_pdf(record.id,
+                                                                           )[
+                0]
+        outfile = open('/tmp/temp.pdf', 'wb')
+        outfile.write(pdf_content)
+        outfile.close()
+        open('/tmp/temp.docx', 'w')
+        parse('/tmp/temp.pdf', '/tmp/temp.docx')
+        self.report_file = base64.b64encode(open('/tmp/temp.pdf', 'rb').read())
+        for rec in record:
+            email_temp = rec.faculty_id.email_address
+            email.append(email_temp)
+        partner = self.env['res.partner'].browse(self._context.get('active_id'))
+
+        # Create the email message
+        for rec in record:
+            if rec.faculty_id.email_address:
+                email_values = {
+                    'subject': 'Faculty Payment',
+                    'email_to': rec.faculty_id.email_address,  # Use the client's email address
+                    'body_html': 'Payment successfully processed.',
+                    # 'attachment_ids': [(6, 0, self.file_ids.ids)]
+                }
+                email = self.env['mail.mail'].sudo().create(email_values)
+                # print(email_values['attachment_ids'])
+                attachment_values = {
+                    'name': 'payment_slip.pdf',
+                    'datas': self.report_file,
+                    'res_model': 'mail.mail',
+                    'res_id': self.id,
+                }
+
+                attachment = self.env['ir.attachment'].sudo().create(attachment_values)
+
+                # Send the email
+                email.attachment_ids = [(4, attachment.id)]
+                email.send()
+
+                # Send the email
+                # email = self.env['mail.mail'].sudo().create(email_values)
+                # email.send()
+                record = self.env['daily.class.record'].sudo().search([])
+                for rec in record:
+                    if self.current_record_id == rec.id:
+                        rec.state = 'paid'
+                return {'type': 'ir.actions.act_window_close'}
+
+        # ss = self.env['payment.total'].sudo().search([])
+        #
+        # for i in ss:
+        #     if self.current_id == i.id:
+        #         i.state = 'pay_list'
 
     def cancel(self):
         ss = self.env['payment.total'].search([])
@@ -146,6 +230,7 @@ class PaymentTotal(models.Model):
     from_date = fields.Date(string='From Date')
     to_date = fields.Date(string='To Date')
     current_id = fields.Integer(string='Current Id')
+    attach_file = fields.Binary(string='Attach File')
 
     currency_id = fields.Many2one('res.currency',
                                   default=lambda self: self.env['res.currency'].search([('name', '=', 'INR')]).id,
@@ -161,7 +246,7 @@ class PaymentTotal(models.Model):
     current_status = fields.Selection([
         ('active', 'Active'), ('inactive', 'Inactive')], string='Current status')
     # inactive_date = fields.Date(string='Inactive date')
-    transaction_id = fields.Integer(string='Transaction id')
+    transaction_id = fields.Char(string='Transaction id')
     state = fields.Selection([('draft', 'Draft'),
                               ('pay', 'Register Payment'),
                               ('pay_list', 'Success')], string='Status', default='draft', track_visibility='onchange')
@@ -193,6 +278,36 @@ class PaymentTotal(models.Model):
     branch = fields.Many2one('logic.branches', 'Branch')
     extra_hr_testing = fields.Float()
     extra_hour_reason = fields.Text()
+    report_file = fields.Binary()
+    current_date = fields.Date()
+
+    # def generate_pdf_report(self):
+    #     data = {}
+    #     report_name = 'faculty.report_faculty_payout'  # Replace with your report's name
+    #
+    #     pdf = self.env.ref(report_name)
+    #     html_content = pdf._render_qweb_pdf([self.id])[0]
+    #     outfile = open('/tmp/temp.pdf', 'wb')
+    #     outfile.write(html_content)
+    #     outfile.close()
+    #
+    #     open('/tmp/temp.docx', 'w')
+    #
+    #     parse('/tmp/temp.pdf', '/tmp/temp.docx')
+    #     self.report_file = base64.b64encode(open('/tmp/temp.pdf', 'rb').read())
+    #     # self.docx_answer_key = base64.b64encode(open('/tmp/temp.docx', 'rb').read())
+    #     return {
+    #         'name': 'Download Answer Key',
+    #         'type': 'ir.actions.act_url',
+    #         'url': '/web/content/?model=payment.total&id={}&field=report_file&filename_field=account_holder&download=true'.format(
+    #             self.id
+    #         ),
+    #         'target': 'self',
+    #     }
+    # if not pdf:
+    #     raise UserError('Unable to generate PDF report.')
+    #
+    # return pdf
 
     @api.depends('remaining_hours', 'total_duration_sum')
     def _compute_set_remaining(self):
@@ -286,7 +401,6 @@ class PaymentTotal(models.Model):
         else:
             self.check_gst = 'No'
         self.state = 'pay'
-
 
     @api.depends('course_id')
     def _compute_advanced_remaining(self):
@@ -404,8 +518,6 @@ class PaymentTotal(models.Model):
     total_class_remaining = fields.Float(string='Total remaining amount', compute='_compute_advance_remaining',
                                          store=True)
 
-
-
     @api.depends('added_payment_extra', 'advance_deduction', 'added_tax_payment')
     def advance_deduction_total(self):
         for rec in self:
@@ -418,7 +530,8 @@ class PaymentTotal(models.Model):
         for i in self:
             i.added_gross_before_tds_custom = i.added_payment_extra + i.amount_tax_id
 
-    added_gross_before_tds_custom = fields.Float(compute='_gst_added_gross_before_tds', store=True, string='Gross payable before TDS + GST')
+    added_gross_before_tds_custom = fields.Float(compute='_gst_added_gross_before_tds', store=True,
+                                                 string='Gross payable before TDS + GST')
 
     #     for i in self:
     #         i.added_gross_before_tds = i.added_payment_extra + i.amount_tax_id

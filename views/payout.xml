@@ -177,6 +177,446 @@
                 </form>
             </field>
         </record>
+        <!--        <record id="faculty_payment_model" model="mail.template">-->
+        <!--           <field name="name">EMAIL TEMPLATE NAME</field>-->
+        <!--           <field name="model_id" ref="faculty.model_payout_wizard"/>-->
+        <!--           <field name="auto_delete" eval="True"/>-->
+        <!--           <field name="email_from">{{object.res_user_id.email}}</field>-->
+        <!--           <field name="email_to">{{object.client_name.email}}</field>-->
+        <!--           <field name="report_template" ref="action_example_pdf"/>-->
+        <!--           <field name="subject">{{object.amc}}</field>-->
+        <!--           <field name="body_html">-->
+        <!--               <p>-->
+        <!--                Dear<t t-out="object.client_name.name"/>,-->
+        <!--                   <br/>-->
+        <!--                   <br/>-->
+        <!--                   Good job, this is our first e-mail template!-->
+        <!--                   <br/>-->
+        <!--               </p>-->
+        <!--               Regards,-->
+        <!--               <br/>-->
+        <!--               <t t-out="object.company_id.name"/>-->
+        <!--           </field>-->
+        <!--       </record>-->
+        <record id="pdf_logic_faculty_paper_format" model="report.paperformat">
+            <field name="name">Logic A4</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">22</field>
+            <field name="margin_bottom">7</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">27</field>
+            <field name="dpi">90</field>
+        </record>
+        <!--        <report-->
+        <!--                id="report_faculty_payout"-->
+        <!--                string="Payment Report"-->
+        <!--                model="payment.total"-->
+        <!--                report_type="qweb-pdf"-->
+        <!--                file="faculty.faculty_payment_template"-->
+        <!--                name="faculty.faculty_payment_template"-->
+        <!--        />-->
+        <record id="report_faculty_payout" model="ir.actions.report">
+            <field name="name">Payment Report</field>
+            <field name="model">payment.total</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">faculty.faculty_payment_template</field>
+            <field name="report_file">faculty.faculty_payment_template</field>
+            <field name="paperformat_id" ref="faculty.pdf_logic_faculty_paper_format"/>
+            <field name="print_report_name">'Payment slip - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_payment_total"/>
+        </record>
+
+        <template id="faculty.faculty_payment_template">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h3 class="text-center">Faculty Payment Slip</h3>
+                        <br></br>
+
+                        <t t-foreach="docs" t-as="doc">
+                            <div align="center">
+
+                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.logo)"
+                                     style="width:30%; max-height:150pt;max-width:100pt;"/>
+
+                            </div>
+                            <div>
+                                <span t-field="doc.company_id.partner_id"
+                                      t-options='{"widget": "contact", "fields": ["name", "address", "phone"], "no_marker": True}'/>
+                            </div>
+                        </t>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+                        <table class="table table-bordered mt32">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <span>Name</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Branch</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Month of Record</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Class</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Course</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Subject</span>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs" t-as="o">
+                                    <tr class="text-center">
+                                        <td>
+                                            <span t-field="o.faculty_id.name.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.branch.branch_name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.month"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.class_room.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.course_id.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.subject_id.name"/>
+                                        </td>
+                                        <!--                                    <td><span t-field="o.latest_version"/></td>-->
+                                        <!--                                    <td><span t-field="o.name"/></td>-->
+                                        <!--                                    <td><span t-field="o.website"/></td>-->
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <h2 class="text-center">Class Record</h2>
+                        <table class="table table-bordered mt32">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <span>Date</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Start time</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>End time</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Topic</span>
+                                    </th>
+                                    <th class="text-center">
+                                        <span>Net Hour</span>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs.payment_ids" t-as="o">
+                                    <tr class="text-center">
+                                        <td>
+                                            <span t-field="o.date"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.start_date"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.end_date"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.topic"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.net_hour"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <br></br>
+                        <t t-foreach="docs" t-as="doc">
+                            <style>
+                                .field-value {
+                                padding: 10px; /* Add space to the right of the field values */
+                                }
+                                .hr {
+                                border-top: 1px solid #000; /* Adjust the line style and color as needed */
+                                margin-top: 10px; /* Adjust the margin to control the spacing above the line */
+                                margin-bottom: 10px; /* Adjust the margin to control the spacing below the line */
+                                }
+                            </style>
+                            <t t-set="rupee_symbol">&#8377;</t>
+                            <table width="100%">
+                                <tr>
+                                    <td align="right">
+                                        <strong>Gross Hours:</strong>&amp;nbsp;&amp;nbsp;
+                                        <span t-field="doc.total_duration_sum"/>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Subject Rate:</strong>&amp;nbsp;&amp;nbsp;
+                                            <t t-esc="rupee_symbol"/>
+                                            <span t-field="doc.rate_of_sub"/>
+                                        </span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Standard hour allocated for Subject:</strong>&amp;nbsp;&amp;nbsp;
+                                            <span t-field="doc.standard_hours"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Class hours till now:</strong>&amp;nbsp;&amp;nbsp;
+                                            <span t-field="doc.class_hours_till"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Balance standard hours:</strong>&amp;nbsp;&amp;nbsp;
+                                            <span t-field="doc.correct_remaining_hours"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Extra hour eligible for payment:</strong>&amp;nbsp;&amp;nbsp;
+                                            <span t-field="doc.extra_charge"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Extra hour payment:</strong>&amp;nbsp;&amp;nbsp;
+                                            <t t-esc="rupee_symbol"/>
+                                            <span t-field="doc.extra_payment"/>
+                                        </span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Gross payable before TDS:</strong>&amp;nbsp;&amp;nbsp;
+                                            <t t-esc="rupee_symbol"/>
+                                            <span t-field="doc.added_payment_extra"/>
+                                        </span>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>TDS to be deducted:</strong>&amp;nbsp;&amp;nbsp;
+                                            <t t-esc="rupee_symbol"/>
+                                            <span t-field="doc.tds_amount"/>
+
+                                        </span>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Gross payable after TDS deduction:</strong>&amp;nbsp;&amp;nbsp;
+                                            <t t-esc="rupee_symbol"/>
+                                            <span t-field="doc.added_tds_payment"/>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>GST Amount:</strong>&amp;nbsp;&amp;nbsp;
+                                            <span t-field="doc.amount_tax_id"/>
+                                        </span>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span>
+                                            <strong>Gross payable before TDS + GST:</strong>&amp;nbsp;&amp;nbsp;
+                                            <t t-esc="rupee_symbol"/>
+                                            <span t-field="doc.added_gross_before_tds_custom"/>
+                                        </span>
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <span><strong>Advance Deduction:</strong>&amp;nbsp;&amp;nbsp;
+                                            <t t-esc="rupee_symbol"/>
+                                            <span t-field="doc.advance_deduction"/>
+                                        </span>
+
+                                    </td>
+
+                                    <!--                                    <td align="right">:-->
+                                    <!--                                        <t t-esc="rupee_symbol"/>-->
+                                    <!--                                        <span t-field="doc.advance_deduction"/>-->
+                                    <!--                                    </td>-->
+                                </tr>
+
+
+                            </table>
+                            <t t-set="rupee_symbol">&#8377;</t>
+                            <div class="hr">
+                            </div>
+                            <h5 align="right">
+                                <span>Paid Amount:&#160;&#160;
+                                    <t t-esc="rupee_symbol"/>
+                                    <span t-field="doc.amount_pay_now"/>
+                                </span>
+                            </h5>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <p>
+                                        <strong>Payment Date:</strong>
+                                        <span t-esc="doc.date_of_payment"/>
+                                    </p>
+                                    <p>
+                                        <strong>Transaction ID:</strong>
+                                        <span t-esc="doc.transaction_id"/>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!--                            <div align="right">-->
+
+                            <!--                                <span>Gross Hours:&#160;&#160;-->
+                            <!--                                    <span t-field="doc.total_duration_sum"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Subject Rate:&#160;&#160;-->
+                            <!--                                    <t t-esc="rupee_symbol"/>-->
+                            <!--                                    <span t-field="doc.rate_of_sub"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Standard hour allocated for Subject:&#160;&#160;-->
+                            <!--                                    <span t-field="doc.standard_hours"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Class hours till now:&#160;&#160;-->
+                            <!--                                    <span t-field="doc.class_hours_till"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Balance standard hours:&#160;&#160;-->
+                            <!--                                    <span t-field="doc.correct_remaining_hours"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Extra hour eligible for payment:&#160;&#160;-->
+                            <!--                                    <span t-field="doc.extra_charge"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Extra hour payment:&#160;&#160;-->
+                            <!--                                    <span t-field="doc.extra_payment"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Gross payable before TDS:&#160;&#160;-->
+                            <!--                                    <t t-esc="rupee_symbol"/>-->
+                            <!--                                    <span t-field="doc.added_payment_extra"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>TDS to be deducted:&#160;&#160;-->
+                            <!--                                    <t t-esc="rupee_symbol"/>-->
+                            <!--                                    <span t-field="doc.tds_amount"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Gross payable before TDS + GST:&#160;&#160;-->
+                            <!--                                    <t t-esc="rupee_symbol"/>-->
+                            <!--                                    <span t-field="doc.added_gross_before_tds_custom"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Gross payable:&#160;&#160;-->
+                            <!--                                    <t t-esc="rupee_symbol"/>-->
+                            <!--                                    <span t-field="doc.added_tax_payment"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+                            <!--                                <span>Advance deduction:&#160;&#160;-->
+                            <!--                                    <t t-esc="rupee_symbol"/>-->
+                            <!--                                    <span t-field="doc.advance_deduction"/>-->
+                            <!--                                </span>-->
+                            <!--                                <br></br>-->
+
+
+                            <!--                            </div>-->
+                            <!--                            <div align="left">-->
+                            <!--                                <span>Transaction ID:&#160;&#160;-->
+                            <!--                                    <span t-field="doc.transaction_id"/>-->
+                            <!--                                </span>-->
+                            <!--                                <span>Date:&#160;&#160;-->
+                            <!--                                    <span t-field="data['current_date']"/>-->
+                            <!--                                </span>-->
+                            <!--                            </div>-->
+                        </t>
+                    </div>
+
+                </t>
+            </t>
+
+        </template>
+        <!--        <template id="faculty.faculty_payment_template">-->
+        <!--            <t t-call="web.html_container">-->
+        <!--                <t t-set="o" t-value="doc"/>-->
+        <!--                <table class="table table-condensed">-->
+        <!--                    <thead>-->
+        <!--                        <tr>-->
+        <!--                            <th>Faculty</th>-->
+        <!--                            <th>Branch</th>-->
+        <!--                        </tr>-->
+        <!--                    </thead>-->
+        <!--                    <tbody>-->
+        <!--                        <t t-foreach="docs" t-as="o">-->
+        <!--                            <tr>-->
+        <!--                                <td>-->
+        <!--                                    <span t-field="o.faculty_id.name.name"/>-->
+        <!--                                </td>-->
+        <!--                                <td>-->
+        <!--                                    <span t-field="o.branch.name"/>-->
+        <!--                                </td>-->
+        <!--                                &lt;!&ndash;                                        <td>&ndash;&gt;-->
+        <!--                                &lt;!&ndash;                                            <span t-field="line.city"/>&ndash;&gt;-->
+        <!--                                &lt;!&ndash;                                        </td>&ndash;&gt;-->
+        <!--                            </tr>-->
+        <!--                        </t>-->
+        <!--                    </tbody>-->
+        <!--                </table>-->
+        <!--            </t>-->
+        <!--        </template>-->
 
         <record id="payout_model_wizard_action" model="ir.actions.act_window">
             <field name="name">Register Payment</field>
@@ -194,11 +634,6 @@
                 parent="menu_course"
                 action="daily_class_rate_record_action"
                 sequence="2"/>
-        <!--        <menuitem name="Faculty Payout Entries"-->
-        <!--                  id="reporting_installation"-->
-        <!--                  parent="menu_payment"-->
-        <!--                  action="payout_model_wizard_action"-->
-        <!--                  sequence="1"/>-->
         <menuitem name="Standard Hours"
                   id="subject_standard_hr_menu"
                   parent="menu_course"

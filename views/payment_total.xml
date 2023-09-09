@@ -8,6 +8,12 @@
             <form>
                 <header>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pay,pay_list"/>
+<!--                    <button-->
+<!--                            name="generate_pdf_report"-->
+<!--                            string="Generate PDF Report"-->
+<!--                            type="object"-->
+<!--                            class="oe_highlight"-->
+<!--                    />-->
                     <button name='confirm_payment' class="oe_highlight" states="draft" string="Confirm"
                             type="object"/>
                     <button name='%(payout_model_wizard_action)d' class="oe_highlight" string="Pay now" states="pay"
@@ -20,6 +26,7 @@
                     <!--                        -->
                     <!--                    </div>-->
                     <div class="oe_button_box" name="button_box">
+
                         <button
                                 id="hr_presence_button"
                                 class="oe_stat_button"
@@ -178,7 +185,7 @@
                     sample="1">
                 <field name="faculty_id"/>
                 <field name="state" readonly="1"/>
-<!--                <field name="currency_id" invisible="1"/>-->
+                <!--                <field name="currency_id" invisible="1"/>-->
                 <!--                <progressbar field="status"-->
                 <!--                             colors='{"paid": "success", "head_assign": "warning", "reject": "danger", "manager": "info", "accounts": "Secondary", "cancelled": "danger"}'/>-->
                 <templates>

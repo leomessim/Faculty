@@ -298,6 +298,7 @@ class DailyClassRecord(models.Model):
                         'end_date': rec.end_date,
                         'balance': rec.balance,
                         'net_hour': rec.net_hour,
+                        'topic': rec.topic,
                     }
                     abc.append((0, 0, res_list))
                 record = self.env['payment.total'].create({
@@ -324,6 +325,7 @@ class DailyClassRecord(models.Model):
                     'extra_hour_reason': self.extra_hour_reason,
                     'correct_remaining_hours': self.total_remaining_hour,
                     'class_hours_till': self.class_hour_till_now,
+
                 }
                 )
             else:
@@ -363,6 +365,7 @@ class DailyClassRecord(models.Model):
                         'end_date': rec.end_date,
                         'balance': rec.balance,
                         'net_hour': rec.net_hour,
+                        'topic': rec.topic,
                     }
                     abc.append((0, 0, res_list))
                 record = self.env['payment.total'].create({

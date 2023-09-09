@@ -39,6 +39,7 @@
                             <group>
 
                                 <field name="name"/>
+                                <field name="email_address" widget="email"/>
                                 <field name="qualification"/>
                                 <field name="exp"/>
                                 <field name="course" widget="many2many_tags"/>

@@ -22,4 +22,13 @@
             </form>
         </field>
     </record>
+<!--    <record id="action_report_daily_class_record" model="ir.actions.report">-->
+<!--        <field name="name">Daily Record Card</field>-->
+<!--        <field name="model">education.student</field>-->
+<!--        <field name="report_type">qweb-pdf</field>-->
+<!--        <field name="report_name">education.report_student_id_card</field>-->
+<!--        <field name="report_file">education.report_student_id_card</field>-->
+<!--        <field name="print_report_name">'Student Card - %s' % (object.name)</field>-->
+<!--        <field name="binding_model_id" ref="model_education_student"/>-->
+<!--    </record>-->
 </odoo>
