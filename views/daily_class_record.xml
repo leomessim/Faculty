@@ -46,6 +46,8 @@
                             type="object"
                             groups="faculty.coordinator_user"
                             attrs="{'invisible':['|',('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
+                    <button name="action_activity_cancel" string="Done" type="object" groups="faculty.coordinator_user"
+                            attrs="{'invisible':['|', ('activity_done_coordinator', '=', True), ('state', '!=', 'rejected')]}" style="background-color: #fc7349;"/>
                     <button name="sent_to_approval" states="sent_approve" string="Sent to Approval" type="object"
                             class="oe_highlight" groups="faculty.coordinator_user"/>
                     <button name="reset_to_draft" states="sent_approve,to_approve" string="Reset to Draft"
@@ -81,6 +83,10 @@
                                    groups="faculty.group_accounting_manager"/>
                         </button>
                     </div>
+                    <widget name="web_ribbon" text="Paid"
+                            attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'rejected'])]}"/>
+                    <widget name="web_ribbon" text="Rejected" bg_color="bg-danger"
+                            attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'paid'])]}"/>
                     <group>
                         <group>
                             <field name="change_faculty_boolean" invisible="1"/>
@@ -97,6 +103,7 @@
                             <field name="month_of_record" attrs="{'readonly':[('make_visible','=',False)]}"/>
                             <field name="over_time_check" invisible="1"/>
                             <field name="over_time" invisible="1"/>
+                            <field name="activity_done_coordinator" invisible="1"/>
 
 
                         </group>
@@ -190,8 +197,8 @@
                     <!--                    </h4>-->
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids"
-                           widget="mail_followers"/>
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
                     <field name="message_ids" widget="mail_thread"/>
                 </div>
             </form>

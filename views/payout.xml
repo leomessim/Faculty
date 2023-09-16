@@ -172,7 +172,7 @@
                     </group>
                     <footer>
                         <button string="Create Payment" class="oe_highlight" type="object" name='done'/>
-                        <button string="Discard" type="object" name='cancel'/>
+                        <button string="Discard" type="object" special='cancel'/>
                     </footer>
                 </form>
             </field>

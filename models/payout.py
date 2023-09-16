@@ -223,7 +223,7 @@ class PaymentDetailsTree(models.Model):
 class PaymentTotal(models.Model):
     _name = 'payment.total'
     _rec_name = 'faculty_id'
-    _inherit = 'mail.thread'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Payment'
 
     faculty_id = fields.Many2one('faculty.details', string='Faculty', required=True, ondelete='restrict')
@@ -239,7 +239,6 @@ class PaymentTotal(models.Model):
                                  default=lambda self: self.env.company)
 
     extra_charge = fields.Float('Extra hour eligible for payment')
-
     advance_deduction = fields.Float(string='Advance deduction')
     tax_id = fields.Many2many('account.tax', string='GST Slab', context={'active_test': False}, ondelete='restrict')
 
@@ -249,7 +248,8 @@ class PaymentTotal(models.Model):
     transaction_id = fields.Char(string='Transaction id')
     state = fields.Selection([('draft', 'Draft'),
                               ('pay', 'Register Payment'),
-                              ('pay_list', 'Success')], string='Status', default='draft', track_visibility='onchange')
+                              ('pay_list', 'Success'), ('rejected', 'Rejected')], string='Status', default='draft',
+                             track_visibility='onchange')
 
     payment_ids = fields.One2many('payment.details.tree', 'payment_details_id', string='Payment')
     month = fields.Selection([
@@ -281,34 +281,6 @@ class PaymentTotal(models.Model):
     report_file = fields.Binary()
     current_date = fields.Date()
 
-    # def generate_pdf_report(self):
-    #     data = {}
-    #     report_name = 'faculty.report_faculty_payout'  # Replace with your report's name
-    #
-    #     pdf = self.env.ref(report_name)
-    #     html_content = pdf._render_qweb_pdf([self.id])[0]
-    #     outfile = open('/tmp/temp.pdf', 'wb')
-    #     outfile.write(html_content)
-    #     outfile.close()
-    #
-    #     open('/tmp/temp.docx', 'w')
-    #
-    #     parse('/tmp/temp.pdf', '/tmp/temp.docx')
-    #     self.report_file = base64.b64encode(open('/tmp/temp.pdf', 'rb').read())
-    #     # self.docx_answer_key = base64.b64encode(open('/tmp/temp.docx', 'rb').read())
-    #     return {
-    #         'name': 'Download Answer Key',
-    #         'type': 'ir.actions.act_url',
-    #         'url': '/web/content/?model=payment.total&id={}&field=report_file&filename_field=account_holder&download=true'.format(
-    #             self.id
-    #         ),
-    #         'target': 'self',
-    #     }
-    # if not pdf:
-    #     raise UserError('Unable to generate PDF report.')
-    #
-    # return pdf
-
     @api.depends('remaining_hours', 'total_duration_sum')
     def _compute_set_remaining(self):
         total = 0
@@ -332,11 +304,6 @@ class PaymentTotal(models.Model):
                 self.charge = rec.salary_per_hr
 
     charge = fields.Float(compute='_sub_charge', store=True)
-
-    # @api.depends('check_remain', 'standard_hours')
-    # def _compute_real_remaining(self):
-    #     for rec in self:
-    #         rec.correct_remaining_hours = rec.standard_hours - rec.check_remain
 
     correct_remaining_hours = fields.Float('Balance standard hours')
 
@@ -533,50 +500,16 @@ class PaymentTotal(models.Model):
     added_gross_before_tds_custom = fields.Float(compute='_gst_added_gross_before_tds', store=True,
                                                  string='Gross payable before TDS + GST')
 
-    #     for i in self:
-    #         i.added_gross_before_tds = i.added_payment_extra + i.amount_tax_id
-    #
-    # added_gross_before_tds = fields.Float(compute='_gst_added_gross_before_tds', store=True,
-    #                                       string='Gross payable before TDS + GST')
-
     @api.depends('added_tds_payment', 'added_tax_payment', 'amount_to_be_paid', 'extra_payment', 'added_payment_extra',
                  'advance_ded_total')
     def _compute_total_payable_amount(self):
         for rec in self:
-            # aa = (rec.amount_to_be_paid - rec.tds_amount) + rec.amount_tax_id
-            # bb = aa - self.advance_deduction
-            # rec.amount_pay_now = bb
             rec.amount_pay_now = rec.advance_ded_total
 
     amount_pay_now = fields.Float(string='Net payable', store=True, compute='_compute_total_payable_amount')
 
-    # @api.depends('payment_ids.net_hour')
-    # def _amount_all(self):
-    #     """
-    #     Compute the total amounts of the SO.
-    #     """
-    #     total = 0
-    #     for order in self.payment_ids:
-    #         total += order.net_hour
-    #     self.update({
-    #         'total_net_hour_amount': total,
-    #     })
-    #
-    # total_net_hour_amount = fields.Float(string='Total net hour', compute='_amount_all', store=True)
-
     def submit_button(self):
         print('kool')
-        # sss = self.env['payout.wizard'].search([])
-        # for i in sss:
-        #     i.amount = self.amount_pay_now
-        # aa = self.env['accountant.payout'].search([])
-        # bb = self.env['faculty.salary.advance'].search([])
-        # # for i in aa:
-        # #     i.state = 'paid'
-        # for j in bb:
-        #     # for k in aa:
-        #     if j.employee_id.name.name == self.faculty_id.name.name:
-        #         j.advance = self.advance_remaining - self.advance_deduction
 
         self.state = 'pay_list'
 
@@ -595,3 +528,30 @@ class PaymentTotal(models.Model):
                     self.advance_remaining = advance.advance
             self.subject_id = self.subject_id
             i.added_total_extra_payment()
+
+    def reject_button(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'reject.reason.payment',
+            'view_mode': 'form',
+            'target': 'new',
+
+        }
+
+
+class RejectReason(models.TransientModel):
+    _name = 'reject.reason.payment'
+
+    reason = fields.Char('Reason')
+
+    def action_done(self):
+        payment = self.env['payment.total'].search([('id', '=', self._context['active_id'])])
+        if payment:
+            daily_record = self.env['daily.class.record'].search([('id', '=', payment.current_id)])
+            daily_record.state = 'rejected'
+            payment.state = 'rejected'
+            daily_record.activity_schedule('faculty.mail_activity_for_coordinator_rejected_record',
+                                           user_id=daily_record.create_uid.id,
+                                           note=f'This record is rejected due to: {self.reason}')
+
+        return

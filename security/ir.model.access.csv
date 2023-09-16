@@ -69,8 +69,4 @@ faculty__coooord,record,model_skipped_classes,group_faculty_administrator,1,1,1,
 faculty_records_accounts,daily_record_acc,model_daily_class_record,group_accounting_manager,1,1,0,0
 faculty__coord_accounts,record,model_skipped_classes,group_accounting_manager,1,1,1,0
 faculty_records_acc,record,model_record_data,group_accounting_manager,1,1,1,0
-
-
-
-
-
+payment_record_reject_reason,record_reject,model_reject_reason_payment,group_accounting_manager,1,1,1,1

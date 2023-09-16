@@ -19,6 +19,8 @@
         'views/daily_class_record.xml',
         'views/changed_faculty.xml',
         'views/server_action.xml',
+        'views/payment_reject_reason.xml',
+        'data/activity.xml',
 
     ],
     'demo': [],

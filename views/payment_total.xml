@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,pay,pay_list"/>
+                    <field name="state" widget="statusbar"/>
 <!--                    <button-->
 <!--                            name="generate_pdf_report"-->
 <!--                            string="Generate PDF Report"-->
@@ -20,6 +20,7 @@
                             type="action"/>
                     <button name='refresh' string="Refresh" states="draft"
                             type="object"/>
+                    <button name="reject_button" string="Reject" type="object" states="draft,pay"/>
                 </header>
                 <sheet>
                     <!--                    <div class="oe_button_box" name="button_box">-->
@@ -59,7 +60,9 @@
                         </button>
                     </div>
                     <widget name="web_ribbon" text="Paid"
-                            attrs="{'invisible':[('state', 'in', ['pay','draft'])]}"/>
+                            attrs="{'invisible':[('state', 'in', ['pay','draft', 'rejected'])]}"/>
+                    <widget name="web_ribbon" text="Rejected" bg_color="bg-danger"
+                            attrs="{'invisible':[('state', 'in', ['pay','draft', 'pay_list'])]}"/>
 
                     <group>
                         <group>
@@ -169,8 +172,8 @@
                     </group>
                 </sheet>
                 <div class="oe_chatter">
-                    <field name="message_follower_ids"
-                           widget="mail_followers"/>
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
                     <field name="message_ids" widget="mail_thread"/>
                 </div>
             </form>

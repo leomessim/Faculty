@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="mail_activity_for_coordinator_rejected_record" model="mail.activity.type">
+        <field name="name">Rejected record</field>
+        <field name="res_model_id" ref="faculty.model_daily_class_record"/>
+        <field name="delay_count">30</field>
+    </record>
+</odoo>

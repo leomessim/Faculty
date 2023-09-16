@@ -5,7 +5,7 @@ from odoo.exceptions import UserError
 
 class DailyClassRecord(models.Model):
     _name = 'daily.class.record'
-    _inherit = 'mail.thread'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'faculty_id'
     _description = 'Class Record'
 
@@ -118,6 +118,16 @@ class DailyClassRecord(models.Model):
 
     total_remaining_hour = fields.Float(string='Balance Standard Hours', readonly=True)
     class_hour_till_now = fields.Float('Class hours till now', readonly=True)
+    activity_done_coordinator = fields.Boolean('Activity done')
+
+    def action_activity_cancel(self):
+
+        faculty_activity = self.env['mail.activity'].search([('res_id', '=', self.id), (
+            'activity_type_id', '=', self.env.ref('faculty.mail_activity_for_coordinator_rejected_record').id)])
+        faculty_activity.unlink()
+        self.activity_done_coordinator = True
+        # if activity_faculty:
+        #     activity_faculty.unlink()
 
     @api.depends('subject_id')
     def onchange_standard_hour(self):
@@ -608,14 +618,18 @@ class DailyClassRecord(models.Model):
         # print(self.env.context.get('active_ids'), 'ids')
         # print(rep, 'rep')
 
-        all_zero_records = self.env['daily.class.record'].sudo().search([('class_hour_till_now', '=', 0), ('month_of_record', '=', 'august')])
-        already_done=[]
+        all_zero_records = self.env['daily.class.record'].sudo().search(
+            [('class_hour_till_now', '=', 0), ('month_of_record', '=', 'august')])
+        already_done = []
         for j in all_zero_records:
-            recs = self.env['daily.class.record'].sudo().search([('id','not in',already_done),('faculty_id', '=', j.faculty_id.id),('class_room', '=', j.class_room.id), ('branch_name', '=', j.branch_name.id), ('course_id', '=', j.course_id.id), ('state', 'not in', ['rejected','draft']), ('subject_id', '=', j.subject_id.id)])
+            recs = self.env['daily.class.record'].sudo().search(
+                [('id', 'not in', already_done), ('faculty_id', '=', j.faculty_id.id),
+                 ('class_room', '=', j.class_room.id), ('branch_name', '=', j.branch_name.id),
+                 ('course_id', '=', j.course_id.id), ('state', 'not in', ['rejected', 'draft']),
+                 ('subject_id', '=', j.subject_id.id)])
             total = 0
             print(recs, 'recs')
             for rec in recs:
-
                 total += rec.total_duration_sum
             j.class_hour_till_now = total
             already_done.append(j.id)
@@ -626,19 +640,6 @@ class DailyClassRecord(models.Model):
             for payments in payment:
                 if payments.current_id == pay_rec.id:
                     payments.class_hours_till = pay_rec.class_hour_till_now
-
-
-        # for rec in rep:
-        #     if rec.state == 'approve':
-        #         if rec.subject_id == all_records.subject_id and rec.course_id == all_records.course_id and rec.branch_name == all_records.branch_name and rec.class_room == all_records.class_room:
-        #             total += all_records.total_duration_sum
-        #             rec.class_hour_till_now = total
-        #             print(total, 'total')
-        #         else:
-        #             rec.class_hour_till_now = rec.total_duration_sum
-
-                # print(total, 'total')
-                # if rec.class_hour_till_now == 0:
 
 
 class RecordData(models.Model):
