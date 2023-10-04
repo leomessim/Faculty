@@ -39,7 +39,9 @@
         <field name="model">daily.class.record</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
+
             <form string="Rate">
+
                 <header>
                     <field name="state" widget="statusbar"/>
                     <button name="confirm_record" class="oe_highlight" string="Confirm"
@@ -47,7 +49,8 @@
                             groups="faculty.coordinator_user"
                             attrs="{'invisible':['|',('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
                     <button name="action_activity_cancel" string="Done" type="object" groups="faculty.coordinator_user"
-                            attrs="{'invisible':['|', ('activity_done_coordinator', '=', True), ('state', '!=', 'rejected')]}" style="background-color: #fc7349;"/>
+                            attrs="{'invisible':['|', ('activity_done_coordinator', '=', True), ('state', '!=', 'rejected')]}"
+                            style="background-color: #fc7349;"/>
                     <button name="sent_to_approval" states="sent_approve" string="Sent to Approval" type="object"
                             class="oe_highlight" groups="faculty.coordinator_user"/>
                     <button name="reset_to_draft" states="sent_approve,to_approve" string="Reset to Draft"
@@ -82,6 +85,12 @@
                             <field string="Payment" name="payment_count" widget="statinfo"
                                    groups="faculty.group_accounting_manager"/>
                         </button>
+
+                        <button class="oe_stat_button" type="object" name="get_old_reports"
+                                icon="fa-book" string="Old Records">
+                            <!--                    <field string="Vehicle" name="vehicle_count" widget="statinfo"/>-->
+                        </button>
+
                     </div>
                     <widget name="web_ribbon" text="Paid"
                             attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'rejected'])]}"/>
@@ -97,10 +106,12 @@
                             <!--                            <field name="old_faculty_class_time"-->
                             <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>-->
                             <field name="coordinator" invisible="1"/>
-                            <field name="faculty_id" attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
+                            <field name="faculty_id"
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
                             <field name="branch_name"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"/>
-                            <field name="month_of_record" attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
+                            <field name="month_of_record"
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
                             <field name="over_time_check" invisible="1"/>
                             <field name="over_time" invisible="1"/>
                             <field name="activity_done_coordinator" invisible="1"/>
@@ -110,7 +121,8 @@
                         <group>
                             <field name="make_visible" invisible="1"/>
                             <field name="make_academic_head" invisible="1"/>
-                            <field name="class_room" attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','rejected'])]}"/>
+                            <field name="class_room"
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','rejected'])]}"/>
                             <field name="course_id" options="{'no_create': True}"
                                    attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
                             <field name="subject_id" options="{'no_create': True}"
@@ -133,7 +145,8 @@
                         </group>
                     </group>
                     <notebook position="inside">
-                        <page string="Record" name="record" attrs="{'readonly':[('state','in',['to_approve','approve','rejected'])]}">
+                        <page string="Record" name="record"
+                              attrs="{'readonly':[('state','in',['to_approve','approve','rejected'])]}">
                             <field name="record_ids"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','reject'])]}">
 
@@ -255,7 +268,8 @@
                 <field name="standard_hour" widget="float_time"/>
                 <field name="total_duration_sum" widget="float_time"/>
                 <field name="total_remaining_hour" widget="float_time"/>
-                <field name="state" widget="badge" decoration-success="state == 'paid'" decoration-info="state == 'approve'"/>
+                <field name="state" widget="badge" decoration-success="state == 'paid'"
+                       decoration-info="state == 'approve'"/>
             </tree>
         </field>
     </record>

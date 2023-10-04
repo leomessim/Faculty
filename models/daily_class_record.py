@@ -641,6 +641,18 @@ class DailyClassRecord(models.Model):
                 if payments.current_id == pay_rec.id:
                     payments.class_hours_till = pay_rec.class_hour_till_now
 
+    def get_old_reports(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Records',
+            'view_mode': 'tree,form',
+            'res_model': 'daily.class.record',
+            'domain': [('branch_name', '=', self.branch_name.id), ('faculty_id', '=', self.faculty_id.id),
+                       ('class_room', '=', self.class_room.id), ('course_id', '=', self.course_id.id),
+                       ('subject_id', '=', self.subject_id.id), ('id', '!=', self.id)],
+            'context': "{'create': False}"
+        }
+
 
 class RecordData(models.Model):
     _name = 'record.data'
