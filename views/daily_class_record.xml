@@ -61,7 +61,7 @@
                     <button name="head_approve" class="oe_highlight" states="to_approve" string="Approve"
                             type="object"
                             groups="faculty.group_faculty_administrator"/>
-                    <button name="rejected" class="oe_highlight" states="to_approve" string="Reject" type="object"
+                    <button name="rejected" style="background-color:#db3814" states="to_approve" string="Reject" type="object"
                             groups="faculty.group_faculty_administrator"/>
                     <button name="refresh_record"
                             help="Please click on the Refresh button provided below to update the record. Once you do that, you'll be able to view and verify the correct hours."
@@ -93,9 +93,11 @@
 
                     </div>
                     <widget name="web_ribbon" text="Paid"
-                            attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'rejected'])]}"/>
+                            attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'rejected','register_payment'])]}"/>
+                    <widget name="web_ribbon" text="Register Payment"
+                            attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'rejected','paid'])]}"/>
                     <widget name="web_ribbon" text="Rejected" bg_color="bg-danger"
-                            attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'paid'])]}"/>
+                            attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'paid','register_payment'])]}"/>
                     <group>
                         <group>
                             <field name="change_faculty_boolean" invisible="1"/>
@@ -269,7 +271,7 @@
                 <field name="total_duration_sum" widget="float_time"/>
                 <field name="total_remaining_hour" widget="float_time"/>
                 <field name="state" widget="badge" decoration-success="state == 'paid'"
-                       decoration-info="state == 'approve'"/>
+                       decoration-info="state == 'approve'" decoration-primary="state == 'register_payment'" decoration-danger="state == 'rejected'"/>
             </tree>
         </field>
     </record>

@@ -19,6 +19,7 @@ class DailyClassRecord(models.Model):
         ('to_approve', 'To Approve'),
         # ('fac_approve', 'Faculty Approve'),
         ('approve', 'Approved'),
+        ('register_payment', 'Register Payment'),
         ('rejected', 'Rejected'),
         ('paid', 'Paid'),
 

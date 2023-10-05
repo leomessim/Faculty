@@ -357,6 +357,8 @@ class PaymentTotal(models.Model):
     total_duration_sum = fields.Float(string='Gross hours', compute='_amount_all', store=True)
 
     def confirm_payment(self):
+        fac_record = self.env['daily.class.record'].sudo().search([('id', '=', self.current_id)])
+        fac_record.write({'state': 'register_payment'})
         rate = self.env['faculty.subject.rate'].search([])
         advance = self.env['faculty.salary.advance'].search([])
         # self.amount_pay_now = self.amount_pay_now - self.advance_deduction
