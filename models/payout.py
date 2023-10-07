@@ -23,12 +23,12 @@ class Payout(models.Model):
 class FacultySalary(models.Model):
     _name = 'faculty.subject.rate'
     _inherit = 'mail.thread'
+    _description = 'Rates'
 
-    name = fields.Many2one('faculty.details', string='Faculty')
-
-    salary_per_hr = fields.Float(string='Salary per hour')
-    course_id = fields.Many2one('courses.details', string='Course')
-    subject_id = fields.Many2one('subject.details', domain="[('course_sub_id', '=', course_id)]", string='Subject')
+    name = fields.Many2one('faculty.details', string='Faculty', required=True)
+    salary_per_hr = fields.Float(string='Salary per hour', required=True)
+    course_id = fields.Many2one('courses.details', string='Course',required=True)
+    subject_id = fields.Many2one('subject.details', domain="[('course_sub_id', '=', course_id)]", string='Subject', required=True)
     currency_id = fields.Many2one('res.currency', string='Currency', required=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
     # name = fields.Char(string='hhhi')

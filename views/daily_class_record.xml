@@ -109,11 +109,11 @@
                             <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>-->
                             <field name="coordinator" invisible="1"/>
                             <field name="faculty_id"
-                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="branch_name"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"/>
                             <field name="month_of_record"
-                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="over_time_check" invisible="1"/>
                             <field name="over_time" invisible="1"/>
                             <field name="activity_done_coordinator" invisible="1"/>
@@ -125,11 +125,11 @@
                             <field name="make_academic_head" invisible="1"/>
                             <field name="create_date" invisible="1"/>
                             <field name="class_room"
-                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','rejected'])]}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="course_id" options="{'no_create': True}"
-                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="subject_id" options="{'no_create': True}"
-                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected'])]}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="actual_dur" invisible="1"/>
 
                             <field name="extra_hour_active"

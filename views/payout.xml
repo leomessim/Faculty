@@ -631,10 +631,10 @@
         <menuitem
                 id="menu_salary_per_hr"
                 name="Faculty Subject Rate"
-                parent="menu_course"
+                parent="menu_payment"
                 action="daily_class_rate_record_action"
-                sequence="2"/>
-        <menuitem name="Standard Hours"
+                sequence="1"/>
+        <menuitem name="View Of Standard Hours"
                   id="subject_standard_hr_menu"
                   parent="menu_course"
                   action="action_subject_standard_hr"

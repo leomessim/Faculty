@@ -231,7 +231,7 @@
 
                 <!--                <field name="remaining_hours"/>-->
                 <field name="amount_pay_now" sum="Total" widget="monetary"/>
-                <field name="state"/>
+                <field name="state" widget="badge" decoration-success="state == 'pay_list'" decoration-info="state == 'confirmed'" decoration-danger="state == 'rejected'"/>
             </tree>
         </field>
     </record>
@@ -252,5 +252,5 @@
             parent="menu_payment"
             action="faculty_payment_form"
             groups="faculty.group_accounting_manager"
-            sequence="1"/>
+            sequence="2"/>
 </odoo>

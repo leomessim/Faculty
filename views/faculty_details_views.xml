@@ -135,6 +135,37 @@
 
             </field>
         </record>
+        <record id="logic_faculty_profile_kanban_view" model="ir.ui.view">
+            <field name="name">Faculty Profiles</field>
+            <field name="model">faculty.details</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" archivable="false"
+                        sample="1">
+                    <field name="name"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                                <div>
+                                    <strong class="o_kanban_record_title">
+                                        <span>
+                                            <field name="name"/>
+                                        </span>
+                                    </strong>
+                                </div>
+                                <div class="oe_kanban_bottom_left text-muted">
+                                    <field name="email_address"/>
+                                </div>
+                                <div class="oe_kanban_bottom_left text-muted">
+                                    <field name="course" widget="many2many_tags"/>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
         <record id="subject_details_form" model="ir.ui.view">
             <field name="name">Subject_details</field>
             <field name="model">subject.details</field>
@@ -157,7 +188,7 @@
                                             <field name="name"/>
                                             <field name="date_update"/>
                                             <field name="old_hr"/>
-<!--                                            <field name="change_faculty"/>-->
+                                            <!--                                            <field name="change_faculty"/>-->
                                         </tree>
                                     </field>
                                 </group>
@@ -185,12 +216,12 @@
             </field>
         </record>
         <record id="action_subject_standard_hr" model="ir.actions.act_window">
-            <field name="name">Standard Hours View</field>
+            <field name="name">View Of Standard Hours</field>
             <field name="res_model">subject.details</field>
             <field name="view_mode">tree</field>
         </record>
         <record id="action_subject" model="ir.actions.act_window">
-            <field name="name">Standard Hours Details</field>
+            <field name="name">Subject Details</field>
             <field name="res_model">subject.details</field>
             <field name="view_mode">tree,form</field>
         </record>
@@ -247,7 +278,7 @@
                 sequence="1"/>
         <menuitem
                 id="menu_faculty_subject"
-                name="Subject"
+                name="Subject/Standard Hours"
                 parent="menu_course"
                 action="action_subject"
                 sequence="2"/>
