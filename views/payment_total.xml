@@ -8,12 +8,12 @@
             <form>
                 <header>
                     <field name="state" widget="statusbar"/>
-<!--                    <button-->
-<!--                            name="generate_pdf_report"-->
-<!--                            string="Generate PDF Report"-->
-<!--                            type="object"-->
-<!--                            class="oe_highlight"-->
-<!--                    />-->
+                    <!--                    <button-->
+                    <!--                            name="generate_pdf_report"-->
+                    <!--                            string="Generate PDF Report"-->
+                    <!--                            type="object"-->
+                    <!--                            class="oe_highlight"-->
+                    <!--                    />-->
                     <button name='confirm_payment' class="oe_highlight" states="draft" string="Confirm"
                             type="object"/>
                     <button name='%(payout_model_wizard_action)d' class="oe_highlight" string="Pay now" states="pay"
@@ -239,6 +239,12 @@
         <field name="name">Payment Total</field>
         <field name="res_model">payment.total</field>
         <field name="view_mode">kanban,tree,form</field>
+    </record>
+    <record id="action_selected_rc_paid" model="ir.actions.server">
+        <field name="name">Change Records State to Paid</field>
+        <field name="model_id" ref="faculty.model_payment_total"/>
+        <field name="state">code</field>
+        <field name="code">action = record.action_selected_records_state_paid()</field>
     </record>
     <menuitem
             id="menu_view_payment_set"

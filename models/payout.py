@@ -127,7 +127,6 @@ class PayoutWizard(models.TransientModel):
         print("Active Wizard ID:", active_wizard_id)
 
     def done(self):
-
         purchase_ids = self.env.context.get('active_ids', [])
         purchase_rec = self.env['payment.total'].browse(purchase_ids)
         print(purchase_ids, 'wiz')
@@ -539,6 +538,59 @@ class PaymentTotal(models.Model):
             'target': 'new',
 
         }
+
+    def action_selected_records_state_paid(self):
+        records = self.env.context.get('active_ids', [])
+        paid = self.env['payment.total'].search([('id', 'in', records)])
+        # email = []
+        for record in paid:
+            print(record.faculty_id.name, 'faculty')
+            pdf_content = \
+                self.env.ref('faculty.report_faculty_payout')._render_qweb_pdf(record.id,
+                                                                               )[
+                    0]
+            outfile = open('/tmp/temp.pdf', 'wb')
+            outfile.write(pdf_content)
+            outfile.close()
+            open('/tmp/temp.docx', 'w')
+            parse('/tmp/temp.pdf', '/tmp/temp.docx')
+            self.report_file = base64.b64encode(open('/tmp/temp.pdf', 'rb').read())
+            # for rec in record:
+            #     email_temp = rec.faculty_id.email_address
+            #     email.append(email_temp)
+            # partner = self.env['res.partner'].browse(self._context.get('active_id'))
+
+            # Create the email message
+            for rec in record:
+                if rec.faculty_id.email_address:
+                    email_values = {
+                        'subject': 'Faculty Payment',
+                        'email_to': rec.faculty_id.email_address,  # Use the client's email address
+                        'body_html': 'Payment successfully processed.',
+                        # 'attachment_ids': [(6, 0, self.file_ids.ids)]
+                    }
+                    email = self.env['mail.mail'].sudo().create(email_values)
+                    # print(email_values['attachment_ids'])
+                    attachment_values = {
+                        'name': 'payment_slip.pdf',
+                        'datas': self.report_file,
+                        'res_model': 'mail.mail',
+                        'res_id': self.id,
+                    }
+
+                    attachment = self.env['ir.attachment'].sudo().create(attachment_values)
+
+                    # Send the email
+                    email.attachment_ids = [(4, attachment.id)]
+                    email.send()
+
+            class_rec = self.env['daily.class.record'].search([])
+
+            for rec in class_rec:
+                if rec.id == record.current_id:
+                    rec.state = 'paid'
+            #     rec.state = 'paid'
+        print(records, 'records')
 
 
 class RejectReason(models.TransientModel):
