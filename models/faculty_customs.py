@@ -110,10 +110,10 @@ class SubjectDetails(models.Model):
     _inherit = 'mail.thread'
     _description = 'Subject'
 
-    name = fields.Char(string='Subject Name', ondelete='restrict')
-    stnd_hr = fields.Float(string='Standard Hours')
+    name = fields.Char(string='Subject Name', ondelete='restrict', required=True)
+    stnd_hr = fields.Float(string='Standard Hours', required=True)
     rec_id = fields.Integer()
-    course_sub_id = fields.Many2one('courses.details', string='Course')
+    course_sub_id = fields.Many2one('courses.details', string='Course', required=True)
     old_ids = fields.One2many('old.standard.hours', 'old_id', compute='old_standard_hr', store=True)
     change_faculty = fields.Boolean()
 

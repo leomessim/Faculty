@@ -123,6 +123,7 @@
                         <group>
                             <field name="make_visible" invisible="1"/>
                             <field name="make_academic_head" invisible="1"/>
+                            <field name="create_date" invisible="1"/>
                             <field name="class_room"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','rejected'])]}"/>
                             <field name="course_id" options="{'no_create': True}"

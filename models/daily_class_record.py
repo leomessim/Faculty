@@ -36,13 +36,19 @@ class DailyClassRecord(models.Model):
         tracking=True)
 
     course_id = fields.Many2one('courses.details', string='Course', required=True, ondelete='restrict')
-    subject_id = fields.Many2one('subject.details', string='Subject', required=True, ondelete='restrict')
+    subject_id = fields.Many2one('subject.details', string='Subject', required=True, ondelete='restrict', domain="[('course_sub_id', '=', course_id)]")
     extra_hour_active = fields.Boolean('Add extra hour', required=True)
     extra_hour_reason = fields.Text('Extra hour reason')
     record_ids = fields.One2many('record.data', 'record_id', string='Records')
     skip_ids = fields.One2many('skipped.classes', 'skip_id', string='Skipped classes')
     subject_rate = fields.Float(string='Subject rate', compute='onchange_standard_hour', store=True)
     extra_hour = fields.Float(string='Extra hour eligible for payment', required=True)
+    create_date = fields.Datetime(default=datetime.now(), tracking=True)
+
+    @api.onchange('course_id')
+    def _compute_subject_based_on_course(self):
+        for record in self:
+            record.subject_id = False
 
     @api.depends('subject_id', 'faculty_id', 'record_ids.date', 'course_id')
     def compute_standard_hour_taken(self):
