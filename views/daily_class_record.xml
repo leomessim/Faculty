@@ -104,21 +104,21 @@
                             <!--                            <field name="old_faculty"-->
                             <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
                             <field name="new_faculty"
-                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>
+                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}" options="{'no_create': True}"/>
                             <!--                            <field name="old_faculty_class_time"-->
                             <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>-->
                             <field name="coordinator" invisible="1"/>
                             <field name="faculty_id"
-                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}" options="{'no_create': True}"/>
                             <field name="branch_name"
-                                   attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}" options="{'no_create': True}"/>
                             <field name="month_of_record"
                                    attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="over_time_check" invisible="1"/>
                             <field name="over_time" invisible="1"/>
                             <field name="activity_done_coordinator" invisible="1"/>
                             <field name="groups_id" invisible="1"/>
-                            <field name="coordinator_head" string="Assign to Head" />
+                            <field name="coordinator_head" string="Assign to Head" attrs="{'readonly':[('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                         </group>
                         <group>
                             <field name="make_visible" invisible="1"/>

@@ -63,7 +63,8 @@ class DailyClassRecord(models.Model):
     # #     return users
     #
     coordinator_head = fields.Many2one('res.users', domain="[('groups_id', 'in', [groups_id])]",
-                                       default=lambda self: self.env.user.employee_id.parent_id.user_id.id, ondelete='restrict')
+                                       default=lambda self: self.env.user.employee_id.parent_id.user_id.id,
+                                       ondelete='restrict', required=True)
 
     def add_empty_coordinator_head_fields(self):
         records = self.env['daily.class.record'].sudo().search([])
@@ -72,6 +73,7 @@ class DailyClassRecord(models.Model):
                 print(record.coordinator_head, 'empty')
                 print(record.create_uid.employee_id.parent_id.user_id.name, 'coord')
                 record.coordinator_head = record.create_uid.employee_id.parent_id.user_id.id
+
     @api.onchange('course_id')
     def _compute_subject_based_on_course(self):
         for record in self:
