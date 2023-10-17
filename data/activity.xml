@@ -5,4 +5,12 @@
         <field name="res_model_id" ref="faculty.model_daily_class_record"/>
         <field name="delay_count">30</field>
     </record>
+    <record id="action_add_coordinator_heads" model="ir.actions.server">
+        <field name="name">Add Coordinator Head</field>
+        <field name="model_id" ref="faculty.model_daily_class_record"/>
+        <field name="binding_model_id" ref="faculty.model_daily_class_record"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.add_empty_coordinator_head_fields()</field>
+    </record>
 </odoo>

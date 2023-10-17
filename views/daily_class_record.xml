@@ -117,8 +117,8 @@
                             <field name="over_time_check" invisible="1"/>
                             <field name="over_time" invisible="1"/>
                             <field name="activity_done_coordinator" invisible="1"/>
-
-
+                            <field name="groups_id" invisible="1"/>
+                            <field name="coordinator_head" string="Assign to Head" />
                         </group>
                         <group>
                             <field name="make_visible" invisible="1"/>

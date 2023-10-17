@@ -36,15 +36,42 @@ class DailyClassRecord(models.Model):
         tracking=True)
 
     course_id = fields.Many2one('courses.details', string='Course', required=True, ondelete='restrict')
-    subject_id = fields.Many2one('subject.details', string='Subject', required=True, ondelete='restrict', domain="[('course_sub_id', '=', course_id)]")
+    subject_id = fields.Many2one('subject.details', string='Subject', required=True, ondelete='restrict',
+                                 domain="[('course_sub_id', '=', course_id)]")
     extra_hour_active = fields.Boolean('Add extra hour', required=True)
     extra_hour_reason = fields.Text('Extra hour reason')
+
     record_ids = fields.One2many('record.data', 'record_id', string='Records')
     skip_ids = fields.One2many('skipped.classes', 'skip_id', string='Skipped classes')
     subject_rate = fields.Float(string='Subject rate', compute='onchange_standard_hour', store=True)
     extra_hour = fields.Float(string='Extra hour eligible for payment', required=True)
     create_date = fields.Datetime(default=datetime.now(), tracking=True)
+    groups_id = fields.Many2one('res.groups', string='Groups',
+                                default=lambda self: self.env.ref('faculty.group_faculty_administrator').id)
 
+    # def _academic_heads(self):
+    #     users_obj = self.env['res.users'].search([])
+    #     users = self.env.ref('faculty.group_faculty_administrator').users.ids
+    #     print(users, 'oola')
+    #     for i in users_obj:
+    #         if i.id in users:
+    #             print(i.name, 'ola')
+    #             domain = [('id', 'in', i.id)]
+    #         else:
+    #             domain = []
+    #         return {'domain': {'coordinator_head': domain}}
+    # #     return users
+    #
+    coordinator_head = fields.Many2one('res.users', domain="[('groups_id', 'in', [groups_id])]",
+                                       default=lambda self: self.env.user.employee_id.parent_id.user_id.id, ondelete='restrict')
+
+    def add_empty_coordinator_head_fields(self):
+        records = self.env['daily.class.record'].sudo().search([])
+        for record in records:
+            if not record.coordinator_head:
+                print(record.coordinator_head, 'empty')
+                print(record.create_uid.employee_id.parent_id.user_id.name, 'coord')
+                record.coordinator_head = record.create_uid.employee_id.parent_id.user_id.id
     @api.onchange('course_id')
     def _compute_subject_based_on_course(self):
         for record in self:
