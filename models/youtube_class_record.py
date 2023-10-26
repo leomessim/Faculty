@@ -7,8 +7,8 @@ class YoutubeClassRecord(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'faculty_id'
 
-    faculty_id = fields.Many2one('res.users', string='Faculty', required=True,
-                                 domain="[('youtube_faculty', '=', True)]")
+    faculty_id = fields.Many2one('faculty.details', string='Faculty', required=True,
+                                 domain="[('name.youtube_faculty', '=', True)]")
     month_of_record = fields.Selection(
         [('january', 'January'), ('february', 'February'), ('march', 'March'), ('april', 'April'), ('may', 'May'),
          ('june', 'June'), ('july', 'July'), ('august', 'August'), ('september', 'September'), ('october', 'October'),

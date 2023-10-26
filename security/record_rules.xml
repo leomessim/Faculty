@@ -12,6 +12,26 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
         </record>
+        <record id="youtube_faculty_rules" model="ir.rule">
+            <field name="name">Only see own profile</field>
+            <field name="model_id" ref="model_faculty_details"/>
+            <field name="domain_force">[('name.id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('faculty.youtube_faculty_id'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+        <record id="youtube_class_rules" model="ir.rule">
+            <field name="name">Only see own records</field>
+            <field name="model_id" ref="model_youtube_class_record"/>
+            <field name="domain_force">['|',('faculty_id.id', '=', user.id), ('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('faculty.youtube_faculty_id'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
         <record id="coordinator_own_documents" model="ir.rule">
             <field name="name">See Only Own Documents</field>
             <field name="model_id" ref="model_daily_class_record"/>

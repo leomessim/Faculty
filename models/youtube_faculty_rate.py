@@ -7,5 +7,5 @@ class YoutubeFacultyRate(models.Model):
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _rec_name = 'faculty_id'
 
-    faculty_id = fields.Many2one('res.users', string='Faculty', required=True, domain="[('youtube_faculty', '=', True)]")
+    faculty_id = fields.Many2one('faculty.details', string='Faculty', required=True, domain="[('name.youtube_faculty', '=', True)]")
     rate = fields.Float(string='Salary Per Hour', required=True)
