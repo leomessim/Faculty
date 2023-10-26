@@ -5,6 +5,11 @@
         <field name="res_model_id" ref="faculty.model_daily_class_record"/>
         <field name="delay_count">30</field>
     </record>
+    <record id="mail_for_youtube_activity" model="mail.activity.type">
+        <field name="name">Youtube Class Record</field>
+        <field name="res_model_id" ref="faculty.model_youtube_class_record"/>
+        <field name="delay_count">30</field>
+    </record>
     <record id="action_add_coordinator_heads" model="ir.actions.server">
         <field name="name">Add Coordinator Head</field>
         <field name="model_id" ref="faculty.model_daily_class_record"/>

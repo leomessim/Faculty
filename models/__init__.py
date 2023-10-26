@@ -6,4 +6,6 @@ from . import advance
 from . import department
 from . import daily_class_record
 from . import change_till_now_action
+from . import youtube_faculty_rate
+from . import youtube_class_record
 

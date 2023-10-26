@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="youtube_fac_rate_per_hour_form" model="ir.ui.view">
+        <field name="name">Faculty Rate</field>
+        <field name="model">youtube.faculty.rate</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Faculty Rate">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="faculty_id"/>
+                            <field name="rate"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="youtube_rate_tree" model="ir.ui.view">
+        <field name="name">Faculty Rate</field>
+        <field name="model">youtube.faculty.rate</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="faculty_id"/>
+                <field name="rate"/>
+            </tree>
+
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="youtube_fac_rate_action">
+        <field name="name">Faculty Rate</field>
+        <field name="res_model">youtube.faculty.rate</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Youtube Faculty Rate" id="menu_youtube_fac_rate"
+              action="youtube_fac_rate_action"
+              parent="menu_payment"
+              sequence="2"/>
+
+
+</odoo>

@@ -8,6 +8,7 @@
             <xpath expr="//field[@name='login']" position="after">
                 <group>
                     <field name="faculty_check"/>
+                    <field name="youtube_faculty"/>
                 </group>
 
             </xpath>

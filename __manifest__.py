@@ -21,6 +21,8 @@
         'views/server_action.xml',
         'views/payment_reject_reason.xml',
         'data/activity.xml',
+        'views/youtube_fac_rate.xml',
+        'views/youtube_class_record.xml',
 
     ],
     'demo': [],
