@@ -132,8 +132,8 @@ class DailyClassRecord(models.Model):
                 if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
                     total += i.total_duration_sum
                     self.class_hour_till_now = total
-            else:
-                self.class_hour_till_now = 0
+            # else:
+            #     self.class_hour_till_now = 0
         self.state = 'to_approve'
         net_hour = self.env['daily.class.record'].sudo().search([])
         total_rem = 0
@@ -634,8 +634,8 @@ class DailyClassRecord(models.Model):
                     print(i.total_duration_sum, 'total duration')
                     total += i.total_duration_sum
                     self.class_till_view = total
-            else:
-                self.class_till_view = 0
+            # else:
+            #     self.class_till_view = 0
 
     class_till_view = fields.Float(string='Class Hours Till Now', compute='_class_till_now_view', store=True)
 
