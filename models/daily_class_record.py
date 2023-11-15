@@ -129,7 +129,7 @@ class DailyClassRecord(models.Model):
         total = 0
         for i in duration:
             if self.faculty_id == i.faculty_id and self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
-                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid':
+                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'register_payment':
                     total += i.total_duration_sum
                     self.class_hour_till_now = total
             # else:
@@ -139,7 +139,7 @@ class DailyClassRecord(models.Model):
         total_rem = 0
         for jj in net_hour:
             if self.faculty_id == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
-                if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid':
+                if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid' or jj.state in 'register_payment':
                     total_rem += jj.total_duration_sum
             aa = self.standard_hour - total_rem
 
@@ -559,7 +559,7 @@ class DailyClassRecord(models.Model):
         total_rem = 0
         for jj in net_hour:
             if self.faculty_id == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
-                if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid':
+                if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid' or jj.state in 'register_payment':
                     total_rem += jj.total_duration_sum
             aa = self.standard_hour - total_rem
         # print(aa, 'class hour till')
@@ -593,7 +593,7 @@ class DailyClassRecord(models.Model):
             std_hr = []
             for jj in net_hour:
                 if self.old_faculty == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
-                    if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid':
+                    if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid' or jj.state in 'register_payment':
                         total_rem += jj.total_duration_sum
                 aa = self.standard_hour - total_rem
                 std_hr.append(aa)
@@ -630,7 +630,7 @@ class DailyClassRecord(models.Model):
         total = 0
         for i in hour:
             if self.faculty_id == i.faculty_id and self.branch_name == i.branch_name and self.class_room == i.class_room and self.course_id == i.course_id and self.subject_id == i.subject_id:
-                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'draft':
+                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'draft' or i.state in 'register_payment':
                     print(i.total_duration_sum, 'total duration')
                     total += i.total_duration_sum
                     self.class_till_view = total
