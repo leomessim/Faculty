@@ -187,7 +187,7 @@
                             <field name="class_hour_till_now" widget="float_time" string="Class Hours Till Now"
                                    attrs="{'invisible':[('state', 'in', ['draft','sent_approve'])]}"/>
                             <field name="class_till_view" widget="float_time"
-                                   attrs="{'invisible':[('state', 'in', ['to_approve','approve','rejected','paid'])]}"/>
+                                   attrs="{'invisible':[('state', 'in', ['to_approve','approve','register_payment','rejected','paid'])]}"/>
 
                             <!--                            <field name="total_duration_sum" widget="monetary"/>-->
                             <field name="subject_rate" widget="monetary"
@@ -199,7 +199,7 @@
                                    attrs="{'invisible':['|', '|',('total_remaining_hour', '&gt;', 0),('total_remaining_hour', '=', 0), ('state', 'in', ['draft','sent_approve'])]}"
                                    widget="float_time"/>
                             <field name="remaining_hour_view" widget="float_time"
-                                   attrs="{'invisible':[('state', 'in', ['to_approve','approve','rejected','paid'])]}"/>
+                                   attrs="{'invisible':[('state', 'in', ['to_approve','approve','rejected','register_payment','paid'])]}"/>
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours'-->
                             <!--                                   attrs="{'visible':[('total_remaining_hour', '&gt;', 0)]}"/>-->
                             <!--                            <field name="total_remaining_hour" string='Balance standard hours' style="color:Red;"-->
