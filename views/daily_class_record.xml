@@ -114,8 +114,8 @@
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}" options="{'no_create': True}"/>
                             <field name="month_of_record"
                                    attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
-                            <field name="over_time_check" invisible="1"/>
-                            <field name="over_time" invisible="1"/>
+                            <field name="over_time_check" />
+                            <field name="over_time" />
                             <field name="activity_done_coordinator" invisible="1"/>
                             <field name="groups_id" invisible="1"/>
                             <field name="coordinator_head" string="Assign to Head" attrs="{'readonly':[('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>

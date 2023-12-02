@@ -318,7 +318,7 @@ class DailyClassRecord(models.Model):
                 net_hour = self.env['daily.class.record'].sudo().search([])
                 for j in net_hour:
                     if self.faculty_id == j.faculty_id and self.branch_name == j.branch_name and self.class_room == j.class_room and self.subject_id == j.subject_id and self.course_id == j.course_id:
-                        if j.state in 'to_approve' or j.state in 'approve' or j.state in 'sent_approve' or j.state in 'paid':
+                        if j.state in 'to_approve' or j.state in 'approve' or j.state in 'sent_approve' or j.state in 'register_payment' or j.state in 'paid':
                             total += j.total_duration_sum
                 var.append(total)
                 aa = self.standard_hour - total

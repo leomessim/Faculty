@@ -60,6 +60,8 @@ faculty_pay_academic,daily_payment,model_payment_total,group_faculty_administrat
 faculty__coo,record,model_record_data,group_faculty_user,1,1,1,0
 faculty_hr,daily_payment,model_payment_total,group_hr,1,0,0,0
 faculty_hr_coord,daily_payment,model_payment_total,coordinator_user,1,1,1,0
+faculty_pay,daily_payment,model_payment_total,group_faculty_user,1,1,1,0
+
 faculty_changed,daily_payment,model_changed_standard_hours,coordinator_user,1,1,1,1
 faculty_changed_head,daily_payment,model_changed_standard_hours,group_faculty_administrator,0,1,1,1
 faculty_changed_acc,daily_payment,model_changed_standard_hours,group_accounting_manager,1,1,1,1
@@ -83,7 +85,5 @@ access_youtube_faculty,access_faculty,model_faculty_details,faculty.youtube_facu
 faculty_youtube_record_hr,daily_record_acc,model_youtube_daily_records,group_hr,1,1,1,1
 youtube_daily_record_hr,daily_record_acc,model_youtube_class_record,group_hr,1,1,1,1
 daily_record_hr,daily_record_hr,model_daily_class_record,group_hr,1,0,0,0
-
-
 
 
