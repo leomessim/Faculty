@@ -141,7 +141,7 @@
                             <field name="standard_hours" widget="float_time"/>
                             <field name="class_hours_till" widget="float_time"/>
 
-                            <field name="extra_hr_testing" string="Extra Hour Excluding"/>
+                            <field name="extra_hr_testing" string="Extra Hour Excluding" invisible="1"/>
                             <field name="correct_remaining_hours" widget="float_time"/>
                             <field name="extra_charge"
                                    attrs="{'readonly':[('state','in',['pay_list','pay','draft'])]}"/>
