@@ -226,7 +226,7 @@
             <field name="report_name">faculty.faculty_payment_template</field>
             <field name="report_file">faculty.faculty_payment_template</field>
             <field name="paperformat_id" ref="faculty.pdf_logic_faculty_paper_format"/>
-            <field name="print_report_name">'Payment slip - %s' % (object.name)</field>
+            <field name="print_report_name">'Payment slip - %s' % ('Faculty')</field>
             <field name="binding_model_id" ref="model_payment_total"/>
         </record>
 
