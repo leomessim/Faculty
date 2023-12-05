@@ -5,7 +5,7 @@ class FacultyDetails(models.Model):
     _name = "faculty.details"
     _inherit = 'mail.thread'
 
-    name = fields.Many2one('res.users', domain=['|', ('faculty_check', '=', True), ('youtube_faculty', '=', True)], string="Name")
+    name = fields.Many2one('res.users', domain=['|',('faculty_check', '=', True), ('youtube_faculty', '=', True)], string="Name")
     qualification = fields.Char(string="Qualification")
     exp = fields.Char(string="Experience")
     course = fields.Many2many('courses.details', string="Courses")
