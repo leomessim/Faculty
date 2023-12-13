@@ -9,15 +9,16 @@
                 <form string="Class">
                     <header>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
-<!--                        <button name="add_subject" class="oe_highlight" states="draft" string="Add Subject"-->
-<!--                                type="object"/>-->
+                        <button name="action_check_count" type="object" icon="fa-plus-circle" string="Check Count"/>
+
                     </header>
                     <sheet>
                         <group>
                             <group>
                                 <field name="name"/>
-<!--                                <field name="department"/>-->
-                                <field name="subject_ids" widget="many2many_tags" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                                <field name="used_count"/>
+                                <field name="subject_ids" widget="many2many_tags"
+                                       attrs="{'invisible': [('state', '=', 'draft')]}"/>
                             </group>
                         </group>
                     </sheet>
@@ -36,7 +37,7 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
-<!--                    <field name="department"/>-->
+                    <!--                    <field name="department"/>-->
 
                 </tree>
             </field>
