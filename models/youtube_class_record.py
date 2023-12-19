@@ -47,7 +47,7 @@ class YoutubeClassRecord(models.Model):
         for i in self:
             for user_id in users:
                 i.activity_schedule('faculty.mail_for_youtube_activity', user_id=user_id.id,
-                                    note=f'{i.faculty_id.name}  YouTube class records have been added. Please approve.')
+                                    note=f'{i.faculty_id.name.name} YouTube class records have been added. Please approve.')
         self.write({'state': 'hr_approval'})
 
     def action_hr_approve(self):
