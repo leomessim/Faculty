@@ -47,22 +47,27 @@
                     <button name="confirm_record" class="oe_highlight" string="Confirm"
                             type="object"
                             groups="faculty.coordinator_user"
-                            attrs="{'invisible':['|',('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
+                            attrs="{'invisible':['|','|',('change_faculty_boolean', '=', True),('state', '!=', 'draft'), ('is_this_record_locked', '=', True)]}"/>
                     <button name="action_activity_cancel" string="Done" type="object" groups="faculty.coordinator_user"
                             attrs="{'invisible':['|', ('activity_done_coordinator', '=', True), ('state', '!=', 'rejected')]}"
                             style="background-color: #fc7349;"/>
-                    <button name="sent_to_approval" states="sent_approve" string="Sent to Approval" type="object"
-                            class="oe_highlight" groups="faculty.coordinator_user"/>
-                    <button name="reset_to_draft" states="sent_approve,to_approve" string="Reset to Draft"
-                            type="object" groups="faculty.coordinator_user"/>
+                    <button name="sent_to_approval" string="Sent to Approval" type="object"
+                            class="oe_highlight" groups="faculty.coordinator_user"
+                            attrs="{'invisible':['|',('is_this_record_locked', '=', True),('state', '!=', 'sent_approve')]}"/>
+                    <button name="reset_to_draft" string="Reset to Draft"
+                            type="object" groups="faculty.coordinator_user"
+                            attrs="{'invisible':['|',('is_this_record_locked', '=', True),('state', 'not in', ['sent_approve','to_approve'])]}"/>
                     <button name="faculty_change_done" string="Done"
                             type="object" attrs="{'invisible':[('change_faculty_boolean', '=', False)]}"/>
 
-                    <button name="head_approve" class="oe_highlight" states="to_approve" string="Approve"
+                    <button name="head_approve" class="oe_highlight" string="Approve"
                             type="object"
-                            groups="faculty.group_faculty_administrator"/>
-                    <button name="rejected" style="background-color:#db3814" states="to_approve" string="Reject" type="object"
-                            groups="faculty.group_faculty_administrator"/>
+                            groups="faculty.group_faculty_administrator"
+                            attrs="{'invisible':['|',('is_this_record_locked', '=', True),('state', 'not in', ['to_approve'])]}"/>
+                    <button name="rejected" style="background-color:#db3814" string="Reject"
+                            type="object"
+                            groups="faculty.group_faculty_administrator"
+                            attrs="{'invisible':['|',('is_this_record_locked', '=', True),('state', 'not in', ['to_approve'])]}"/>
                     <button name="refresh_record"
                             help="Please click on the Refresh button provided below to update the record. Once you do that, you'll be able to view and verify the correct hours."
                             string="Refresh" type="object"
@@ -71,7 +76,7 @@
                     <button name="change_faculty" string="Change Faculty"
                             type="object"
                             groups="faculty.coordinator_user"
-                            attrs="{'invisible':['|',('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
+                            attrs="{'invisible':['|','|',('is_this_record_locked', '=', True),('change_faculty_boolean', '=', True),('state', '!=', 'draft')]}"/>
                     <button name="faculty_change_cancel" string="Cancel" type="object"
                             groups="faculty.coordinator_user"
                             attrs="{'invisible':[('change_faculty_boolean', '=', False)]}"/>
@@ -100,25 +105,31 @@
                             attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'paid','register_payment'])]}"/>
                     <group>
                         <group>
+                            <field name="is_this_record_locked" groups="base.group_no_one"/>
+                            <field name="is_this_current_month_record" groups="base.group_no_one"/>
                             <field name="change_faculty_boolean" invisible="1"/>
                             <!--                            <field name="old_faculty"-->
                             <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)], 'required':[('change_faculty_boolean','=',True)]}"/>-->
                             <field name="new_faculty"
-                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}" options="{'no_create': True}"/>
+                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"
+                                   options="{'no_create': True}"/>
                             <!--                            <field name="old_faculty_class_time"-->
                             <!--                                   attrs="{'invisible':[('change_faculty_boolean','=',False)]}"/>-->
                             <field name="coordinator" invisible="1"/>
                             <field name="faculty_id"
-                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}" options="{'no_create': True}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"
+                                   options="{'no_create': True}"/>
                             <field name="branch_name"
-                                   attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}" options="{'no_create': True}"/>
+                                   attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"
+                                   options="{'no_create': True}"/>
                             <field name="month_of_record"
                                    attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="over_time_check" invisible="1"/>
                             <field name="over_time" invisible="1"/>
                             <field name="activity_done_coordinator" invisible="1"/>
                             <field name="groups_id" invisible="1"/>
-                            <field name="coordinator_head" string="Assign to Head" attrs="{'readonly':[('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
+                            <field name="coordinator_head" string="Assign to Head"
+                                   attrs="{'readonly':[('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                         </group>
                         <group>
                             <field name="make_visible" invisible="1"/>
@@ -272,7 +283,8 @@
                 <field name="total_duration_sum" widget="float_time"/>
                 <field name="total_remaining_hour" widget="float_time"/>
                 <field name="state" widget="badge" decoration-success="state == 'paid'"
-                       decoration-info="state == 'approve'" decoration-primary="state == 'register_payment'" decoration-danger="state == 'rejected'"/>
+                       decoration-info="state == 'approve'" decoration-primary="state == 'register_payment'"
+                       decoration-danger="state == 'rejected'"/>
             </tree>
         </field>
     </record>

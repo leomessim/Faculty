@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <menuitem name="Configuration"
+              id="faculty_configuration_menu"
+              parent="menu_faculty"
+              action="faculty_details_view_form"
+              groups="base.group_no_one"
+              sequence="12"/>
+<!--              action="model_logic_recruitment_action"-->
+
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="faculty_record_lock_day_form_view" model="ir.ui.view">
+        <field name="name">Faculty Record Lock Day</field>
+        <field name="model">faculty.daily.record.lock.date</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Faculty Lock Day">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="lock_day"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="faculty_record_lock_day_list_view" model="ir.ui.view">
+        <field name="name">Faculty Record Lock Day</field>
+        <field name="model">faculty.daily.record.lock.date</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="lock_day"/>
+            </tree>
+
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="faculty_record_lock_day_action">
+        <field name="name">Faculty Record Lock Day</field>
+        <field name="res_model">faculty.daily.record.lock.date</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Faculty Record Lock Day" id="faculty_record_lock_day_main_menu"
+              action="faculty_record_lock_day_action"
+              parent="faculty_configuration_menu"
+              sequence="1"/>
+
+
+</odoo>

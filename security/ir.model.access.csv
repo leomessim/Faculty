@@ -86,4 +86,5 @@ faculty_youtube_record_hr,daily_record_acc,model_youtube_daily_records,group_hr,
 youtube_daily_record_hr,daily_record_acc,model_youtube_class_record,group_hr,1,1,1,1
 daily_record_hr,daily_record_hr,model_daily_class_record,group_hr,1,0,0,0
 
+daily_record_lock_day,daily_record_day,model_faculty_daily_record_lock_date,,1,1,1,1
 

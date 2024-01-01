@@ -23,6 +23,8 @@
         'data/activity.xml',
         'views/youtube_fac_rate.xml',
         'views/youtube_class_record.xml',
+        'views/configuration.xml',
+        'views/lock_day.xml',
 
     ],
     'demo': [],
