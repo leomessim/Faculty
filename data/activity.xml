@@ -18,4 +18,16 @@
         <field name="state">code</field>
         <field name="code">action = records.add_empty_coordinator_head_fields()</field>
     </record>
+
+    <record id="cron_job_for_faculty_record_lock" model="ir.cron">
+        <field name="name">Record Locking</field>
+        <field name="model_id" ref="model_daily_class_record"/>
+        <field name="state">code</field>
+        <field name="code">model.action_cron_locking_record()</field>
+        <field name="active" eval="True"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+    </record>
 </odoo>
