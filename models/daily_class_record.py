@@ -158,7 +158,7 @@ class DailyClassRecord(models.Model):
         # print(lock_day.lock_day, 'lock day')
         rec = self.env['daily.class.record'].sudo().search([])
         for record in rec:
-            print(record.month_of_record, 'rec month')
+            # print(record.month_of_record, 'rec month')
             if record.month_of_record:
                 if record.month_of_record == 'january':
                     if current_date.month == 1:
@@ -230,6 +230,9 @@ class DailyClassRecord(models.Model):
                     record.is_this_record_locked = False
             else:
                 record.is_this_record_locked = False
+
+    def action_unlock_daily_record(self):
+        self.is_this_record_locked = False
 
     coordinator_head = fields.Many2one('res.users', domain="[('groups_id', 'in', [groups_id])]",
                                        default=lambda self: self.env.user.employee_id.parent_id.user_id.id,

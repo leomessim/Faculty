@@ -6,6 +6,9 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Faculty Lock Day">
+                <header>
+                    <button name="action_cron_locking_record_manual" string="Lock" type="object" icon="fa-lock"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
