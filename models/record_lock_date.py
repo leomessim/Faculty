@@ -94,3 +94,9 @@ class FacultyDailyRecordLockDate(models.Model):
             else:
                 record.is_this_record_locked = False
 
+    def action_all_record_unlocking(self):
+        record = self.env['daily.class.record'].sudo().search([])
+        for rec in record:
+            if rec.is_this_record_locked == True:
+                rec.is_this_record_locked = False
+

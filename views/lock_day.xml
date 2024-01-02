@@ -46,5 +46,14 @@
               parent="faculty_configuration_menu"
               sequence="1"/>
 
+    <record id="server_action_for_unlock_faculty_record" model="ir.actions.server">
+        <field name="name">Unlock Faculty Records</field>
+        <field name="model_id" ref="faculty.model_faculty_daily_record_lock_date"/>
+        <field name="binding_model_id" ref="faculty.model_faculty_daily_record_lock_date"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_all_record_unlocking()</field>
+    </record>
+
 
 </odoo>
