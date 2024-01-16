@@ -30,4 +30,13 @@
         <field name="numbercall">-1</field>
         <field name="doall" eval="False"/>
     </record>
+
+    <record id="action_unlock_records" model="ir.actions.server">
+        <field name="name">UnLock Records</field>
+        <field name="model_id" ref="faculty.model_daily_class_record"/>
+        <field name="binding_model_id" ref="faculty.model_daily_class_record"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_all_record_unlocking()</field>
+    </record>
 </odoo>

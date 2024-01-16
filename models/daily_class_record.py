@@ -234,6 +234,11 @@ class DailyClassRecord(models.Model):
     def action_unlock_daily_record(self):
         self.is_this_record_locked = False
 
+    def action_all_record_unlocking(self):
+        rec = self.env['daily.class.record'].sudo().search([])
+        for record in rec:
+            record.is_this_record_locked = False
+
     coordinator_head = fields.Many2one('res.users', domain="[('groups_id', 'in', [groups_id])]",
                                        default=lambda self: self.env.user.employee_id.parent_id.user_id.id,
                                        ondelete='restrict', required=True)
