@@ -485,10 +485,7 @@ class DailyClassRecord(models.Model):
     def head_approve(self):
         print(self.coordinator.employee_id.parent_id.user_id.id, 'employee')
         print(self.env.user, 'user')
-        if not self.coordinator.employee_id.parent_id.user_id.id == self.env.user.id:
-            raise UserError('Coordinator manager approve button')
-        #
-        else:
+        if self.coordinator.employee_id.parent_id.user_id.id == self.env.user.id or self.env.user.id == self.coordinator_head.id:
             if self.over_time_check == True:
                 total = 0
                 var = []
@@ -619,6 +616,9 @@ class DailyClassRecord(models.Model):
                 )
 
             # self.state = 'approve'
+        #
+        else:
+            raise UserError('Coordinator manager approve button')
 
     def compute_count(self):
         for record in self:
