@@ -105,6 +105,10 @@
                             attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'rejected','paid'])]}"/>
                     <widget name="web_ribbon" text="Rejected" bg_color="bg-danger"
                             attrs="{'invisible':[('state', 'in', ['draft','sent_approve', 'to_approve', 'approve', 'paid','register_payment'])]}"/>
+<!--                    <widget name="web_ribbon" title="Locked" bg_color="bg-danger"-->
+<!--                            attrs="{'invisible': [('is_this_record_locked', '!=', True)]}"/>-->
+                    <h2 align="center" style="color:red;" attrs="{'invisible':[('is_this_record_locked', '!=', True)]}">This record is locked</h2>
+
                     <group>
                         <group>
                             <field name="is_this_record_locked" groups="base.group_no_one"/>
