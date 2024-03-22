@@ -302,25 +302,25 @@ class DailyClassRecord(models.Model):
     standard_hour = fields.Float(string='Standard Hour', compute='compute_standard_hour_taken', store=True)
 
     def sent_to_approval(self):
-        duration = self.env['daily.class.record'].sudo().search([])
-        total = 0
-        for i in duration:
-            if self.faculty_id == i.faculty_id and self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
-                if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'register_payment':
-                    total += i.total_duration_sum
-                    self.class_hour_till_now = total
+        # duration = self.env['daily.class.record'].sudo().search([])
+        # total = 0
+        # for i in duration:
+        #     if self.faculty_id == i.faculty_id and self.branch_name == i.branch_name and self.class_room == i.class_room and self.subject_id == i.subject_id and self.course_id == i.course_id:
+        #         if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'register_payment':
+        #             total += i.total_duration_sum
+        self.class_hour_till_now = self.class_till_view
             # else:
             #     self.class_hour_till_now = 0
         self.state = 'to_approve'
-        net_hour = self.env['daily.class.record'].sudo().search([])
-        total_rem = 0
-        for jj in net_hour:
-            if self.faculty_id == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
-                if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid' or jj.state in 'register_payment':
-                    total_rem += jj.total_duration_sum
-            aa = self.standard_hour - total_rem
+        # net_hour = self.env['daily.class.record'].sudo().search([])
+        # total_rem = 0
+        # for jj in net_hour:
+        #     if self.faculty_id == jj.faculty_id and self.branch_name == jj.branch_name and self.class_room == jj.class_room and self.course_id == jj.course_id and self.subject_id == jj.subject_id:
+        #         if jj.state in 'to_approve' or jj.state in 'approve' or jj.state in 'sent_approve' or jj.state in 'paid' or jj.state in 'register_payment':
+        #             total_rem += jj.total_duration_sum
+        #     aa = self.standard_hour - total_rem
 
-            self.total_remaining_hour = aa
+        self.total_remaining_hour = self.remaining_hour_view
 
         # fac = self.env['faculty.details'].search([])
         # for faculty in fac:
