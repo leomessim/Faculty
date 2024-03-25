@@ -138,9 +138,12 @@ class DailyClassRecord(models.Model):
         current_day = current_date.day
         print(current_day, 'current day')
         print(lock_day.lock_day, 'lock day')
-        if self.is_this_current_month_record == False:
-            if current_day > lock_day.lock_day:
-                self.is_this_record_locked = True
+        if self.month_of_record:
+            if self.is_this_current_month_record == False:
+                if current_day > lock_day.lock_day:
+                    self.is_this_record_locked = True
+                else:
+                    self.is_this_record_locked = False
             else:
                 self.is_this_record_locked = False
         else:
