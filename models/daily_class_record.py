@@ -49,6 +49,21 @@ class DailyClassRecord(models.Model):
     is_this_record_locked = fields.Boolean('Is this record locked?')
     groups_id = fields.Many2one('res.groups', string='Groups',
                                 default=lambda self: self.env.ref('faculty.group_faculty_administrator').id)
+    record_year = fields.Char(string='Year', compute='year_only', store=True)
+
+    @api.depends('create_date')
+    def year_only(self):
+        if self.create_date:
+            print(self.create_date.year, 'year')
+            self.record_year = self.create_date.year
+
+    def action_bulk_record_add_year(self):
+        rec = self.env['daily.class.record'].sudo().search([])
+        for i in rec:
+            if i.create_date:
+                i.record_year = i.create_date.year
+
+
 
     # def _academic_heads(self):
     #     users_obj = self.env['res.users'].search([])
