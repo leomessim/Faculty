@@ -53,9 +53,9 @@ class DailyClassRecord(models.Model):
 
     @api.depends('create_date')
     def year_only(self):
-        if self.create_date:
-            print(self.create_date.year, 'year')
-            self.record_year = self.create_date.year
+        for i in self:
+            if i.create_date:
+                i.record_year = i.create_date.year
 
     def action_bulk_record_add_year(self):
         rec = self.env['daily.class.record'].sudo().search([])
