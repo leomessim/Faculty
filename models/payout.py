@@ -214,6 +214,7 @@ class PaymentDetailsTree(models.Model):
     break_time = fields.Float(string='Break time')
     topic = fields.Char(string='Topic')
     date = fields.Date(string='Date')
+    upaya_class = fields.Boolean(string='Upaya Class')
     payment_details_id = fields.Many2one('payment.total', string='Payments record', ondelete='cascade')
     net_hour = fields.Float(string='Net hour')
     balance = fields.Float(string='Amount')

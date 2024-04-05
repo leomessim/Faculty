@@ -381,7 +381,8 @@ class DailyClassRecord(models.Model):
         """
         total = 0
         for order in self.record_ids:
-            total += order.net_hour
+            if order.upaya_class == False:
+                total += order.net_hour
         self.update({
             'total_duration_sum': total,
         })
@@ -537,6 +538,7 @@ class DailyClassRecord(models.Model):
                         'balance': rec.balance,
                         'net_hour': rec.net_hour,
                         'topic': rec.topic,
+                        'upaya_class': rec.upaya_class
                     }
                     abc.append((0, 0, res_list))
                 record = self.env['payment.total'].create({
@@ -604,6 +606,7 @@ class DailyClassRecord(models.Model):
                         'balance': rec.balance,
                         'net_hour': rec.net_hour,
                         'topic': rec.topic,
+                        'upaya_class': rec.upaya_class
                     }
                     abc.append((0, 0, res_list))
                 record = self.env['payment.total'].create({
@@ -895,6 +898,7 @@ class RecordData(models.Model):
     break_reason = fields.Char(string='Break reason')
     break_time = fields.Float(string='Break Time', widget='time')
     topic = fields.Char(string='Topic')
+    upaya_class = fields.Boolean(string='Upaya Class', help="When selecting the 'Upaya' class, the hour will be excluded from standard hour calculations, extra hour calculations, and similar computations.")
     date = fields.Date(string='Date', default=fields.Date.today)
     remaining_hours = fields.Float('Remaining hours')
 

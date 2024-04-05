@@ -124,6 +124,7 @@
                                     <field name="topic"/>
                                     <field name="net_hour" widget="float_time"/>
                                     <field name="balance" invisible="1"/>
+                                    <field name="upaya_class"/>
                                 </tree>
                             </field>
                             <!--                                <field name="total_amount" widget="monetary"/>-->
