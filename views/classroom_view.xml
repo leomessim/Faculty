@@ -8,17 +8,17 @@
             <field name="arch" type="xml">
                 <form string="Class">
                     <header>
-                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
-                        <button name="action_check_count" type="object" icon="fa-plus-circle" string="Check Count"/>
+<!--                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>-->
+<!--                        <button name="action_check_count" type="object" icon="fa-plus-circle" string="Check Count"/>-->
 
                     </header>
                     <sheet>
                         <group>
                             <group>
                                 <field name="name"/>
-                                <field name="used_count"/>
-                                <field name="subject_ids" widget="many2many_tags"
-                                       attrs="{'invisible': [('state', '=', 'draft')]}"/>
+<!--                                <field name="used_count"/>-->
+<!--                                <field name="subject_ids" widget="many2many_tags"-->
+<!--                                       attrs="{'invisible': [('state', '=', 'draft')]}"/>-->
                             </group>
                         </group>
                     </sheet>

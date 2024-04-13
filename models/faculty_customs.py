@@ -85,21 +85,16 @@ class Courses(models.Model):
     name = fields.Char(string='Course Name', required=True)
     subject_ids = fields.Many2many('subject.details', string='Subject', ondelete='restrict')
     # department = fields.Many2one('primary.department', string='Primary department', required=True)
-    state = fields.Selection(selection=[
-        ('draft', 'Draft'),
-        ('confirm', 'Confirm'),
-        ('done', 'Done'),
-    ], string='Status', required=True, readonly=True, copy=False,
-        tracking=True, default='draft')
+
     current_id = fields.Integer()
     used_count = fields.Integer()
 
-    def action_check_count(self):
-        rec = self.env['daily.class.record'].sudo().search_count([('course_id', '=', self.id)])
-        for j in self:
-            j.used_count = rec
-
-        print(rec, "count")
+    # def action_check_count(self):
+    #     rec = self.env['daily.class.record'].sudo().search_count([('course_id', '=', self.id)])
+    #     for j in self:
+    #         j.used_count = rec
+    #
+    #     print(rec, "count")
 
     def add_subject(self):
         # self.state = 'confirm'
@@ -124,12 +119,12 @@ class SubjectDetails(models.Model):
     course_sub_id = fields.Many2one('courses.details', string='Course', required=True)
     old_ids = fields.One2many('old.standard.hours', 'old_id', compute='old_standard_hr', store=True)
     change_faculty = fields.Boolean()
-    used_count = fields.Integer()
+    # used_count = fields.Integer()
 
-    def action_check_count(self):
-        rec = self.env['daily.class.record'].sudo().search_count([('subject_id', '=', self.id)])
-        self.used_count = rec
-        print(rec, "count")
+    # def action_check_count(self):
+    #     rec = self.env['daily.class.record'].sudo().search_count([('subject_id', '=', self.id)])
+    #     self.used_count = rec
+    #     print(rec, "count")
 
     # @api.model
     # def create(self, vals):

@@ -171,16 +171,16 @@
             <field name="model">subject.details</field>
             <field name="arch" type="xml">
                 <form>
-                    <header>
-                        <button name="action_check_count" type="object" icon="fa-plus-circle" string="Check Count" groups="base.group_no_one"/>
-                    </header>
+<!--                    <header>-->
+<!--                        <button name="action_check_count" type="object" icon="fa-plus-circle" string="Check Count" groups="base.group_no_one"/>-->
+<!--                    </header>-->
                     <sheet>
                         <group>
                             <group>
                                 <field name="name"/>
                                 <field name="course_sub_id"/>
                                 <field name="stnd_hr" widget="float_time"/>
-                                <field name="used_count" groups="base.group_no_one"/>
+<!--                                <field name="used_count" groups="base.group_no_one"/>-->
                             </group>
 
                         </group>
