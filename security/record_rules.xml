@@ -5,7 +5,7 @@
         <record id="coordinator_remove_delete_access" model="ir.rule">
             <field name="name">Only see some states</field>
             <field name="model_id" ref="model_daily_class_record"/>
-            <field name="domain_force">['&amp;',('state', 'in', ['paid','approve','to_approve','rejected','register_payment']), ('coordinator_head', '=', user.id)]</field>
+            <field name="domain_force">['&amp;',('state', 'in', ['paid','approve','to_approve','rejected','register_payment','draft','sent_approve']), ('coordinator_head', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('faculty.group_faculty_administrator'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

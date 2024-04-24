@@ -158,7 +158,7 @@
                                     <field name="email_address"/>
                                 </div>
                                 <div class="oe_kanban_bottom_left text-muted">
-                                    <field name="course" widget="many2many_tags"/>
+                                    <field name="course" widget="many2many_kanban"/>
                                 </div>
                             </div>
                         </t>
