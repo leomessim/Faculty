@@ -27,8 +27,9 @@ class FacultySalary(models.Model):
 
     name = fields.Many2one('faculty.details', string='Faculty', required=True)
     salary_per_hr = fields.Float(string='Salary per hour', required=True)
-    course_id = fields.Many2one('courses.details', string='Course',required=True)
-    subject_id = fields.Many2one('subject.details', domain="[('course_sub_id', '=', course_id)]", string='Subject', required=True)
+    course_id = fields.Many2one('courses.details', string='Course', required=True)
+    subject_id = fields.Many2one('subject.details', domain="[('course_sub_id', '=', course_id)]", string='Subject',
+                                 required=True)
     currency_id = fields.Many2one('res.currency', string='Currency', required=True,
                                   default=lambda self: self.env.user.company_id.currency_id)
     # name = fields.Char(string='hhhi')
@@ -280,6 +281,8 @@ class PaymentTotal(models.Model):
     extra_hour_reason = fields.Text()
     report_file = fields.Binary()
     current_date = fields.Date()
+
+
 
     @api.depends('remaining_hours', 'total_duration_sum')
     def _compute_set_remaining(self):
@@ -592,6 +595,50 @@ class PaymentTotal(models.Model):
                     rec.state = 'paid'
             #     rec.state = 'paid'
         print(records, 'records')
+
+    def action_print_faculty_pay_slip(self):
+        print('kool')
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'faculty.model_payout_wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'name': 'PaySlip',
+            'context': {'default_faculty_id': self.faculty_id.id}
+
+        }
+
+
+class FacultyPaySlipWizard(models.TransientModel):
+    _name = 'faculty.model_payout_wizard'
+
+    faculty_id = fields.Many2one('faculty.details', 'Name', required=1)
+    hourly_rate = fields.Float(string='Hourly Rate', required=1)
+    year = fields.Char(string='Year', required=1)
+    charges = fields.Float(string='Charges', required=1)
+    less_tds = fields.Float(string='Less TDS', compute='_compute_less_amount', store=True)
+    total = fields.Float(string='Total', compute='_compute_deducted_charges', store=True)
+    date = fields.Date(string='Date', default=fields.Date.context_today)
+    hr_manger = fields.Many2one('res.users', string='HR Manager', default=lambda self: self.env.user)
+    company_id = fields.Many2one('res.company', string='Company', default=lambda self: self.env.user.company_id)
+    currency_id = fields.Many2one('res.currency', string='Currency', required=True, default=lambda self: self.env.user.company_id.currency_id.id)
+    month = fields.Selection(
+        [('January', 'January'), ('February', 'February'), ('March', 'March'), ('April', 'April'), ('May', 'May'), ('June', 'June'),
+         ('July', 'July'), ('August', 'August'), ('September', 'September'), ('October', 'October'), ('November', 'November'), ('December', 'December')], 'Month', required=1)
+
+    @api.depends('charges')
+    def _compute_deducted_charges(self):
+        for record in self:
+            record.total = record.charges * 0.90
+
+    @api.depends('charges')
+    def _compute_less_amount(self):
+        for record in self:
+            record.less_tds = record.charges - record.total
+
+    def print_sample_report(self):
+        return self.env.ref(
+            'faculty.faculty_pay_slip_report').report_action(self)
 
 
 class RejectReason(models.TransientModel):

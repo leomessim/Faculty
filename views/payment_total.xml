@@ -8,19 +8,20 @@
             <form>
                 <header>
                     <field name="state" widget="statusbar"/>
-                    <!--                    <button-->
-                    <!--                            name="generate_pdf_report"-->
-                    <!--                            string="Generate PDF Report"-->
-                    <!--                            type="object"-->
-                    <!--                            class="oe_highlight"-->
-                    <!--                    />-->
+                    <button
+                            name="action_print_faculty_pay_slip"
+                            string="Print PaySlip"
+                            type="object"
+                            class="oe_highlight"
+                            groups="faculty.group_hr"
+                    />
                     <button name='confirm_payment' class="oe_highlight" states="draft" string="Confirm"
-                            type="object"/>
+                            type="object" groups="faculty.group_accounting_manager"/>
                     <button name='%(payout_model_wizard_action)d' class="oe_highlight" string="Pay now" states="pay"
-                            type="action"/>
+                            type="action" groups="faculty.group_accounting_manager"/>
                     <button name='refresh' string="Refresh" states="draft"
-                            type="object"/>
-                    <button name="reject_button" string="Reject" type="object" states="draft,pay"/>
+                            type="object" groups="faculty.group_accounting_manager"/>
+                    <button name="reject_button" string="Reject" type="object" states="draft,pay" groups="faculty.group_accounting_manager"/>
                 </header>
                 <sheet>
                     <!--                    <div class="oe_button_box" name="button_box">-->
@@ -232,7 +233,8 @@
 
                 <!--                <field name="remaining_hours"/>-->
                 <field name="amount_pay_now" sum="Total" widget="monetary"/>
-                <field name="state" widget="badge" decoration-success="state == 'pay_list'" decoration-info="state == 'confirmed'" decoration-danger="state == 'rejected'"/>
+                <field name="state" widget="badge" decoration-success="state == 'pay_list'"
+                       decoration-info="state == 'confirmed'" decoration-danger="state == 'rejected'"/>
             </tree>
         </field>
     </record>
@@ -252,6 +254,6 @@
             name="Payment Details"
             parent="menu_payment"
             action="faculty_payment_form"
-            groups="faculty.group_accounting_manager"
+            groups="faculty.group_accounting_manager,faculty.group_hr"
             sequence="2"/>
 </odoo>

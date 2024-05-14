@@ -25,6 +25,7 @@
         'views/youtube_class_record.xml',
         'views/configuration.xml',
         'views/lock_day.xml',
+        'views/faculty_payslip.xml',
 
     ],
     'demo': [],

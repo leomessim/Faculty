@@ -88,3 +88,6 @@ daily_record_hr,daily_record_hr,model_daily_class_record,group_hr,1,0,0,0
 
 daily_record_lock_day,daily_record_day,model_faculty_daily_record_lock_date,,1,1,1,1
 
+faculty_payslip_wizard,faculty_payslip_wizard,model_faculty_model_payout_wizard,,1,1,1,1
+faculty_payment_details_hr,record,model_payment_details_tree,group_hr,1,1,1,1
+

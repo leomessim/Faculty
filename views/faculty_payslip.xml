@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="payslip_faculty_form_view" model="ir.ui.view">
+        <field name="name">PaySlip</field>
+        <field name="model">faculty.model_payout_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register Payment">
+                <group>
+                    <group>
+                        <field name="faculty_id"/>
+                        <field name="hr_manger" string="HR Manager"/>
+                        <field name="hourly_rate" widget="monetary"/>
+                        <label for="month" string="Date"/>
+                        <div class="o_row">
+                            <field name="month" placeholder="Month"/>
+                            <field name="year" placeholder="Year"/>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="charges" widget="monetary"/>
+                        <field name="less_tds" widget="monetary"/>
+                        <field name="total" widget="monetary"/>
+                        <field name="currency_id" invisible="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="print_sample_report" string="PaySlip" type="object" class="oe_highlight"/>
+                    <button string="Discard" type="object" special='cancel'/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="faculty_pay_slip_report" model="ir.actions.report">
+        <field name="name">PaySlip</field>
+        <field name="model">faculty.model_payout_wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">faculty.faculty_pay_slip_report_template</field>
+        <field name="binding_model_id" ref="model_faculty_model_payout_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="faculty_pay_slip_report_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <link href="https://fonts.googleapis.com/css2?family=Tinos" rel="stylesheet"/>
+                        <style>
+                            p {
+                            font-size: 18px;
+                            font-family: "Tinos", serif;
+                            }
+                            h1 {
+                            font-family: "Tinos", serif;
+                            }
+                            table {
+                            border-collapse: collapse;
+                            width: 100%;
+                            font-family: "Tinos", serif;
+                            }
+
+                            td, th {
+                            font-size: 18px;
+                            border: 1px solid #0a0a0a;
+                            text-align: left;
+                            padding: 4px;
+                            font-family: "Tinos", serif;
+                            }
+                        </style>
+                        <p class="oe_left" t-field="doc.date"/>
+                        <br/>
+                        <br/>
+                        <div class="text-middle" style="text-align:center;">
+                            <u>
+                                <h1>
+                                    <b>To Whom-so-ever It May Concern</b>
+                                </h1>
+                                <br/>
+                            </u>
+
+                        </div>
+                        <div>
+                            <p>This is to certify that Mr.
+                                <t t-esc="doc.faculty_id.name.name"/>
+                                , is currently working as Faculty in our Institution on hourly basis with our entire
+                                satisfaction. His hourly rate payment is Rs
+                                <t t-esc="doc.hourly_rate"/>
+                                /- per hour. During this period, we found him to be a sincere, honest, hardworking and
+                                dedicated person with a professional attitude and very good job knowledge.
+                                <br/>
+                                <p>This is issued upon his request.</p>
+                            </p>
+                        </div>
+                        <br/>
+                        <br/>
+                        <div>
+                            <h2 align="center">
+                                <b>
+                                    <u>
+                                        <t t-esc="doc.month"/>
+                                        <t t-esc="doc.year"/>
+                                    </u>
+                                </b>
+                            </h2>
+                        </div>
+                        <br/>
+                        <br/>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span>CHARGES
+                                            <!--                                            <span t-field="o.employee_id"/>-->
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.charges"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>LESS: TDS
+                                            <!--                                            <span t-field="o.joining_date"/>-->
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.less_tds"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>TOTAL
+                                            <!--                                            <span t-field="o.employee_code"/>-->
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span t-field="doc.total"/>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <br/>
+                        <br/>
+                        <br/><div>
+                        <p>For Logic Management Training Institutes Pvt. Ltd</p>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p><t t-esc="doc.hr_manger.name" /></p>
+                        <p>HR Manager</p>
+                    </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
