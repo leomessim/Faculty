@@ -604,7 +604,10 @@ class PaymentTotal(models.Model):
             'view_mode': 'form',
             'target': 'new',
             'name': 'PaySlip',
-            'context': {'default_faculty_id': self.faculty_id.id}
+            'context': {'default_faculty_id': self.faculty_id.id,
+                        'default_charges': self.advance_ded_total,
+                        'default_hourly_rate': self.rate_of_sub,
+                        }
 
         }
 
