@@ -243,38 +243,39 @@ class DailyClassRecord(models.Model):
         for record in rec:
             record.is_this_record_locked = False
 
-    coordinator_head = fields.Many2one('res.users', domain="[('groups_id', 'in', [groups_id])]",
-                                       default=lambda self: self.env.user.employee_id.branch_id.branch_head.id,
-                                       ondelete='restrict', required=True)
-    branch_id = fields.Many2one('logic.base.branches', string='Custom Branch')
+    coordinator_head = fields.Many2one('res.users',
+                                       required=True)
+    branch_id = fields.Many2one('logic.base.branches', string='Heads Branch', compute='_compute_branch_name', store=True, readonly=0)
 
-    def server_action_for_change_branch_student_to_base(self):
+    @api.depends('branch_name','branch_id')
+    def _compute_branch_name(self):
+        for recs in self:
+            if recs.branch_name.branch_name == 'Kottayam Campus':
+                recs.branch_id = 3
+            if recs.branch_name.branch_name == 'Corporate Office & City Campus':
+                recs.branch_id = 1
+            if recs.branch_name.branch_name == 'Cochin Campus':
+                recs.branch_id = 2
+            if recs.branch_name.branch_name == 'Trivandrum Campus':
+                recs.branch_id = 6
+            if recs.branch_name.branch_name == 'Calicut Campus':
+                recs.branch_id = 4
+            if recs.branch_name.branch_name == 'Malappuram Campus':
+                recs.branch_id = 9
+            if recs.branch_name.branch_name == 'Palakkad Campus':
+                recs.branch_id = 7
 
-        active_ids = self.env.context.get('active_ids', [])
-        rec = self.env['daily.class.record'].sudo().search([('id', 'in', active_ids)])
-        for recs in rec:
-            if recs.branch_name:
-                print('ya', recs.branch_name)
+            if recs.branch_name.branch_name == 'Online Campus':
+                recs.branch_id = 10
+            if recs.branch_name.branch_name == 'Bengaluru':
+                recs.branch_id = 16
 
-                if recs.branch_name.branch_name == 'Kottayam Campus':
-                    recs.branch_id = 3
-                if recs.branch_name.branch_name == 'Corporate Office & City Campus':
-                    recs.branch_id = 1
-                if recs.branch_name.branch_name == 'Cochin Campus':
-                    recs.branch_id = 2
-                if recs.branch_name.branch_name == 'Trivandrum Campus':
-                    recs.branch_id = 6
-                if recs.branch_name.branch_name == 'Calicut Campus':
-                    recs.branch_id = 4
-                if recs.branch_name.branch_name == 'Malappuram Campus':
-                    recs.branch_id = 9
-                if recs.branch_name.branch_name == 'Palakkad Campus':
-                    recs.branch_id = 7
+    @api.onchange('branch_id')
+    def _onchange_branch_heads(self):
+        if self.branch_id:
+            self.coordinator_head = self.branch_id.branch_head.id
 
-                if recs.branch_name.branch_name == 'Online Campus':
-                    recs.branch_id = 10
-                if recs.branch_name.branch_name == 'Bengaluru':
-                    recs.branch_id = 16
+
 
     def add_empty_coordinator_head_fields(self):
         records = self.env['daily.class.record'].sudo().search([])
@@ -517,9 +518,7 @@ class DailyClassRecord(models.Model):
                 #     self._total_taken_classes()
 
     def head_approve(self):
-        print(self.coordinator.employee_id.parent_id.user_id.id, 'employee')
-        print(self.env.user, 'user')
-        if self.coordinator.employee_id.parent_id.user_id.id == self.env.user.id or self.env.user.id == self.coordinator_head.id:
+        if self.coordinator_head.id == self.env.user.id:
             if self.over_time_check == True:
                 total = 0
                 var = []
@@ -654,7 +653,7 @@ class DailyClassRecord(models.Model):
             # self.state = 'approve'
         #
         else:
-            raise UserError('Coordinator manager approve button')
+            raise UserError('This record can only be approved by the Branch Head.')
 
     def compute_count(self):
         for record in self:
