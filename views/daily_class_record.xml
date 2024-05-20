@@ -130,7 +130,7 @@
                             <field name="branch_name"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"
                                    options="{'no_create': True}"/>
-                            <field name="branch_id" string="Custom Branch"/>
+                            <field name="branch_id" string="Custom Branch" groups="base.group_no_one"/>
                             <field name="month_of_record"
                                    attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="over_time_check" invisible="1"/>

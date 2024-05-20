@@ -246,7 +246,7 @@ class DailyClassRecord(models.Model):
     coordinator_head = fields.Many2one('res.users', domain="[('groups_id', 'in', [groups_id])]",
                                        default=lambda self: self.env.user.employee_id.branch_id.branch_head.id,
                                        ondelete='restrict', required=True)
-    branch_id = fields.Many2one('logic.base.branches', string='Branch', required=1)
+    branch_id = fields.Many2one('logic.base.branches', string='Custom Branch')
 
     def server_action_for_change_branch_student_to_base(self):
         rec = self.env['daily.class.record'].sudo().search([])
