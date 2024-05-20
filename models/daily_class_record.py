@@ -254,24 +254,26 @@ class DailyClassRecord(models.Model):
         rec = self.env['daily.class.record'].sudo().search([('id', 'in', active_ids)])
         for recs in rec:
             if recs.branch_name:
-                if recs.branch_name == 'Kottayam Campus':
+                print('ya', recs.branch_name)
+
+                if recs.branch_name.branch_name == 'Kottayam Campus':
                     recs.branch_id = 3
-                if recs.branch_name == 'Corporate Office & City Campus':
+                if recs.branch_name.branch_name == 'Corporate Office & City Campus':
                     recs.branch_id = 1
-                if recs.branch_name == 'Cochin Campus':
+                if recs.branch_name.branch_name == 'Cochin Campus':
                     recs.branch_id = 2
-                if recs.branch_name == 'Trivandrum Campus':
+                if recs.branch_name.branch_name == 'Trivandrum Campus':
                     recs.branch_id = 6
-                if recs.branch_name == 'Calicut Campus':
+                if recs.branch_name.branch_name == 'Calicut Campus':
                     recs.branch_id = 4
-                if recs.branch_name == 'Malappuram Campus':
+                if recs.branch_name.branch_name == 'Malappuram Campus':
                     recs.branch_id = 9
-                if recs.branch_name == 'Palakkad Campus':
+                if recs.branch_name.branch_name == 'Palakkad Campus':
                     recs.branch_id = 7
 
-                if recs.branch_name == 'Online Campus':
+                if recs.branch_name.branch_name == 'Online Campus':
                     recs.branch_id = 10
-                if recs.branch_name == 'Bengaluru':
+                if recs.branch_name.branch_name == 'Bengaluru':
                     recs.branch_id = 16
 
     def add_empty_coordinator_head_fields(self):
