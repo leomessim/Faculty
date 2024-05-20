@@ -249,7 +249,9 @@ class DailyClassRecord(models.Model):
     branch_id = fields.Many2one('logic.base.branches', string='Custom Branch')
 
     def server_action_for_change_branch_student_to_base(self):
-        rec = self.env['daily.class.record'].sudo().search([])
+
+        active_ids = self.env.context.get('active_ids', [])
+        rec = self.env['daily.class.record'].sudo().search([('id', 'in', active_ids)])
         for recs in rec:
             if recs.branch_name:
                 if recs.branch_name == 'Kottayam Campus':
