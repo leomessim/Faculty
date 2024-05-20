@@ -63,21 +63,6 @@ class DailyClassRecord(models.Model):
             if i.create_date:
                 i.record_year = i.create_date.year
 
-
-
-    # def _academic_heads(self):
-    #     users_obj = self.env['res.users'].search([])
-    #     users = self.env.ref('faculty.group_faculty_administrator').users.ids
-    #     print(users, 'oola')
-    #     for i in users_obj:
-    #         if i.id in users:
-    #             print(i.name, 'ola')
-    #             domain = [('id', 'in', i.id)]
-    #         else:
-    #             domain = []
-    #         return {'domain': {'coordinator_head': domain}}
-    # #     return users
-    #
     is_this_current_month_record = fields.Boolean('Is this current month record')
 
     @api.onchange('month_of_record')
@@ -162,7 +147,6 @@ class DailyClassRecord(models.Model):
                     self.is_this_record_locked = True
                 else:
                     self.is_this_record_locked = False
-
         else:
             self.is_this_record_locked = False
 
@@ -260,8 +244,33 @@ class DailyClassRecord(models.Model):
             record.is_this_record_locked = False
 
     coordinator_head = fields.Many2one('res.users', domain="[('groups_id', 'in', [groups_id])]",
-                                       default=lambda self: self.env.user.employee_id.parent_id.user_id.id,
+                                       default=lambda self: self.env.user.employee_id.branch_id.branch_head.id,
                                        ondelete='restrict', required=True)
+    branch_id = fields.Many2one('logic.base.branches', string='Branch', required=1)
+
+    def server_action_for_change_branch_student_to_base(self):
+        rec = self.env['daily.class.record'].sudo().search([])
+        for recs in rec:
+            if recs.branch_name:
+                if recs.branch_name == 'Kottayam Campus':
+                    recs.branch_id = 3
+                if recs.branch_name == 'Corporate Office & City Campus':
+                    recs.branch_id = 1
+                if recs.branch_name == 'Cochin Campus':
+                    recs.branch_id = 2
+                if recs.branch_name == 'Trivandrum Campus':
+                    recs.branch_id = 6
+                if recs.branch_name == 'Calicut Campus':
+                    recs.branch_id = 4
+                if recs.branch_name == 'Malappuram Campus':
+                    recs.branch_id = 9
+                if recs.branch_name == 'Palakkad Campus':
+                    recs.branch_id = 7
+
+                if recs.branch_name == 'Online Campus':
+                    recs.branch_id = 10
+                if recs.branch_name == 'Bengaluru':
+                    recs.branch_id = 16
 
     def add_empty_coordinator_head_fields(self):
         records = self.env['daily.class.record'].sudo().search([])

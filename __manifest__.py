@@ -26,6 +26,7 @@
         'views/configuration.xml',
         'views/lock_day.xml',
         'views/faculty_payslip.xml',
+        'data/server_action.xml',
 
     ],
     'demo': [],

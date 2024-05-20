@@ -130,13 +130,14 @@
                             <field name="branch_name"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','!=','draft')]}"
                                    options="{'no_create': True}"/>
+                            <field name="branch_id" string="Custom Branch"/>
                             <field name="month_of_record"
                                    attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="over_time_check" invisible="1"/>
                             <field name="over_time" invisible="1"/>
                             <field name="activity_done_coordinator" invisible="1"/>
                             <field name="groups_id" invisible="1"/>
-                            <field name="coordinator_head" string="Assign to Head"
+                            <field name="coordinator_head" string="Branch Head"
                                    attrs="{'readonly':[('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                         </group>
                         <group>
@@ -248,6 +249,7 @@
             <search>
                 <field name="faculty_id"/>
                 <field name="branch_name"/>
+
                 <field name="class_room"/>
                 <field name="course_id"/>
                 <field name="subject_id"/>
