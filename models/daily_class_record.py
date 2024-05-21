@@ -245,9 +245,10 @@ class DailyClassRecord(models.Model):
 
     coordinator_head = fields.Many2one('res.users',
                                        required=True)
-    branch_id = fields.Many2one('logic.base.branches', string='Heads Branch', compute='_compute_branch_name', store=True, readonly=0)
+    branch_id = fields.Many2one('logic.base.branches', string='Heads Branch', compute='_compute_branch_name',
+                                store=True, readonly=0)
 
-    @api.depends('branch_name','branch_id')
+    @api.depends('branch_name', 'branch_id')
     def _compute_branch_name(self):
         for recs in self:
             if recs.branch_name.branch_name == 'Kottayam Campus':
@@ -274,8 +275,6 @@ class DailyClassRecord(models.Model):
     def _onchange_branch_heads(self):
         if self.branch_id:
             self.coordinator_head = self.branch_id.branch_head.id
-
-
 
     def add_empty_coordinator_head_fields(self):
         records = self.env['daily.class.record'].sudo().search([])
@@ -343,8 +342,8 @@ class DailyClassRecord(models.Model):
         #         if i.state in 'to_approve' or i.state in 'approve' or i.state in 'sent_approve' or i.state in 'paid' or i.state in 'register_payment':
         #             total += i.total_duration_sum
         self.class_hour_till_now = self.class_till_view
-            # else:
-            #     self.class_hour_till_now = 0
+        # else:
+        #     self.class_hour_till_now = 0
         self.state = 'to_approve'
         # net_hour = self.env['daily.class.record'].sudo().search([])
         # total_rem = 0
@@ -501,6 +500,13 @@ class DailyClassRecord(models.Model):
             record.state = 'sent_approve'
         # self.check_coordinator_id = self.env.user.employee_parent_id.user_id
         # print(self.check_coordinator_id, 'cooo')
+        self.env['logic.task.other'].sudo().create({'name': 'Faculty record added',
+                                                    'task_types': 'other',
+                                                    'description': 'Faculty :' + ' ' + self.faculty_id.name.name
+                                                                   + "\n" + 'Branch :' + ' ' + self.branch_name.branch_name +  "\n"  + 'Class :' + ' ' + self.class_room.name + "\n" + 'Subject :' + ' ' + self.subject_id.name + "\n" + 'Course :' + ' ' + self.course_id.name + ' record added',
+                                                    })
+        rec = self.env['logic.task.other'].search([], limit=1, order='id desc')
+        rec.sudo().write({'state': 'completed'})
 
     def refresh_record(self):
         ff = self.env['daily.class.record'].sudo().search([])
@@ -912,7 +918,8 @@ class RecordData(models.Model):
     break_reason = fields.Char(string='Break reason')
     break_time = fields.Float(string='Break Time', widget='time')
     topic = fields.Char(string='Topic')
-    upaya_class = fields.Boolean(string='Upaya Class', help="When selecting the 'Upaya' class, the hour will be excluded from standard hour calculations, extra hour calculations, and similar computations.")
+    upaya_class = fields.Boolean(string='Upaya Class',
+                                 help="When selecting the 'Upaya' class, the hour will be excluded from standard hour calculations, extra hour calculations, and similar computations.")
     date = fields.Date(string='Date', default=fields.Date.today)
     remaining_hours = fields.Float('Remaining hours')
 
