@@ -30,7 +30,7 @@ class CrashClassRecord(models.Model):
 
         })
 
-    total_hour = fields.Float(string='Total Hour', compute='_total_hour', store=True)
+    total_hour = fields.Float(string='Total Hour', compute='_total_hour', redaonly=False)
 
     def action_confirm(self):
         self.activity_schedule('faculty.mail_activity_for_crash_record_record',
@@ -81,9 +81,22 @@ class CrashClassRecord(models.Model):
             activity_id.action_feedback(feedback='Rejected')
         self.write({'state': 'rejected'})
 
+    def action_refresh_payment(self):
+        payment = self.env['crash.faculty.payment'].search([('faculty_id', '=', self.faculty_id.id)], limit=1, order='id desc')
+        if payment:
+            self.faculty_payment = payment.payment * self.total_hour
+
     def action_register_payment(self):
 
         self.write({'state': 'paid'})
+
+    @api.depends('total_hour')
+    def _compute_faculty_payment(self):
+        rate = self.env['crash.faculty.payment'].search([('faculty_id', '=', self.faculty_id.id)], limit=1, order='id desc')
+        for order in self:
+            order.faculty_payment = order.total_hour * rate.payment
+
+    faculty_payment = fields.Float(string='Faculty Payment', compute='_compute_faculty_payment', store=True)
 
 
 class CrashDailyClasses(models.Model):
@@ -108,4 +121,16 @@ class CrashDailyClasses(models.Model):
             'net_hour': total
         })
 
-    net_hour = fields.Float(string='Total Time', compute='_total_time', store=True)
+    net_hour = fields.Float(string='Net Time', compute='_total_time', store=True, redaonly=False)
+
+
+class CrashFacultyPayment(models.Model):
+    _name = 'crash.faculty.payment'
+    _description = 'Crash Faculty Payment'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _rec_name = 'faculty_id'
+
+    faculty_id = fields.Many2one('faculty.details', string="Faculty", required=1)
+    payment = fields.Float(string="Payment", required=True)
+    currency_id = fields.Many2one('res.currency', string='Currency',
+                                  default=lambda self: self.env.user.company_id.currency_id)

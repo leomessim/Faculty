@@ -95,3 +95,4 @@ crash_daily_records,crash_daily_class_records,model_crash_class_record,faculty.c
 crash_daily_class_records,crash_class_records,model_crash_daily_classes,,1,1,1,1
 access_faculty_crash,access_faculty,model_faculty_details,faculty.crash_coordinators,1,1,0,1
 crash_class_records_accounts,crash_class_records,model_crash_class_record,faculty.group_accounting_manager,1,1,1,1
+crash_faculty_payment,crash_class_records,model_crash_faculty_payment,faculty.group_accounting_manager,1,1,1,1

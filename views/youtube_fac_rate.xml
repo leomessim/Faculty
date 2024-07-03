@@ -44,5 +44,51 @@
               parent="menu_payment"
               sequence="2"/>
 
+    <record id="crash_fac_rate_per_hour_form" model="ir.ui.view">
+        <field name="name">Faculty Rate</field>
+        <field name="model">crash.faculty.payment</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Faculty Rate">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="faculty_id"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="payment" widget="monetary"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="youtube_rate_tree" model="ir.ui.view">
+        <field name="name">Faculty Rate</field>
+        <field name="model">crash.faculty.payment</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="faculty_id"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="payment" widget="monetary"/>
+            </tree>
+
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="crash_fac_rate_action">
+        <field name="name">Faculty Rate</field>
+        <field name="res_model">crash.faculty.payment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem name="Crash Faculty Rate" id="menu_crash_fac_rate"
+              action="crash_fac_rate_action"
+              parent="menu_payment"
+              sequence="3"/>
+
 
 </odoo>
