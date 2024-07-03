@@ -9,4 +9,5 @@ from . import change_till_now_action
 from . import youtube_faculty_rate
 from . import youtube_class_record
 from . import record_lock_date
+from . import crash_class_record
 

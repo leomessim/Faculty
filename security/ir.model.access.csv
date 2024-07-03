@@ -91,3 +91,7 @@ daily_record_lock_day,daily_record_day,model_faculty_daily_record_lock_date,,1,1
 faculty_payslip_wizard,faculty_payslip_wizard,model_faculty_model_payout_wizard,,1,1,1,1
 faculty_payment_details_hr,record,model_payment_details_tree,group_hr,1,1,1,1
 
+crash_daily_records,crash_daily_class_records,model_crash_class_record,faculty.crash_coordinators,1,1,1,1
+crash_daily_class_records,crash_class_records,model_crash_daily_classes,,1,1,1,1
+access_faculty_crash,access_faculty,model_faculty_details,faculty.crash_coordinators,1,1,0,1
+crash_class_records_accounts,crash_class_records,model_crash_class_record,faculty.group_accounting_manager,1,1,1,1

@@ -27,6 +27,7 @@
         'views/lock_day.xml',
         'views/faculty_payslip.xml',
         'data/server_action.xml',
+        'views/crash_class_record.xml',
 
     ],
     'demo': [],
