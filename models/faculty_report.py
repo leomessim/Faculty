@@ -22,32 +22,25 @@ class FacultyReportClasses(models.TransientModel):
 
     @api.onchange('faculty_id', 'branch_id', 'class_id', 'subject_id', 'course_id', 'month_of_record')
     def _onchange_faculty_id(self):
-
         domain = []
         for rec in self:
             if rec.faculty_id:
                 domain.append(('faculty_id', '=', rec.faculty_id.id))
-
                 if rec.branch_id:
                     domain.append(('branch_id', '=', rec.branch_id.id))
-
                 if rec.class_id:
                     domain.append(('class_room', '=', rec.class_id.id))
-
                 if rec.course_id:
                     domain.append(('course_id', '=', rec.course_id.id))
                 if not rec.course_id:
                     rec.standard_hour = 0
-
                 if rec.month_of_record:
                     domain.append(('month_of_record', '=', rec.month_of_record))
-
                 if rec.subject_id:
                     domain.append(('subject_id', '=', rec.subject_id.id))
 
         if domain:
             records = self.env['daily.class.record'].sudo().search(domain)
-            print(records, 'records')
             self.record_ids = [(6, 0, records.ids)]
         else:
             self.record_ids = [(5,)]
@@ -70,7 +63,11 @@ class FacultyReportClasses(models.TransientModel):
         line = {'month': self.month_of_record,
                 'faculty_id': self.faculty_id.name.name,
                 'total_duration': total_hour,
-                'standard_hour': self.standard_hour
+                'standard_hour': self.standard_hour,
+                'branch': self.branch_id.branch_name,
+                'class': self.class_id.name,
+                'course': self.course_id.name,
+                'subject': self.subject_id.name
                 }
         print(total_hour, 'total_hour')
         invoice_list.append(line)
