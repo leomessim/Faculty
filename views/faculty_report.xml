@@ -42,7 +42,6 @@
     <menuitem name="Faculty Report"
               id="faculty_record_report_classes_duration"
               parent="faculty_record_report"
-              groups="faculty.group_hr"
               action="faculty_record_total_duration_report_action"
               sequence="1"/>
 
