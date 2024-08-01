@@ -245,25 +245,26 @@ class DailyClassRecord(models.Model):
     @api.depends('branch_name', 'branch_id')
     def _compute_branch_name(self):
         for recs in self:
-            if recs.branch_name.branch_name == 'Kottayam Campus':
-                recs.branch_id = 3
-            if recs.branch_name.branch_name == 'Corporate Office & City Campus':
-                recs.branch_id = 1
-            if recs.branch_name.branch_name == 'Cochin Campus':
-                recs.branch_id = 2
-            if recs.branch_name.branch_name == 'Trivandrum Campus':
-                recs.branch_id = 6
-            if recs.branch_name.branch_name == 'Calicut Campus':
-                recs.branch_id = 4
-            if recs.branch_name.branch_name == 'Malappuram Campus':
-                recs.branch_id = 9
-            if recs.branch_name.branch_name == 'Palakkad Campus':
-                recs.branch_id = 7
+            if recs.branch_name:
+                if recs.branch_name.branch_name == 'Kottayam Campus':
+                    recs.branch_id = 3
+                if recs.branch_name.branch_name == 'Corporate Office & City Campus':
+                    recs.branch_id = 1
+                if recs.branch_name.branch_name == 'Cochin Campus':
+                    recs.branch_id = 2
+                if recs.branch_name.branch_name == 'Trivandrum Campus':
+                    recs.branch_id = 6
+                if recs.branch_name.branch_name == 'Calicut Campus':
+                    recs.branch_id = 4
+                if recs.branch_name.branch_name == 'Malappuram Campus':
+                    recs.branch_id = 9
+                if recs.branch_name.branch_name == 'Palakkad Campus':
+                    recs.branch_id = 7
 
-            if recs.branch_name.branch_name == 'Online Campus':
-                recs.branch_id = 10
-            if recs.branch_name.branch_name == 'Bengaluru':
-                recs.branch_id = 16
+                if recs.branch_name.branch_name == 'Online Campus':
+                    recs.branch_id = 10
+                if recs.branch_name.branch_name == 'Bengaluru':
+                    recs.branch_id = 16
 
     @api.onchange('branch_id')
     def _onchange_branch_heads(self):

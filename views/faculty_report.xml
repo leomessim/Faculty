@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <menuitem name="Report"
+              id="faculty_record_report"
+              parent="menu_faculty"
+              sequence="10"/>
+
+
+    <record id="faculty_record_total_duration_report" model="ir.ui.view">
+        <field name="name">faculty.report</field>
+        <field name="model">faculty.class.report</field>
+        <field name="arch" type="xml">
+            <form string="Report">
+                <footer>
+                    <button name="print_xlsx_report" type="object" string="Print" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+                <group class="oe_title">
+                    <field name="faculty_id" placeholder="Faculty"/>
+<!--                    <field name="standard_hour" groups="base.group_no_one"/>-->
+                    <field name="branch_id" placeholder="filter branch"/>
+                    <field name="month_of_record"/>
+                    <field name="class_id" placeholder="filter class"/>
+                    <field name="course_id" placeholder="filter course"/>
+                    <field name="subject_id" placeholder="filter subject"/>
+                </group>
+                <group>
+                    <field name="record_ids" widget="many2many_tags" invisible="1"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    <record id="faculty_record_total_duration_report_action" model="ir.actions.act_window">
+        <field name="name">Faculty Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">faculty.class.report</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="faculty_record_total_duration_report"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem name="Faculty Report"
+              id="faculty_record_report_classes_duration"
+              parent="faculty_record_report"
+              groups="faculty.group_hr"
+              action="faculty_record_total_duration_report_action"
+              sequence="1"/>
+
+</odoo>
