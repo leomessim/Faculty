@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
-    <menuitem name="Report"
-              id="faculty_record_report"
-              parent="menu_faculty"
-              sequence="10"/>
+
 
 
     <record id="faculty_record_total_duration_report" model="ir.ui.view">
@@ -38,7 +35,11 @@
         <field name="view_id" ref="faculty_record_total_duration_report"/>
         <field name="target">new</field>
     </record>
-
+    <menuitem name="Report"
+              id="faculty_record_report"
+              parent="menu_faculty"
+              action="faculty_record_total_duration_report_action"
+              sequence="10"/>
     <menuitem name="Faculty Report"
               id="faculty_record_report_classes_duration"
               parent="faculty_record_report"
