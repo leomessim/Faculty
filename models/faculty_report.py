@@ -24,26 +24,26 @@ class FacultyReportClasses(models.TransientModel):
     def _onchange_faculty_id(self):
 
         domain = []
-        if self.faculty_id:
-            domain.append(('faculty_id', '=', self.faculty_id.id))
+        for rec in self:
+            if rec.faculty_id:
+                domain.append(('faculty_id', '=', rec.faculty_id.id))
 
-            if self.branch_id:
-                domain.append(('branch_id', '=', self.branch_id.id))
+                if rec.branch_id:
+                    domain.append(('branch_id', '=', rec.branch_id.id))
 
-            if self.class_id:
-                domain.append(('class_room', '=', self.class_id.id))
+                if rec.class_id:
+                    domain.append(('class_room', '=', rec.class_id.id))
 
-            if self.course_id:
-                self.standard_hour = self.env['subject.details'].sudo().search([('course_sub_id', '=', self.course_id.id)]).stnd_hr
-                domain.append(('course_id', '=', self.course_id.id))
-            if not self.course_id:
-                self.standard_hour = 0
+                if rec.course_id:
+                    domain.append(('course_id', '=', rec.course_id.id))
+                if not rec.course_id:
+                    rec.standard_hour = 0
 
-            if self.month_of_record:
-                domain.append(('month_of_record', '=', self.month_of_record))
+                if rec.month_of_record:
+                    domain.append(('month_of_record', '=', rec.month_of_record))
 
-            if self.subject_id:
-                domain.append(('subject_id', '=', self.subject_id.id))
+                if rec.subject_id:
+                    domain.append(('subject_id', '=', rec.subject_id.id))
 
         if domain:
             records = self.env['daily.class.record'].sudo().search(domain)
