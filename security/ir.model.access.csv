@@ -97,3 +97,4 @@ access_faculty_crash,access_faculty,model_faculty_details,faculty.crash_coordina
 crash_class_records_accounts,crash_class_records,model_crash_class_record,faculty.group_accounting_manager,1,1,1,1
 crash_faculty_payment,crash_class_records,model_crash_faculty_payment,faculty.group_accounting_manager,1,1,1,1
 faculty_reports,faculty_reports,model_faculty_class_report,,1,1,1,1
+faculty_records_hr,record,model_record_data,group_hr,1,1,1,1
