@@ -14,12 +14,13 @@
                 </footer>
                 <group class="oe_title">
                     <field name="faculty_id" placeholder="Faculty"/>
+                    <field name="selection_field" widget="radio"/>
 <!--                    <field name="standard_hour" groups="base.group_no_one"/>-->
-                    <field name="branch_id" placeholder="filter branch"/>
-                    <field name="month_of_record"/>
-                    <field name="class_id" placeholder="filter class"/>
-                    <field name="course_id" placeholder="filter course"/>
-                    <field name="subject_id" placeholder="filter subject"/>
+<!--                    <field name="branch_id"/>-->
+<!--                    <field name="month_of_record"/>-->
+<!--                    <field name="class_id"/>-->
+<!--                    <field name="course_id" placeholder="filter course"/>-->
+<!--                    <field name="subject_id" placeholder="filter subject"/>-->
                 </group>
                 <group>
                     <field name="record_ids" widget="many2many_tags" invisible="1"/>
@@ -40,6 +41,7 @@
               parent="menu_faculty"
               action="faculty_record_total_duration_report_action"
               sequence="10"/>
+
     <menuitem name="Faculty Report"
               id="faculty_record_report_classes_duration"
               parent="faculty_record_report"

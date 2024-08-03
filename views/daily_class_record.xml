@@ -163,8 +163,6 @@
                             <field name="total_extra_hour" invisible="1"/>
                             <field name="extra_hour_testing" invisible="1"/>
                             <field name="is_it_changed" invisible="1"/>
-
-
                         </group>
                     </group>
                     <notebook position="inside">
@@ -311,8 +309,5 @@
               parent="menu_view_faculty"
               action="action_class_record"
               sequence="10"/>
-
-
-
 
 </odoo>
