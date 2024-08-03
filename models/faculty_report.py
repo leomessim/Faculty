@@ -7,6 +7,7 @@ class FacultyReportClasses(models.TransientModel):
 
     faculty_id = fields.Many2one('faculty.details', string='Faculty', required=1)
     record_ids = fields.Many2many('daily.class.record', string='Records')
+    datas_ids = fields.Many2many('record.data', string='Datas')
     selection_field = fields.Selection([
         ('branch', 'Branch'),
         ('class', 'Class'),
@@ -14,19 +15,31 @@ class FacultyReportClasses(models.TransientModel):
         ('subject', 'Subject'),
         ('total', 'Total')
     ], string='Filter', default='branch')
+    from_date = fields.Date(string="From Date")
+    to_date = fields.Date(string="To Date")
 
-    @api.onchange('faculty_id', 'selection_field')
+    @api.onchange('faculty_id', 'selection_field', 'from_date', 'to_date')
     def _onchange_faculty_id(self):
         domain = []
+        sec_domain = []
         for rec in self:
             if rec.faculty_id:
                 domain.append(('faculty_id', '=', rec.faculty_id.id))
+                sec_domain.append(('record_id.faculty_id', '=', rec.faculty_id.id))
+            if rec.from_date and rec.to_date:
+                sec_domain.append(('date', '>=', rec.from_date))
+                sec_domain.append(('date', '<=', rec.to_date))
+                domain.append(('create_date', '>=', rec.from_date))
+                domain.append(('create_date', '<=', rec.to_date))
 
         if domain:
+            datas = self.env['record.data'].sudo().search(sec_domain)
             records = self.env['daily.class.record'].sudo().search(domain)
             self.record_ids = [(6, 0, records.ids)]
+            self.datas_ids = [(6, 0, datas.ids)]
         else:
             self.record_ids = [(5,)]
+            self.datas_ids = [(5,)]
 
     def print_xlsx_report(self):
         return {
@@ -44,14 +57,14 @@ class FacultyReportClasses(models.TransientModel):
                 total_hour = 0
                 rec = self.record_ids.ids
                 print(rec , 'rrr')
-                records = self.env['daily.class.record'].sudo().search(
-                    [('id', 'in', self.record_ids.ids),
-                     ('branch_id', '=', branch.id),
-                     ('state', 'in', ['approve', 'register_payment', 'paid'])]
+                records = self.env['record.data'].sudo().search(
+                    [('id', 'in', self.datas_ids.ids),
+                     ('record_id.branch_id', '=', branch.id),
+                     ('record_id.state', 'in', ['approve', 'register_payment', 'paid'])]
                 )
                 print(records, 'rec')
                 for record in records:
-                    total_hour += record.total_duration_sum
+                    total_hour += record.net_hour
 
                 if total_hour > 0:
                     line = {
@@ -68,14 +81,14 @@ class FacultyReportClasses(models.TransientModel):
 
             for cl in classes:
                 total_hour = 0
-                records = self.env['daily.class.record'].sudo().search(
-                    [('id', 'in', self.record_ids.ids),
-                     ('class_room', '=', cl.id),
-                     ('state', 'in', ['approve', 'register_payment', 'paid'])]
+                records = self.env['record.data'].sudo().search(
+                    [('id', 'in', self.datas_ids.ids),
+                     ('record_id.class_room', '=', cl.id),
+                     ('record_id.state', 'in', ['approve', 'register_payment', 'paid'])]
                 )
 
                 for record in records:
-                    total_hour += record.total_duration_sum
+                    total_hour += record.net_hour
 
                 if total_hour > 0:
                     line = {
@@ -91,14 +104,14 @@ class FacultyReportClasses(models.TransientModel):
 
             for course in courses:
                 total_hour = 0
-                records = self.env['daily.class.record'].sudo().search(
-                    [('id', 'in', self.record_ids.ids),
-                     ('course_id', '=', course.id),
-                     ('state', 'in', ['approve', 'register_payment', 'paid'])]
+                records = self.env['record.data'].sudo().search(
+                    [('id', 'in', self.datas_ids.ids),
+                     ('record_id.course_id', '=', course.id),
+                     ('record_id.state', 'in', ['approve', 'register_payment', 'paid'])]
                 )
 
                 for record in records:
-                    total_hour += record.total_duration_sum
+                    total_hour += record.net_hour
 
                 if total_hour > 0:
                     line = {
@@ -114,14 +127,14 @@ class FacultyReportClasses(models.TransientModel):
 
             for subject in subjects:
                 total_hour = 0
-                records = self.env['daily.class.record'].sudo().search(
-                    [('id', 'in', self.record_ids.ids),
-                     ('subject_id', '=', subject.id),
-                     ('state', 'in', ['approve', 'register_payment', 'paid'])]
+                records = self.env['record.data'].sudo().search(
+                    [('id', 'in', self.datas_ids.ids),
+                     ('record_id.subject_id', '=', subject.id),
+                     ('record_id.state', 'in', ['approve', 'register_payment', 'paid'])]
                 )
 
                 for record in records:
-                    total_hour += record.total_duration_sum
+                    total_hour += record.net_hour
 
                 if total_hour > 0:
                     line = {
@@ -134,13 +147,13 @@ class FacultyReportClasses(models.TransientModel):
 
         else:
             total_hour = 0
-            records = self.env['daily.class.record'].sudo().search(
-                [('id', 'in', self.record_ids.ids),
-                 ('state', 'in', ['approve', 'register_payment', 'paid'])]
+            records = self.env['record.data'].sudo().search(
+                [('id', 'in', self.datas_ids.ids),
+                 ('record_id.state', 'in', ['approve', 'register_payment', 'paid'])]
             )
 
             for record in records:
-                total_hour += record.total_duration_sum
+                total_hour += record.net_hour
 
             if total_hour > 0:
                 line = {

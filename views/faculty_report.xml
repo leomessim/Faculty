@@ -2,7 +2,6 @@
 <odoo>
 
 
-
     <record id="faculty_record_total_duration_report" model="ir.ui.view">
         <field name="name">faculty.report</field>
         <field name="model">faculty.class.report</field>
@@ -14,16 +13,24 @@
                 </footer>
                 <group class="oe_title">
                     <field name="faculty_id" placeholder="Faculty"/>
+
+                    <label for="from_date" string="Dates"/>
+                    <div class="o_row">
+                        <field name="from_date" placeholder="from date"/>
+                        <field name="to_date" placeholder="to date"/>
+                    </div>
+
                     <field name="selection_field" widget="radio"/>
-<!--                    <field name="standard_hour" groups="base.group_no_one"/>-->
-<!--                    <field name="branch_id"/>-->
-<!--                    <field name="month_of_record"/>-->
-<!--                    <field name="class_id"/>-->
-<!--                    <field name="course_id" placeholder="filter course"/>-->
-<!--                    <field name="subject_id" placeholder="filter subject"/>-->
+                    <!--                    <field name="standard_hour" groups="base.group_no_one"/>-->
+                    <!--                    <field name="branch_id"/>-->
+                    <!--                    <field name="month_of_record"/>-->
+                    <!--                    <field name="class_id"/>-->
+                    <!--                    <field name="course_id" placeholder="filter course"/>-->
+                    <!--                    <field name="subject_id" placeholder="filter subject"/>-->
                 </group>
                 <group>
                     <field name="record_ids" widget="many2many_tags" invisible="1"/>
+                    <field name="datas_ids" widget="many2many_tags" invisible="1"/>
                 </group>
             </form>
         </field>
