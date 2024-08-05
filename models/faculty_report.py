@@ -164,7 +164,8 @@ class FacultyReportClasses(models.TransientModel):
                         'branch': record.record_id.branch_id.branch_name,
                         'course': record.record_id.course_id.name,
                         'subject': record.record_id.subject_id.name,
-                        'total_net': record.net_hour
+                        'total_net': record.net_hour,
+                        'dates': str(record.date)
 
                         # Include other fields as necessary
                     }

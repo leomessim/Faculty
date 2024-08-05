@@ -71,14 +71,16 @@ class FacultyReportController(http.Controller):
             sheet.write(col_start, 1, 'Subject', header_format)
             sheet.write(col_start, 2, 'Total Duration (Hr)', header_format)
         elif selection_field == 'total':
-            sheet.write(col_start, 0, 'No.', header_format)
-            sheet.write(col_start, 1, 'Branch', header_format)
-            sheet.write(col_start, 2, 'Class', header_format)
-            sheet.write(col_start, 3, 'Course', header_format)
-            sheet.write(col_start, 4, 'Subject', header_format)
-            sheet.write(col_start, 5, 'Total', header_format)
 
-            sheet.write(col_start, 5, 'Total Duration (Hr)', header_format)
+            sheet.write(col_start, 0, 'No.', header_format)
+            sheet.write(col_start, 1, 'Date', header_format)
+            sheet.write(col_start, 2, 'Branch', header_format)
+            sheet.write(col_start, 3, 'Class', header_format)
+            sheet.write(col_start, 4, 'Course', header_format)
+            sheet.write(col_start, 5, 'Subject', header_format)
+            sheet.write(col_start, 6, 'Total', header_format)
+
+            sheet.write(col_start, 6, 'Total Duration (Hr)', header_format)
 
         # Write the report lines starting from the 5th row
         row = col_start + 1
@@ -97,17 +99,18 @@ class FacultyReportController(http.Controller):
             elif selection_field == 'subject':
                 sheet.write(row, 1, line.get('subject', ''), text_style)
             elif selection_field == 'total':
-                sheet.write(row, 1, line.get('branch', ''), text_style)
-                sheet.write(row, 2, line.get('classes', ''), text_style)
-                sheet.write(row, 3, line.get('course', ''), text_style)
-                sheet.write(row, 4, line.get('subject', ''), text_style)
-                sheet.write(row, 5, line.get('total_net', ''), text_style)
+                sheet.write(row, 1, line.get('dates', ''), text_style)
+                sheet.write(row, 2, line.get('branch', ''), text_style)
+                sheet.write(row, 3, line.get('classes', ''), text_style)
+                sheet.write(row, 4, line.get('course', ''), text_style)
+                sheet.write(row, 5, line.get('subject', ''), text_style)
+                sheet.write(row, 6, line.get('total_net', ''), text_style)
 
                 total_duration_sum += line.get('total_net', 0)
             row += 1
             number += 1
-        sheet.write(row, 4, 'Total Duration (Hr)', header_format)
-        sheet.write(row, 5, total_duration_sum, total_duration)
+        sheet.write(row, 5, 'Total Duration (Hr)', header_format)
+        sheet.write(row, 6, total_duration_sum, total_duration)
         workbook.close()
         output.seek(0)
         response.stream.write(output.read())
