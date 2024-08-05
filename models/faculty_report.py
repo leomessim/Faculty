@@ -147,6 +147,7 @@ class FacultyReportClasses(models.TransientModel):
 
         else:
             total_hour = 0
+
             records = self.env['record.data'].sudo().search(
                 [('id', 'in', self.datas_ids.ids),
                  ('record_id.state', 'in', ['approve', 'register_payment', 'paid'])]
@@ -155,14 +156,19 @@ class FacultyReportClasses(models.TransientModel):
             for record in records:
                 total_hour += record.net_hour
 
-            if total_hour > 0:
-                line = {
-                    'faculty_id': self.faculty_id.name.name,
-                    'total_duration': total_hour,
-                    # Include other fields as necessary
-                }
-                invoice_list.append(line)
+                if total_hour > 0:
+                    line = {
+                        # 'faculty_id': self.faculty_id.name.name,
+                        'total_duration': total_hour,
+                        'classes': record.record_id.class_room.name,
+                        'branch': record.record_id.branch_id.branch_name,
+                        'course': record.record_id.course_id.name,
+                        'subject': record.record_id.subject_id.name,
+                        'total_net': record.net_hour
+
+                        # Include other fields as necessary
+                    }
+                    print(line, 'iii')
+                    invoice_list.append(line)
 
         return invoice_list
-
-
