@@ -112,7 +112,7 @@ class CrashDailyClasses(models.Model):
     from_time = fields.Float(string="From Time")
     to_time = fields.Float(string="To Time")
 
-    @api.depends('from_time', 'to_time')
+    @api.onchange('from_time', 'to_time')
     def _total_time(self):
         total = 0
         for i in self:
@@ -121,7 +121,7 @@ class CrashDailyClasses(models.Model):
             'net_hour': total
         })
 
-    net_hour = fields.Float(string='Net Time', compute='_total_time', store=True, redaonly=False)
+    net_hour = fields.Float(string='Net Time', redaonly=False)
 
 
 class CrashFacultyPayment(models.Model):
