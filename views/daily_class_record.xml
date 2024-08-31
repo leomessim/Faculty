@@ -143,7 +143,7 @@
                         <group>
                             <field name="make_visible" invisible="1"/>
                             <field name="make_academic_head" invisible="1"/>
-                            <field name="create_date" invisible="1"/>
+                            <field name="create_date" groups="base.group_no_one"/>
                             <field name="class_room"
                                    attrs="{'readonly':['|',('make_visible','=',False),('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="course_id" options="{'no_create': True}"
@@ -281,11 +281,11 @@
         <field name="model">daily.class.record</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree>
+            <tree multi_edit="1">
                 <field name="faculty_id"/>
                 <field name="branch_name"/>
                 <field name="month_of_record"/>
-                <field name="record_year"/>
+                <field name="record_year" readonly="0"/>
 
                 <field name="class_room"/>
                 <field name="course_id"/>
