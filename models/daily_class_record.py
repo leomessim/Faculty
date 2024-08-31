@@ -55,9 +55,10 @@ class DailyClassRecord(models.Model):
 
     @api.depends('month_of_record', 'year_of_record')
     def _compute_year_and_month(self):
-        if self.year_of_record:
-            if self.month_of_record:
-                self.record_month_year = self.month_of_record + ' - ' + self.year_of_record
+        for i in self:
+            if i.year_of_record:
+                if i.month_of_record:
+                    i.record_month_year = i.month_of_record + ' - ' + i.year_of_record
 
     def server_action_for_add_bulk_year_of_record(self):
         record = self.env['daily.class.record'].sudo().search([])
