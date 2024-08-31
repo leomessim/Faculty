@@ -134,6 +134,8 @@
                             <field name="month_of_record"
                                    attrs="{'readonly':['|',('make_visible','=',False), ('state','in',['to_approve','approve','rejected','paid','register_payment'])]}"/>
                             <field name="over_time_check" invisible="1"/>
+                            <field name="year_of_record"/>
+                            <field name="record_month_year"/>
                             <field name="over_time" invisible="1"/>
                             <field name="activity_done_coordinator" invisible="1"/>
                             <field name="groups_id" invisible="1"/>
@@ -286,7 +288,7 @@
                 <field name="branch_name"/>
                 <field name="month_of_record"/>
                 <field name="record_year" readonly="0"/>
-
+                <field name="record_month_year"/>
                 <field name="class_room"/>
                 <field name="course_id"/>
                 <field name="subject_id"/>

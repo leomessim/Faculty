@@ -50,6 +50,20 @@ class DailyClassRecord(models.Model):
     groups_id = fields.Many2one('res.groups', string='Groups',
                                 default=lambda self: self.env.ref('faculty.group_faculty_administrator').id)
     record_year = fields.Char(string='Year', compute='year_only', store=True)
+    year_of_record = fields.Selection([('2023', '2023'), ('2024', '2024'), ('2025', '2025')], string='Year of Record', default='2024')
+    record_month_year = fields.Char(string='Month/Year', compute='_compute_year_and_month', store=True)
+
+    @api.depends('month_of_record', 'year_of_record')
+    def _compute_year_and_month(self):
+        if self.year_of_record:
+            if self.month_of_record:
+                self.record_month_year = self.month_of_record + ' - ' + self.year_of_record
+
+    def server_action_for_add_bulk_year_of_record(self):
+        record = self.env['daily.class.record'].sudo().search([])
+        for i in record:
+            i.year_of_record = i.record_year
+
 
     @api.depends('create_date')
     def year_only(self):
