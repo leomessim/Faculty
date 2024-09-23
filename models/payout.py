@@ -466,13 +466,14 @@ class PaymentTotal(models.Model):
     def _compute_tax_id_amount(self):
         for rec in self:
             if rec.tax_id:
+                print(rec.tax_id, 'tax')
                 for tax in rec.tax_id:
                     rec.amount_tax_id = (rec.added_payment_extra * tax.amount) / 100
 
             else:
                 rec.amount_tax_id = 0
 
-    amount_tax_id = fields.Monetary(string='GST Amount', store=True, readonly=True, currency_field='currency_id',
+    amount_tax_id = fields.Monetary(string='GST Amount', store=True, readonly=True,
                                     compute='_compute_tax_id_amount')
 
     @api.depends('added_tds_payment', 'tax_id', 'amount_tax_id', 'added_payment_extra')

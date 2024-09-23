@@ -237,21 +237,6 @@
                         <h3 class="text-center">Faculty Payment Slip</h3>
                         <br></br>
 
-<!--                        <t t-foreach="docs" t-as="doc">-->
-<!--                            <div align="center">-->
-
-<!--                                <img t-att-src="'data:image/png;base64,%s' % to_text(doc.company_id.logo)"-->
-<!--                                     style="width:30%; max-height:150pt;max-width:100pt;"/>-->
-
-<!--                            </div>-->
-<!--                            <div>-->
-<!--                                <span t-field="doc.company_id.partner_id"-->
-<!--                                      t-options='{"widget": "contact", "fields": ["name", "address", "phone"], "no_marker": True}'/>-->
-<!--                            </div>-->
-<!--                        </t>-->
-<!--                        <br></br>-->
-<!--                        <br></br>-->
-<!--                        <br></br>-->
                         <table class="table table-bordered mt32">
                             <thead>
                                 <tr>
@@ -511,6 +496,10 @@
                                     <p>
                                         <strong>Transaction ID:</strong>
                                         <span t-esc="doc.transaction_id"/>
+                                    </p>
+                                    <p>
+                                        <strong>Pan Number:</strong>
+                                        <span t-esc="doc.faculty_id.pan_number"/>
                                     </p>
                                 </div>
                             </div>

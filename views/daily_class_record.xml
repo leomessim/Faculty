@@ -287,7 +287,7 @@
                 <field name="faculty_id"/>
                 <field name="branch_name"/>
                 <field name="month_of_record"/>
-                <field name="record_year" readonly="0"/>
+                <field name="year_of_record" string="Year" readonly="0"/>
                 <field name="record_month_year"/>
                 <field name="class_room"/>
                 <field name="course_id"/>

@@ -162,7 +162,7 @@
                             <field name="advance_deduction" widget="monetary"/>
                             <field name="advance_ded_total" widget="monetary"/>
                             <field name="company_id" invisible="1"/>
-                            <field name="currency_id" invisible="1"/>
+                            <field name="currency_id" />
                             <div class="oe_subtotal_footer_separator oe_inline">
                                 <label for="amount_pay_now" attrs="{'invisible':[('state','in',['draft'])]}"/>
                             </div>
