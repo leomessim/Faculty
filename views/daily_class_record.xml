@@ -80,7 +80,7 @@
                     <button name="faculty_change_cancel" string="Cancel" type="object"
                             groups="faculty.coordinator_user"
                             attrs="{'invisible':[('change_faculty_boolean', '=', False)]}"/>
-                    <button name="action_unlock_daily_record" string="Unlock" type="object" groups="base.group_no_one"
+                    <button name="action_unlock_daily_record" string="Unlock" type="object" groups="base.group_no_one,faculty.group_faculty_administrator"
                             attrs="{'invisible':[('is_this_record_locked','=',False)]}" icon="fa-unlock"/>
                     <!--                    <button name="rejected" class="oe_highlight" string="Reject" type="object"-->
                     <!--                            attrs="{'invisible':[('state', 'in', ['rejected','draft','approve'])]}"/>-->
