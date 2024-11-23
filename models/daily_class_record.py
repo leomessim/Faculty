@@ -80,169 +80,169 @@ class DailyClassRecord(models.Model):
 
     is_this_current_month_record = fields.Boolean('Is this current month record')
 
-    # @api.onchange('month_of_record')
-    # def _onchange_lock_record(self):
-    #     current_date = fields.Date.context_today(self)
-    #     print(current_date.month, 'month')
-    #     if self.month_of_record:
-    #         if self.month_of_record == 'january':
-    #             if current_date.month == 1:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'february':
-    #             if current_date.month == 2:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'march':
-    #             if current_date.month == 3:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'april':
-    #             if current_date.month == 4:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #
-    #         if self.month_of_record == 'may':
-    #             if current_date.month == 5:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'june':
-    #             if current_date.month == 6:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'july':
-    #             if current_date.month == 7:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'august':
-    #             if current_date.month == 8:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'september':
-    #             if current_date.month == 9:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'october':
-    #             if current_date.month == 10:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'november':
-    #             if current_date.month == 11:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #         if self.month_of_record == 'december':
-    #             if current_date.month == 12:
-    #                 self.is_this_current_month_record = True
-    #             else:
-    #                 self.is_this_current_month_record = False
-    #             print()
-    #     current_date = fields.Date.context_today(self)
-    #     print(current_date.month, 'month')
-    #     lock_day = self.env['faculty.daily.record.lock.date'].sudo().search([], limit=1)
-    #     current_day = current_date.day
-    #     print(current_day, 'current day')
-    #     print(lock_day.lock_day, 'lock day')
-    #     if self.month_of_record:
-    #         if self.is_this_current_month_record == False:
-    #             self.is_this_record_locked = True
-    #         else:
-    #             if current_day > lock_day.lock_day:
-    #                 self.is_this_record_locked = True
-    #             else:
-    #                 self.is_this_record_locked = False
-    #     else:
-    #         self.is_this_record_locked = False
+    @api.onchange('month_of_record')
+    def _onchange_lock_record(self):
+        current_date = fields.Date.context_today(self)
+        print(current_date.month, 'month')
+        if self.month_of_record:
+            if self.month_of_record == 'january':
+                if current_date.month == 1:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'february':
+                if current_date.month == 2:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'march':
+                if current_date.month == 3:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'april':
+                if current_date.month == 4:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
 
-    # def action_cron_locking_record(self):
-    #     print('action')
-    #     current_date = fields.Date.context_today(self)
-    #     lock_day = self.env['faculty.daily.record.lock.date'].sudo().search([], limit=1)
-    #     current_day = current_date.day
-    #     rec = self.env['daily.class.record'].sudo().search([])
-    #     for record in rec:
-    #
-    #         if record.month_of_record:
-    #             if record.month_of_record == 'january':
-    #                 if current_date.month == 1:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'february':
-    #                 if current_date.month == 2:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'march':
-    #                 if current_date.month == 3:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'april':
-    #                 if current_date.month == 4:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #
-    #             if record.month_of_record == 'may':
-    #                 if current_date.month == 5:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'june':
-    #                 if current_date.month == 6:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'july':
-    #                 if current_date.month == 7:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'august':
-    #                 if current_date.month == 8:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'september':
-    #                 if current_date.month == 9:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'october':
-    #                 if current_date.month == 10:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'november':
-    #                 if current_date.month == 11:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #             if record.month_of_record == 'december':
-    #                 if current_date.month == 12:
-    #                     record.is_this_current_month_record = True
-    #                 else:
-    #                     record.is_this_current_month_record = False
-    #                 print()
-    #
-    #         if record.is_this_current_month_record == False:
-    #             if current_day > lock_day.lock_day:
-    #                 record.is_this_record_locked = True
-    #             else:
-    #                 record.is_this_record_locked = False
-    #         else:
-    #             record.is_this_record_locked = False
+            if self.month_of_record == 'may':
+                if current_date.month == 5:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'june':
+                if current_date.month == 6:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'july':
+                if current_date.month == 7:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'august':
+                if current_date.month == 8:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'september':
+                if current_date.month == 9:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'october':
+                if current_date.month == 10:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'november':
+                if current_date.month == 11:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+            if self.month_of_record == 'december':
+                if current_date.month == 12:
+                    self.is_this_current_month_record = True
+                else:
+                    self.is_this_current_month_record = False
+                print()
+        current_date = fields.Date.context_today(self)
+        print(current_date.month, 'month')
+        lock_day = self.env['faculty.daily.record.lock.date'].sudo().search([], limit=1)
+        current_day = current_date.day
+        print(current_day, 'current day')
+        print(lock_day.lock_day, 'lock day')
+        if self.month_of_record:
+            if self.is_this_current_month_record == False:
+                self.is_this_record_locked = True
+            else:
+                if current_day > lock_day.lock_day:
+                    self.is_this_record_locked = True
+                else:
+                    self.is_this_record_locked = False
+        else:
+            self.is_this_record_locked = False
+
+    def action_cron_locking_record(self):
+        print('action')
+        current_date = fields.Date.context_today(self)
+        lock_day = self.env['faculty.daily.record.lock.date'].sudo().search([], limit=1)
+        current_day = current_date.day
+        rec = self.env['daily.class.record'].sudo().search([])
+        for record in rec:
+
+            if record.month_of_record:
+                if record.month_of_record == 'january':
+                    if current_date.month == 1:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'february':
+                    if current_date.month == 2:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'march':
+                    if current_date.month == 3:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'april':
+                    if current_date.month == 4:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+
+                if record.month_of_record == 'may':
+                    if current_date.month == 5:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'june':
+                    if current_date.month == 6:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'july':
+                    if current_date.month == 7:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'august':
+                    if current_date.month == 8:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'september':
+                    if current_date.month == 9:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'october':
+                    if current_date.month == 10:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'november':
+                    if current_date.month == 11:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                if record.month_of_record == 'december':
+                    if current_date.month == 12:
+                        record.is_this_current_month_record = True
+                    else:
+                        record.is_this_current_month_record = False
+                    print()
+
+            if record.is_this_current_month_record == False:
+                if current_day > lock_day.lock_day:
+                    record.is_this_record_locked = True
+                else:
+                    record.is_this_record_locked = False
+            else:
+                record.is_this_record_locked = False
 
     def action_unlock_daily_record(self):
         self.is_this_record_locked = False
